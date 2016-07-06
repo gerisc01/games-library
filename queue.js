@@ -1,7 +1,7 @@
 var element = null;
 var aEvent = null;
-var downArrow = "<button type=\"button\" class=\"btn btn-default\" aria-label=\"Down\"><span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span></button></li>";
-var upArrow = "<button type=\"button\" class=\"btn btn-default\" aria-label=\"Up\"><span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span></button></li>";
+var downArrow = " <button type=\"button\" class=\"btn btn-default\" aria-label=\"Down\"><span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span></button></li>";
+var upArrow = " <button type=\"button\" class=\"btn btn-default\" aria-label=\"Up\"><span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span></button></li>";
 
 $(document).on('click', '.btn', function(event) {
     var target = $(event.target);
