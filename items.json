@@ -1,1 +1,34 @@
-{"items":[{"name":"Uncharted 4","length":660,"lengthPlayed":60,"platform":"PS4","genre":"Action Adventure","notes":null,"list":"current","listPos":1},{"name":"Tales from the Borderalnds","length":600,"lengthPlayed":600,"platform":"PS4","genre":"Adventure","notes":null,"list":"current","listPos":2}]}
+{
+   "items":[
+      {
+         "name":"Tales from the Borderalnds",
+         "list":"current",
+         "listPos":2
+      },
+      {
+         "name":"Uncharted 4",
+         "list":"current",
+         "listPos":1
+      },
+      {
+        "name" : "Furi",
+        "list" : "backlog",
+        "listPos" : 3
+      },
+      {
+         "name" : "The Banner Saga",
+         "list" : "backlog",
+         "listPos" : 2
+      },
+      {
+        "name" : "Borderlands 2",
+        "list":"current",
+        "listPos":3
+      },
+      {
+        "name" : "Dishonored",
+        "list" : "backlog",
+        "listPos" : 1
+      }
+   ]
+}
