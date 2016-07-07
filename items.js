@@ -1,5 +1,5 @@
-var downArrow = " <button type=\"button\" class=\"btn btn-default\" aria-label=\"Down\"><span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span></button></li>";
-var upArrow = " <button type=\"button\" class=\"btn btn-default\" aria-label=\"Up\"><span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span></button></li>";
+var downArrow = " <button type=\"button\" id=\"down\" class=\"btn btn-default\" aria-label=\"Down\"><span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span></button></li>";
+var upArrow = " <button type=\"button\" id=\"up\" class=\"btn btn-default\" aria-label=\"Up\"><span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span></button></li>";
 
 // Populates the lists with a class of "list" and the id of the lists passed as a parameter
 function populateLists(lists) {
