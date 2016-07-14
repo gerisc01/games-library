@@ -14,6 +14,17 @@ $(document).on('click', '.btn.mvmt-inside-list', function(event) {
     }
 });
 
+$(document).on('click', '.movement.dropdown li a', function(event) {
+    event.preventDefault();
+    var target = $(event.target);
+    var newListId = target.text();
+    var currentListId = target.closest("div.list-container").attr("id");
+    var item = target.closest("div.row");
+    // item swap move list
+    target.replaceWith("<a href=\"#\">"+currentListId+"</a>");
+    $("div#"+newListId+" .list").append(item);
+});
+
 $(document).on('mouseup', '.btn', function() {
    $(this).blur(); 
 });

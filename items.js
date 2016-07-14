@@ -27,18 +27,25 @@ function populateLists(lists) {
                 return a.listPos - b.listPos;
             });
 
+            // Create move dropdown list to be used for this list type
+            var moveList = "<div class=\"col-md-2\">"+
+                "<div class=\"movement dropdown\">"+
+                "<button type=\"button\" data-toggle=\"dropdown\" class=\"btn btn-default dropdown-toggle\">"+
+                "<span class=\"glyphicon glyphicon-tasks\"></span>"+
+                "</button>"+
+                "<ul class=\"dropdown-menu\">";
+
+            for (var z=0;z<lists.length;z++) {
+                if (lists[z] != listId) {
+                    moveList += "<li><a href=\"#\">"+lists[z]+"</a></li>";
+                }
+            }
+
+            moveList += "</ul></div></div>";
+
             var itemsLen = stagedItems.length;
             var listElem =  $(".list-container#"+listId).children("div.list");
             listElem.append(listHeader());
-
-            // Define click event for move list
-            $(".list-container#"+listId).on('click', 'button#move', function() {
-                var target = $(event.target);
-                while (target && target.prop("tagName") !== "BUTTON") {
-                    target = target.parent();
-                }
-                var divId = target.closest("div.list-container").attr("id");
-            });
 
             for (var j=0;j<itemsLen;j++) {
                 var row = jQuery("<div class=\"row\"/>");
@@ -51,9 +58,6 @@ function populateLists(lists) {
                 }).appendTo(title);
 
                 var arrows = "<div class=\"col-md-2\">"+upArrow+downArrow+"</span>";
-                var moveList = "<div class=\"col-md-2\"><button type=\"button\" id=\"move\" class=\"btn btn-default\">"+
-                    "<span class=\"glyphicon glyphicon-tasks\"></span>"+
-                    "</button></div>";
 
                 row.append(title);
                 row.append(arrows);
