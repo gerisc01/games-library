@@ -1,5 +1,5 @@
-var downArrow = " <button type=\"button\" id=\"down\" class=\"btn btn-default\" aria-label=\"Down\"><span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span></button></li>";
-var upArrow = " <button type=\"button\" id=\"up\" class=\"btn btn-default\" aria-label=\"Up\"><span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span></button></li>";
+var downArrow = " <button type=\"button\" id=\"down\" class=\"btn btn-default mvmt-inside-list\" aria-label=\"Down\"><span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span></button></li>";
+var upArrow = " <button type=\"button\" id=\"up\" class=\"btn btn-default mvmt-inside-list\" aria-label=\"Up\"><span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span></button></li>";
 
 // Populates the lists with a class of "list" and the id of the lists passed as a parameter
 function populateLists(lists) {
@@ -28,22 +28,53 @@ function populateLists(lists) {
             });
 
             var itemsLen = stagedItems.length;
-            var listElem =  $(".list#"+listId).children("ul");
+            var listElem =  $(".list-container#"+listId).children("div.list");
+            listElem.append(listHeader());
+
+            // Define click event for move list
+            $(".list-container#"+listId).on('click', 'button#move', function() {
+                var target = $(event.target);
+                while (target && target.prop("tagName") !== "BUTTON") {
+                    target = target.parent();
+                }
+                var divId = target.closest("div.list-container").attr("id");
+            });
+
             for (var j=0;j<itemsLen;j++) {
-                var li = jQuery("<li/>");
+                var row = jQuery("<div class=\"row\"/>");
+                
+                var title = jQuery("<div class=\"col-md-6\"/>");
 
                 jQuery("<span/>", {
                     id: "title",
                     text: stagedItems[j].name
-                }).appendTo(li);
+                }).appendTo(title);
 
-                li.append(upArrow);
-                li.append(downArrow);
+                var arrows = "<div class=\"col-md-2\">"+upArrow+downArrow+"</span>";
+                var moveList = "<div class=\"col-md-2\"><button type=\"button\" id=\"move\" class=\"btn btn-default\">"+
+                    "<span class=\"glyphicon glyphicon-tasks\"></span>"+
+                    "</button></div>";
 
-                listElem.append(li);
+                row.append(title);
+                row.append(arrows);
+                row.append(moveList);
 
-                console.log(stagedItems[j].name + " : " + stagedItems[j].listPos);
+                listElem.append(row);
             }
         }
     });
 }
+
+function listHeader() {
+    return "<div class=\"row\">"+
+        "<div class=\"col-md-6\"><h4>Title</h4></div>"+
+        "<div class=\"col-md-2\"><h4>Order</h4></div>"+
+        "<div class=\"col-md-2\"><h4>Move Lists</h4></div>"+
+        "</div>";
+}
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,18 +12,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="queue.js"></script>
     <script src="items.js"></script>
-</head>
-<body>
-    <div id="current" class="editable-items list">
-      <h3>Current</h3>
-      <ul/>
-    </div>
-    <div id="backlog" class="editable-items list">
-      <h3>Backlog</h3>
-      <ul/>
+    <link href="items.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div id="current" class="list-container">
+          <h3>Current</h3>
+          <div class="container list col-md-10"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div id="backlog" class="list-container">
+          <h3>Backlog</h3>
+          <div class="container list col-md-10"></div>
+        </div>
+      </div>
     </div>
     <script>
       $(populateLists(["current","backlog"]));
     </script>
-</body>
+  </body>
 </html>
