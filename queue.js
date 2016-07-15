@@ -10,18 +10,12 @@ $(document).on('click', '.btn.mvmt-inside-list', function(event) {
     var item = target.closest("div.row");
 
     if (direction === "up") {
-        if (item.prev("div.row").find(".mvmt-inside-list#up").hasClass("disabled")) { 
-            item.find(".mvmt-inside-list#up").addClass("disabled"); 
-            item.prev("div.row").find(".mvmt-inside-list#up").removeClass("disabled");
-        }
         item.insertBefore($(item.prev("div.row")));
     } else {
-        if (item.next("div.row").find(".mvmt-inside-list#down").hasClass("disabled")) { 
-            item.find(".mvmt-inside-list#down").addClass("disabled"); 
-            item.next("div.row").find(".mvmt-inside-list#down").removeClass("disabled");
-        }
         item.insertAfter($(item.next("div.row")));
     }
+
+    resetDisabledArrows(divId);
 });
 
 $(document).on('click', '.movement.dropdown li a', function(event) {
@@ -30,16 +24,27 @@ $(document).on('click', '.movement.dropdown li a', function(event) {
     var newListId = target.text();
     var currentListId = target.closest("div.list-container").attr("id");
     var item = target.closest("div.row");
-    // TODO: Disable appropriate buttons on swap
 
-    // item swap move list
     target.replaceWith("<a href=\"#\">"+currentListId+"</a>");
     $("div#"+newListId+" .list").append(item);
+
+    resetDisabledArrows(newListId);
+    resetDisabledArrows(currentListId);
 });
 
 $(document).on('mouseup', '.btn', function() {
-   $(this).blur(); 
+   $(this).blur();
 });
+
+// If a listId is supplied, just reset the arrows in that given list
+function resetDisabledArrows(listId) {
+    if (listId !== undefined) {
+        var list = $(".list-container#"+listId);
+        list.find(".mvmt-inside-list").removeClass("disabled");
+        list.find("div.item .mvmt-inside-list#up").first().addClass("disabled");
+        list.find("div.item .mvmt-inside-list#down").last().addClass("disabled");
+    }
+}
 
 function itemMoved(item) {
     
