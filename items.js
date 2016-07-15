@@ -48,7 +48,7 @@ function populateLists(lists) {
             listElem.append(listHeader());
 
             for (var j=0;j<itemsLen;j++) {
-                var row = jQuery("<div class=\"row\"/>");
+                var row = jQuery("<div class=\"row item\"/>");
                 
                 var title = jQuery("<div class=\"col-md-6\"/>");
 
@@ -65,6 +65,10 @@ function populateLists(lists) {
 
                 listElem.append(row);
             }
+
+            // For each list, disable the first upArrow and the last downArrow
+            listElem.find("div.item .mvmt-inside-list#up").first().addClass("disabled");
+            listElem.find("div.item .mvmt-inside-list#down").last().addClass("disabled");
         }
     });
 }
