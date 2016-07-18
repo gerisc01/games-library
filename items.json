@@ -1,34 +1,171 @@
 {
-   "items":[
-      {
-         "name":"Tales from the Borderalnds",
-         "list":"current",
-         "listPos":2
-      },
-      {
-         "name":"Uncharted 4",
-         "list":"current",
-         "listPos":1
-      },
-      {
-        "name" : "Furi",
-        "list" : "backlog",
-        "listPos" : 3
-      },
-      {
-         "name" : "The Banner Saga",
-         "list" : "backlog",
-         "listPos" : 2
-      },
-      {
-        "name" : "Borderlands 2",
-        "list":"current",
-        "listPos":3
-      },
-      {
-        "name" : "Dishonored",
-        "list" : "backlog",
-        "listPos" : 1
-      }
-   ]
+    "collections" : [
+        {
+            "title" : "Games",
+            "id" : "games",
+            "position" : 1
+        },
+        {
+            "title" : "Movies",
+            "id" : "movies",
+            "position" : 2
+        }
+    ],
+    "lists" : {
+        "games" : [
+            {
+                "title" : "Currently Playing",
+                "id" : "current",
+                "position" : 1,
+                "fields" : [
+                    {
+                        "name" : "Name",
+                        "id" : "name"
+                    }
+                ]
+            },
+            {
+                "title" : "To Play Next",
+                "id" : "next",
+                "position" : 2,
+                "fields" : [
+                    {
+                        "name" : "Name",
+                        "id" : "name"
+                    }
+                ]
+            },
+            {
+                "title" : "Backlog",
+                "id" : "backlog",
+                "position" : 3,
+                "fields" : [
+                    {
+                        "name" : "Name",
+                        "id" : "name"
+                    }
+                ]
+            }
+        ],
+        "movies" : [
+            {
+                "title" : "Watch Soon",
+                "id" : "next",
+                "position" : 1,
+                "fields" : [
+                    {
+                        "name" : "Name",
+                        "id" : "name"
+                    }
+                ]
+            },
+            {
+                "title" : "Backlog",
+                "id" : "backlog",
+                "position" : 2,
+                "fields" : [
+                    {
+                        "name" : "Name",
+                        "id" : "name"
+                    }
+                ]
+            }
+        ]
+    },
+    "items" : {
+        "games" : {
+            "current" : [
+                {
+                    "name" : "Uncharted 4",
+                    "position" : 1
+                },
+                {
+                    "name" : "MLB the Show 16",
+                    "position" : 2
+                },
+                {
+                    "name" : "Borderlands 2",
+                    "position" : 3
+                },
+                {
+                    "name" : "Rayman Origins",
+                    "position" : 4
+                }
+            ],
+            "next" : [
+                {
+                    "name" : "Furi",
+                    "position" : 1
+                },
+                {
+                    "name" : "The Banner Saga",
+                    "position" : 2
+                },
+                {
+                    "name" : "Shadow of Mordor",
+                    "position" : 3
+                },
+                {
+                    "name" : "Never Alone",
+                    "position" : 4
+                }
+            ],
+            "backlog" : [
+                {
+                    "name" : "Volume",
+                    "position" : 1
+                },
+                {
+                    "name" : "Sly 3",
+                    "position" : 2
+                },
+                {
+                    "name" : "Kingdom Hearts II",
+                    "position" : 3
+                },
+                {
+                    "name" : "Valiant Hearts",
+                    "position" : 4
+                },
+                {
+                    "name" : "Proteus",
+                    "position" : 5
+                },
+                {
+                    "name" : "Broken Age",
+                    "position" : 6
+                }
+            ]
+        },
+        "movies" : {
+            "next" : [
+                {
+                    "name" : "Zootopia",
+                    "position" : 1
+                },
+                {
+                    "name" : "Mockingjay Part 1",
+                    "position" : 2
+                },
+                {
+                    "name" : "Star Wars: Force Awakens",
+                    "position" : 3
+                }
+            ],
+            "backlog" : [
+                {
+                    "name" : "Memento",
+                    "position" : 1
+                },
+                {
+                    "name" : "The Amazing Spiderman 2",
+                    "position" : 2
+                },
+                {
+                    "name" : "The Little Prince",
+                    "position" : 3
+                }
+            ]
+        }
+    }
 }

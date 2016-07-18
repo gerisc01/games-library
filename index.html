@@ -18,28 +18,13 @@
   </head>
   <body>
     <!-- Tabs -->
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#">Games</a></li>
-      <li><a href="#">Movies</a></li>
-      <li><a href="#">All</a></li>
-    </ul>
+    <ul id="collections" class="nav nav-tabs tabs"></ul>
 
-    <div class="container">
-      <div class="row">
-        <div id="current" class="list-container">
-          <h3>Current</h3>
-          <div class="container list col-md-10"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div id="backlog" class="list-container">
-          <h3>Backlog</h3>
-          <div class="container list col-md-10"></div>
-        </div>
-      </div>
-    </div>
+    <!-- Lists -->
+    <div class="container lists"></div>
+
     <script>
-      $(populateLists(["current","backlog"]));
+      $(initializePage());
     </script>
   </body>
 </html>
