@@ -44,7 +44,6 @@ function populateLists(lists,items) {
         var listItems = items[key];
         var listItemsLength = listItems.length;
         var list = $(".list-container#"+key).children("div.list");
-        var listName = $(".list-container#"+key).children("h3").text();
 
         // // Sort items
         // var stagedItems = listItems[listId];
@@ -56,7 +55,7 @@ function populateLists(lists,items) {
             var row = jQuery("<div class=\"row item\"/>");
 
             var movement = jQuery("<div class=\"col-md-2\"/>");
-            movement.append(getMoveButton(listName));
+            movement.append(getMoveButton(key));
             movement.append(getMoveArrows());
             
             var title = jQuery("<div class=\"col-md-6\"/>");
@@ -71,6 +70,10 @@ function populateLists(lists,items) {
 
             list.append(row);
         }
+
+        var movement = jQuery("<div class=\"col-md-2\"/>");
+        movement.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
+        list.append(jQuery("<div class=\"row new-item\"/>").append(movement));
 
         // disable the first and last arrow inside the list
         list.find("div.item .mvmt-inside-list#up").first().addClass("disabled");
@@ -91,18 +94,49 @@ $(document).on('click', '.tabs#collections li a', function(event) {
     $(this).blur();
 });
 
+$(document).on('click', '.quick-add.add', function(event) {
+    var target = $(event.target);
+    while (target && target.prop("tagName") !== "BUTTON") {
+        target = target.parent();
+    }
+
+    var newItem = target.closest(".new-item");
+    newItem.append("<div class=\"col-md-6\"><span id=\"title\"><input class=\"quick-add\"/></span></div>");
+
+    target.replaceWith(" <button type=\"button\" class=\"btn btn-default quick-add cancel\"><span class=\"glyphicon glyphicon-minus red\"></span></button>");
+});
+
+$(document).on('click', '.quick-add.cancel', function(event) {
+    var target = $(event.target);
+    while (target && target.prop("tagName") !== "BUTTON") {
+        target = target.parent();
+    }
+
+    var movement = jQuery("<div class=\"col-md-2\"/>");
+    movement.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
+
+    var newItem = target.closest(".new-item");
+    newItem.empty();
+    newItem.append(movement);
+
+    target.replaceWith(" <button type=\"button\" class=\"btn btn-default quick-add cancel\"><span class=\"glyphicon glyphicon-minus red\"></span></button>");
+});
+
 
 // Helper Methods
 
-var getMoveButton = function(listName) {
+var getMoveButton = function(listId) {
     var moveList = "<div class=\"movement dropdown\">"+
         "<button type=\"button\" data-toggle=\"dropdown\" class=\"btn btn-default dropdown-toggle\">"+
         "<span class=\"glyphicon glyphicon-tasks\"></span>"+
         "</button>"+
         "<ul class=\"dropdown-menu\">";
 
-    $(".list-container h3").each(function() {
-        if ($(this).text() !== listName) moveList += "<li><a href=\"#\">"+$(this).text()+"</a></li>";
+    $(".list-container").each(function() {
+        if ($(this).attr("id") !== listId) { 
+            moveList += "<li><a id=\""+$(this).attr("id")+"\" href=\"#\">"+
+                $(this).children("h3").text()+"</a></li>";
+        }
     });
 
     moveList += "</ul></div>";
@@ -112,12 +146,12 @@ var getMoveButton = function(listName) {
 
 var getMoveArrows = function() {
     // Up Arrow
-    return " <button type=\"button\" id=\"down\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Down\">"+
-    "<span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span>"+
+    return " <button type=\"button\" id=\"up\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Up\">"+
+    "<span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span>"+
     "</button>"+
     // Down Arrow
-    " <button type=\"button\" id=\"up\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Up\">"+
-    "<span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span>"+
+    " <button type=\"button\" id=\"down\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Down\">"+
+    "<span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span>"+
     "</button>";
 }
 

@@ -21,11 +21,12 @@ $(document).on('click', '.btn.mvmt-inside-list', function(event) {
 $(document).on('click', '.movement.dropdown li a', function(event) {
     event.preventDefault();
     var target = $(event.target);
-    var newListId = target.text();
+    var newListId = target.attr("id");
     var currentListId = target.closest("div.list-container").attr("id");
-    var item = target.closest("div.row");
+    var currentListName = $("div.list-container#"+currentListId+" h3").text();
+    var item = target.closest("div.item");
 
-    target.replaceWith("<a href=\"#\">"+currentListId+"</a>");
+    target.replaceWith("<a id=\""+currentListId+"\" href=\"#\">"+currentListName+"</a>");
     $("div#"+newListId+" .list").append(item);
 
     resetDisabledArrows(newListId);

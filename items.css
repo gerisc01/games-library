@@ -5,3 +5,20 @@
 .movement.dropdown {
     margin-right: 10px;
 }
+
+.btn.quick-add {
+    float: right;
+    margin-right: 1px;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+input.quick-add {
+    width: 95%;
+}
