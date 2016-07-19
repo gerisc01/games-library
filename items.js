@@ -8,33 +8,41 @@ function initializePage() {
             $(".tabs#collections").append(tab);
         }
 
-        // Grab the active collection and build the lists and headers
-        var collectionId = $(".tabs#collections li.active").attr("id");
-        var lists = data.lists[collectionId];
-        for (var i=0;i<lists.length;i++) {
-            // Create a div for each list
-            var list = "<div class=\"row\">"+
-                "<div id=\""+lists[i]["id"]+"\" class=\"list-container\">"+
-                    "<h3>"+lists[i]["title"]+"</h3>"+
-                    "<div class=\"container list col-md-10\"></div>"+
-                "</div>"+
-            "</div>";
-            $("div.lists").append(list);
-
-            // Append list header
-            $(".list-container#"+lists[i]["id"]).children("div.list")
-                .append(getHeader());
-        }
-
         // Populate lists with the items
-        populateLists(data.items[collectionId]);
+        var collectionId = $(".tabs#collections li.active").attr("id");
+        populateLists(data.lists[collectionId],data.items[collectionId]);
     });
 }
 
-function populateLists(lists) {
-    for (var key in lists) { if (lists.hasOwnProperty(key)) {
-        var items = lists[key];
-        var itemsLength = lists[key].length;
+function reloadList() {
+    $.getJSON("items.json", function(data) {
+        // Populate lists with the items
+        var collectionId = $(".tabs#collections li.active").attr("id");
+        populateLists(data.lists[collectionId],data.items[collectionId]);
+    });
+}
+
+function populateLists(lists,items) {
+    // Build the lists and headers for the active collection
+    for (var i=0;i<lists.length;i++) {
+        // Create a div for each list
+        var list = "<div class=\"row\">"+
+            "<div id=\""+lists[i]["id"]+"\" class=\"list-container\">"+
+            "<div class=\"col-md-1\"></div>"+ // Put this div in to get a bit of space for the title
+                "<h3>"+lists[i]["title"]+"</h3>"+
+                "<div class=\"container list col-md-10\"></div>"+
+            "</div>"+
+        "</div>";
+        $("div.lists").append(list);
+
+        // Append list header
+        $(".list-container#"+lists[i]["id"]).children("div.list")
+            .append(getHeader());
+    }
+
+    for (var key in items) { if (items.hasOwnProperty(key)) {
+        var listItems = items[key];
+        var listItemsLength = listItems.length;
         var list = $(".list-container#"+key).children("div.list");
         var listName = $(".list-container#"+key).children("h3").text();
 
@@ -44,19 +52,22 @@ function populateLists(lists) {
         //     return a.listPos - b.listPos;
         // });
 
-        for (var i=0;i<itemsLength;i++) {
+        for (var i=0;i<listItemsLength;i++) {
             var row = jQuery("<div class=\"row item\"/>");
+
+            var movement = jQuery("<div class=\"col-md-2\"/>");
+            movement.append(getMoveButton(listName));
+            movement.append(getMoveArrows());
             
             var title = jQuery("<div class=\"col-md-6\"/>");
 
-            jQuery("<span/>", {
+            jQuery(" <span/>", {
                 id: "title",
-                text: items[i].name
+                text: listItems[i].name
             }).appendTo(title);
 
+            row.append(movement);
             row.append(title);
-            row.append(getMoveArrows());
-            row.append(getMoveButton(listName));
 
             list.append(row);
         }
@@ -67,9 +78,24 @@ function populateLists(lists) {
     }}
 }
 
+
+// Listeners
+
+$(document).on('click', '.tabs#collections li a', function(event) {
+    var target = $(event.target);
+    $(".tabs#collections li.active").removeClass("active");
+    target.parent("li").addClass("active");
+
+    $(".container.lists").empty();
+    reloadList();
+    $(this).blur();
+});
+
+
+// Helper Methods
+
 var getMoveButton = function(listName) {
-    var moveList = "<div class=\"col-md-2\">"+
-        "<div class=\"movement dropdown\">"+
+    var moveList = "<div class=\"movement dropdown\">"+
         "<button type=\"button\" data-toggle=\"dropdown\" class=\"btn btn-default dropdown-toggle\">"+
         "<span class=\"glyphicon glyphicon-tasks\"></span>"+
         "</button>"+
@@ -79,29 +105,26 @@ var getMoveButton = function(listName) {
         if ($(this).text() !== listName) moveList += "<li><a href=\"#\">"+$(this).text()+"</a></li>";
     });
 
-    moveList += "</ul></div></div>";
+    moveList += "</ul></div>";
 
     return moveList;
 }
 
 var getMoveArrows = function() {
     // Up Arrow
-    return "<div class=\"col-md-2\">"+
-    " <button type=\"button\" id=\"down\" class=\"btn btn-default mvmt-inside-list\" aria-label=\"Down\">"+
+    return " <button type=\"button\" id=\"down\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Down\">"+
     "<span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span>"+
     "</button>"+
     // Down Arrow
-    " <button type=\"button\" id=\"up\" class=\"btn btn-default mvmt-inside-list\" aria-label=\"Up\">"+
+    " <button type=\"button\" id=\"up\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Up\">"+
     "<span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span>"+
-    "</button>"+
-    "</div>";
+    "</button>";
 }
 
 function getHeader() {
     return "<div class=\"row\">"+
+        "<div class=\"col-md-2\"></div>"+
         "<div class=\"col-md-6\"><h4>Title</h4></div>"+
-        "<div class=\"col-md-2\"><h4>Order</h4></div>"+
-        "<div class=\"col-md-2\"><h4>Move Lists</h4></div>"+
         "</div>";
 }
 

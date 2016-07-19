@@ -1,0 +1,7 @@
+.movement {
+    float: left;
+}
+
+.movement.dropdown {
+    margin-right: 10px;
+}
