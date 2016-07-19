@@ -46,7 +46,3 @@ function resetDisabledArrows(listId) {
         list.find("div.item .mvmt-inside-list#down").last().addClass("disabled");
     }
 }
-
-function itemMoved(item) {
-    
-}

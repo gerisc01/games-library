@@ -1,5 +1,5 @@
 .movement {
-    float: left;
+    float: right;
 }
 
 .movement.dropdown {
@@ -8,7 +8,6 @@
 
 .btn.quick-add {
     float: right;
-    margin-right: 1px;
 }
 
 .green {

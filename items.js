@@ -45,18 +45,12 @@ function populateLists(lists,items) {
         var listItemsLength = listItems.length;
         var list = $(".list-container#"+key).children("div.list");
 
-        // // Sort items
-        // var stagedItems = listItems[listId];
-        // stagedItems.sort(function(a,b) {
-        //     return a.listPos - b.listPos;
-        // });
-
         for (var i=0;i<listItemsLength;i++) {
             var row = jQuery("<div class=\"row item\"/>");
 
             var movement = jQuery("<div class=\"col-md-2\"/>");
-            movement.append(getMoveButton(key));
             movement.append(getMoveArrows());
+            movement.append(getMoveButton(key));
             
             var title = jQuery("<div class=\"col-md-6\"/>");
 
@@ -71,9 +65,9 @@ function populateLists(lists,items) {
             list.append(row);
         }
 
-        var movement = jQuery("<div class=\"col-md-2\"/>");
-        movement.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
-        list.append(jQuery("<div class=\"row new-item\"/>").append(movement));
+        var quickAdd = jQuery("<div class=\"col-md-2\"/>");
+        quickAdd.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
+        list.append(jQuery("<div class=\"row new-item\"/>").append(quickAdd));
 
         // disable the first and last arrow inside the list
         list.find("div.item .mvmt-inside-list#up").first().addClass("disabled");
@@ -103,7 +97,8 @@ $(document).on('click', '.quick-add.add', function(event) {
     var newItem = target.closest(".new-item");
     newItem.append("<div class=\"col-md-6\"><span id=\"title\"><input class=\"quick-add\"/></span></div>");
 
-    target.replaceWith(" <button type=\"button\" class=\"btn btn-default quick-add cancel\"><span class=\"glyphicon glyphicon-minus red\"></span></button>");
+    target.replaceWith("<button type=\"button\" class=\"btn btn-default quick-add accept\"><span class=\"glyphicon glyphicon-ok green\"></span></button>"+
+        " <button type=\"button\" class=\"btn btn-default quick-add cancel\"><span class=\"glyphicon glyphicon-minus red\"></span></button>");
 });
 
 $(document).on('click', '.quick-add.cancel', function(event) {
@@ -111,6 +106,7 @@ $(document).on('click', '.quick-add.cancel', function(event) {
     while (target && target.prop("tagName") !== "BUTTON") {
         target = target.parent();
     }
+    var currentListId = target.closest("div.list-container").attr("id");
 
     var movement = jQuery("<div class=\"col-md-2\"/>");
     movement.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
@@ -118,8 +114,35 @@ $(document).on('click', '.quick-add.cancel', function(event) {
     var newItem = target.closest(".new-item");
     newItem.empty();
     newItem.append(movement);
+});
 
-    target.replaceWith(" <button type=\"button\" class=\"btn btn-default quick-add cancel\"><span class=\"glyphicon glyphicon-minus red\"></span></button>");
+$(document).on('click', '.quick-add.accept', function(event) {
+    var target = $(event.target);
+    while (target && target.prop("tagName") !== "BUTTON") {
+        target = target.parent();
+    }
+    var list = target.closest("div.list-container").children("div.list");
+    var listId = target.closest("div.list-container").attr("id");
+    var newItem = target.closest(".new-item");
+
+    newItem.find("input.quick-add").each(function() {
+        var text = $(this).val();
+        $(this).replaceWith(text);
+    });
+
+    var movement = newItem.children("div").first();
+    movement.empty();
+    movement.append(getMoveArrows());
+    movement.append(getMoveButton(listId));
+
+    newItem.removeClass("new-item");
+    newItem.addClass("item");
+
+    resetDisabledArrows(listId);
+
+    var quickAdd = jQuery("<div class=\"col-md-2\"/>");
+    quickAdd.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
+    list.append(jQuery("<div class=\"row new-item\"/>").append(quickAdd));
 });
 
 
@@ -145,13 +168,13 @@ var getMoveButton = function(listId) {
 }
 
 var getMoveArrows = function() {
-    // Up Arrow
-    return " <button type=\"button\" id=\"up\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Up\">"+
-    "<span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span>"+
-    "</button>"+
     // Down Arrow
-    " <button type=\"button\" id=\"down\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Down\">"+
+    return " <button type=\"button\" id=\"down\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Down\">"+
     "<span class=\"glyphicon glyphicon-arrow-down\" aria-hidden=\"true\"></span>"+
+    "</button>"+
+    // Up Arrow
+    " <button type=\"button\" id=\"up\" class=\"btn btn-default movement mvmt-inside-list\" aria-label=\"Up\">"+
+    "<span class=\"glyphicon glyphicon-arrow-up\" aria-hidden=\"true\"></span>"+
     "</button>";
 }
 
