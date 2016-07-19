@@ -28,9 +28,9 @@ function populateLists(lists,items) {
         // Create a div for each list
         var list = "<div class=\"row\">"+
             "<div id=\""+lists[i]["id"]+"\" class=\"list-container\">"+
-            "<div class=\"col-md-1\"></div>"+ // Put this div in to get a bit of space for the title
+                "<div class=\"col-md-1\"></div>"+ // Put this div in to get a bit of space for the title
                 "<h3>"+lists[i]["title"]+"</h3>"+
-                "<div class=\"container list col-md-10\"></div>"+
+                "<div class=\"container list\"></div>"+
             "</div>"+
         "</div>";
         $("div.lists").append(list);
@@ -52,15 +52,39 @@ function populateLists(lists,items) {
             movement.append(getMoveArrows());
             movement.append(getMoveButton(key));
             
-            var title = jQuery("<div class=\"col-md-6\"/>");
+            var title = jQuery("<div class=\"col-md-3\"/>");
 
             jQuery(" <span/>", {
                 id: "title",
-                text: listItems[i].name
+                text: listItems[i]["name"]
             }).appendTo(title);
+
+            var length = jQuery("<div class=\"col-md-2\"/>");
+
+            jQuery(" <span/>", {
+                id: "length",
+                text: listItems[i]["length"]
+            }).appendTo(length);
+
+            var genre = jQuery("<div class=\"col-md-3\"/>");
+
+            jQuery(" <span/>", {
+                id: "genre",
+                text: listItems[i]["genre"]
+            }).appendTo(genre);
+
+            var platform = jQuery("<div class=\"col-md-2\"/>");
+
+            jQuery(" <span/>", {
+                id: "platform",
+                text: listItems[i]["platform"]
+            }).appendTo(platform);
 
             row.append(movement);
             row.append(title);
+            row.append(length);
+            row.append(genre);
+            row.append(platform);
 
             list.append(row);
         }
@@ -181,7 +205,10 @@ var getMoveArrows = function() {
 function getHeader() {
     return "<div class=\"row\">"+
         "<div class=\"col-md-2\"></div>"+
-        "<div class=\"col-md-6\"><h4>Title</h4></div>"+
+        "<div class=\"col-md-3\"><h4>Title</h4></div>"+
+        "<div class=\"col-md-2\"><h4>Length</h4></div>"+
+        "<div class=\"col-md-3\"><h4>Genre</h4></div>"+
+        "<div class=\"col-md-2\"><h4>Platform</h4></div>"+
         "</div>";
 }
 

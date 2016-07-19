@@ -2,13 +2,11 @@
     "collections" : [
         {
             "title" : "Games",
-            "id" : "games",
-            "position" : 1
+            "id" : "games"
         },
         {
             "title" : "Movies",
-            "id" : "movies",
-            "position" : 2
+            "id" : "movies"
         }
     ],
     "lists" : {
@@ -16,33 +14,66 @@
             {
                 "title" : "Currently Playing",
                 "id" : "current",
-                "position" : 1,
                 "fields" : [
                     {
                         "name" : "Name",
                         "id" : "name"
+                    },
+                    {
+                        "name" : "Length",
+                        "id" : "length"
+                    },
+                    {
+                        "name" : "Genre",
+                        "id" : "genre"
+                    },
+                    {
+                        "name" : "Platform",
+                        "id" : "platform"
                     }
                 ]
             },
             {
                 "title" : "To Play Next",
                 "id" : "next",
-                "position" : 2,
                 "fields" : [
                     {
                         "name" : "Name",
                         "id" : "name"
+                    },
+                    {
+                        "name" : "Length",
+                        "id" : "length"
+                    },
+                    {
+                        "name" : "Genre",
+                        "id" : "genre"
+                    },
+                    {
+                        "name" : "Platform",
+                        "id" : "platform"
                     }
                 ]
             },
             {
                 "title" : "Backlog",
                 "id" : "backlog",
-                "position" : 3,
                 "fields" : [
                     {
                         "name" : "Name",
                         "id" : "name"
+                    },
+                    {
+                        "name" : "Length",
+                        "id" : "length"
+                    },
+                    {
+                        "name" : "Genre",
+                        "id" : "genre"
+                    },
+                    {
+                        "name" : "Platform",
+                        "id" : "platform"
                     }
                 ]
             }
@@ -51,7 +82,6 @@
             {
                 "title" : "Watch Soon",
                 "id" : "next",
-                "position" : 1,
                 "fields" : [
                     {
                         "name" : "Name",
@@ -62,7 +92,6 @@
             {
                 "title" : "Backlog",
                 "id" : "backlog",
-                "position" : 2,
                 "fields" : [
                     {
                         "name" : "Name",
@@ -77,93 +106,109 @@
             "current" : [
                 {
                     "name" : "Uncharted 4",
-                    "position" : 1
+                    "length" : "14.5 Hrs",
+                    "genre" : "Action Adventure",
+                    "platform" : "PS4"
                 },
                 {
                     "name" : "MLB the Show 16",
-                    "position" : 2
+                    "length" : "",
+                    "genre" : "Sports",
+                    "platform" : "PS4"
                 },
                 {
                     "name" : "Borderlands 2",
-                    "position" : 3
+                    "length" : "31 Hrs",
+                    "genre" : "First Person Shooter",
+                    "platform" : "PC"
                 },
                 {
                     "name" : "Rayman Origins",
-                    "position" : 4
+                    "length" : "10.5 Hrs",
+                    "genre" : "Platformer",
+                    "platform" : "PC"
                 }
             ],
             "next" : [
                 {
                     "name" : "Furi",
-                    "position" : 1
+                    "length" : "4 Hrs",
+                    "genre" : "Action",
+                    "platform" : "PS4"
                 },
                 {
                     "name" : "The Banner Saga",
-                    "position" : 2
+                    "length" : "11 Hrs",
+                    "genre" : "Strategy",
+                    "platform" : "PC"
                 },
                 {
                     "name" : "Shadow of Mordor",
-                    "position" : 3
+                    "length" : "15.5 Hrs",
+                    "genre" : "Actiion Adventure",
+                    "platform" : "PS4"
                 },
                 {
                     "name" : "Never Alone",
-                    "position" : 4
+                    "length" : "3 Hrs",
+                    "genre" : "Platform/Puzzle",
+                    "platform" : "PS4"
                 }
             ],
             "backlog" : [
                 {
                     "name" : "Volume",
-                    "position" : 1
+                    "length" : "8 Hrs",
+                    "genre" : "Action, Stealth",
+                    "platform" : "PC"
                 },
                 {
                     "name" : "Sly 3",
-                    "position" : 2
+                    "length" : "12.5 Hrs",
+                    "genre" : "Adventure",
+                    "platform" : "PS3"
                 },
                 {
                     "name" : "Kingdom Hearts II",
-                    "position" : 3
+                    "length" : "26 Hrs",
+                    "genre" : "Action JRPG",
+                    "platform" : "PS3"
                 },
                 {
                     "name" : "Valiant Hearts",
-                    "position" : 4
-                },
-                {
-                    "name" : "Proteus",
-                    "position" : 5
+                    "length" : "6 Hrs",
+                    "genre" : "Adventure",
+                    "platform" : "PS4"
                 },
                 {
                     "name" : "Broken Age",
-                    "position" : 6
+                    "length" : "10.5 Hrs",
+                    "genre": "Adventure",
+                    "platform" : "PS4"
                 }
             ]
         },
         "movies" : {
             "next" : [
                 {
-                    "name" : "Zootopia",
-                    "position" : 1
+                    "name" : "Zootopia"
                 },
                 {
-                    "name" : "Mockingjay Part 1",
-                    "position" : 2
+                    "name" : "Mockingjay Part 1"
                 },
                 {
-                    "name" : "Star Wars: Force Awakens",
-                    "position" : 3
+                    "name" : "Star Wars: Force Awakens"
                 }
             ],
             "backlog" : [
                 {
-                    "name" : "Memento",
-                    "position" : 1
+                    "name" : "Memento"
                 },
                 {
-                    "name" : "The Amazing Spiderman 2",
-                    "position" : 2
+                    "name" : "The Amazing Spiderman 2"
                 },
                 {
-                    "name" : "The Little Prince",
-                    "position" : 3
+                    "name" : "The Little Prince"
                 }
             ]
         }
