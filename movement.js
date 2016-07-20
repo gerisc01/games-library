@@ -27,7 +27,7 @@ $(document).on('click', '.movement.dropdown li a', function(event) {
     var item = target.closest("div.item");
 
     target.replaceWith("<a id=\""+currentListId+"\" href=\"#\">"+currentListName+"</a>");
-    $("div#"+newListId+" .list").append(item);
+    item.insertBefore($("div#"+newListId+" .new-item"));
 
     resetDisabledArrows(newListId);
     resetDisabledArrows(currentListId);
