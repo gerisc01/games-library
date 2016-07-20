@@ -74,9 +74,19 @@ function populateLists(lists,items) {
             list.append(row);
         }
 
-        var quickAdd = jQuery("<div class=\"col-md-2\"/>");
-        quickAdd.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
-        list.append(jQuery("<div class=\"row new-item\"/>").append(quickAdd));
+        // Create the quick add row
+        var quickAdd = jQuery("<div class=\"row new-item\"/>");
+        // Add the quick add button to the row
+        var button = jQuery("<div class=\"col-md-2\"/>").append(
+            " <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
+        quickAdd.append(button);
+        for (var j=0;j<listSpec.length;j++) {
+            var field = listSpec[j];
+            var column = jQuery("<div class=\"col-md-"+field["width"]+"\"/>");
+            jQuery("<span/>",{id: field["id"], class: "quick-add"}).appendTo(column);
+            quickAdd.append(column);
+        }
+        list.append(quickAdd);
 
         // disable the first and last arrow inside the list
         list.find("div.item .mvmt-inside-list#up").first().addClass("disabled");
@@ -104,20 +114,9 @@ $(document).on('click', '.quick-add.add', function(event) {
     }
 
     var newItem = target.closest(".new-item");
-
-    // Grab the previous item and get ids and column widths from there
-    var item = target.closest(".new-item").prev(".item");
-    if (item.length !== 0) {
-        item.children("div").each(function() {
-            var id = $(this).children("span").attr("id");
-            var div = jQuery("<div/>");
-            if (id !== undefined) {
-                div.addClass($(this).attr("class"));
-                div.append(jQuery("<span id=\""+id+"\"/>").append("<input class=\"quick-add\"/>"));
-                newItem.append(div);
-            }
-        });
-    }
+    newItem.find("span.quick-add").each(function() {
+        $(this).append("<input class=\"quick-add\"/>");
+    });
 
     target.replaceWith("<button type=\"button\" class=\"btn btn-default quick-add accept\"><span class=\"glyphicon glyphicon-ok green\"></span></button>"+
         " <button type=\"button\" class=\"btn btn-default quick-add cancel\"><span class=\"glyphicon glyphicon-minus red\"></span></button>");
@@ -130,12 +129,14 @@ $(document).on('click', '.quick-add.cancel', function(event) {
     }
     var currentListId = target.closest("div.list-container").attr("id");
 
-    var movement = jQuery("<div class=\"col-md-2\"/>");
-    movement.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
-
     var newItem = target.closest(".new-item");
-    newItem.empty();
-    newItem.append(movement);
+    // Replace the cancel and accept buttons with the quick add button
+    newItem.find("div").first().empty();
+    newItem.find("div").first().append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
+    // Empty the inputs from the field spans
+    newItem.find("span.quick-add").each(function() {
+        $(this).empty();
+    });
 });
 
 $(document).on('click', '.quick-add.accept', function(event) {
@@ -162,9 +163,19 @@ $(document).on('click', '.quick-add.accept', function(event) {
 
     resetDisabledArrows(listId);
 
-    var quickAdd = jQuery("<div class=\"col-md-2\"/>");
-    quickAdd.append(" <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
-    list.append(jQuery("<div class=\"row new-item\"/>").append(quickAdd));
+    // Create the new quick add row
+    var quickAdd = jQuery("<div class=\"row new-item\"/>");
+    // Add the quick add button to the row
+    var button = jQuery("<div class=\"col-md-2\"/>").append(
+        " <button type=\"button\" class=\"btn btn-default quick-add add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>");
+    quickAdd.append(button);
+    newItem.find("span.quick-add").each(function() {
+        var parentDiv = $(this).parent("div").clone();
+        parentDiv.children("span.quick-add").empty();
+        parentDiv.appendTo(quickAdd);
+        $(this).removeClass("quick-add");
+    });
+    list.append(quickAdd);
 });
 
 
