@@ -178,6 +178,109 @@ $(document).on('click', '.quick-add.accept', function(event) {
     list.append(quickAdd);
 });
 
+$(document).on('click', '.edit.cancel', function(event) {
+    var target = $(event.target);
+    while (target && target.prop("tagName") !== "BUTTON") {
+        target = target.parent();
+    }
+    var listId = target.closest("div.list-container").attr("id");
+
+    var item = target.closest(".item");
+    var movement = item.children("div").first();
+    movement.empty();
+    movement.append(getMoveArrows());
+    movement.append(getMoveButton(listId));
+
+    item.find("input.edit").each(function() {
+        var preEditText = $(this).next("span#preEdit").text();
+        var parentSpan = $(this).parent("span");
+        parentSpan.empty();
+        parentSpan.text(preEditText);
+    });
+});
+
+$(document).on('click', '.edit.accept', function(event) {
+    var target = $(event.target);
+    while (target && target.prop("tagName") !== "BUTTON") {
+        target = target.parent();
+    }
+    var listId = target.closest("div.list-container").attr("id");
+
+    var item = target.closest(".item");
+    var movement = item.children("div").first();
+    movement.empty();
+    movement.append(getMoveArrows());
+    movement.append(getMoveButton(listId));
+
+    item.find("input.edit").each(function() {
+        var newText = $(this).val();
+        var parentSpan = $(this).parent("span");
+        parentSpan.empty();
+        parentSpan.text(newText);
+    });
+});
+
+// Movement helpers
+
+$(document).on('click', '.btn.mvmt-inside-list', function(event) {
+    var target = $(event.target);
+    while (target && target.prop("tagName") !== "BUTTON") {
+        target = target.parent();
+    }
+    if (target.hasClass("disabled")) return;
+
+    var direction = target.attr("id");
+    var divId = target.closest("div.list-container").attr("id");
+    var item = target.closest("div.row");
+
+    if (direction === "up") {
+        item.insertBefore($(item.prev("div.row")));
+    } else {
+        item.insertAfter($(item.next("div.row")));
+    }
+
+    resetDisabledArrows(divId);
+});
+
+// Movement Menu (Move/Edit/Delete)
+$(document).on('click', '.movement.dropdown li a', function(event) {
+    event.preventDefault();
+    var target = $(event.target);
+    var item = target.closest("div.item");
+    // If delete
+    if (target.hasClass("delete")) { 
+        item.remove();
+    }
+    // If edit
+    else if (target.hasClass("edit")) {
+        item.children("div").first().empty();
+        item.children("div").first().append("<button type=\"button\" class=\"btn btn-default edit accept\"><span class=\"glyphicon glyphicon-ok green\"></span></button>"+
+        " <button type=\"button\" class=\"btn btn-default edit cancel\"><span class=\"glyphicon glyphicon-remove red\"></span></button>");
+        item.children("div").children("span").each(function() {
+            var text = $(this).text();
+            $(this).empty();
+            $(this).append(jQuery("<input/>", {class: "edit", value: text}));
+            $(this).append(jQuery("<span/>", {id: "preEdit", text: text, class: "hidden"}));
+        });
+    }
+    // If neither of those, it is movement
+    else {
+        var newListId = target.attr("id");
+        var currentListId = target.closest("div.list-container").attr("id");
+        var currentListName = $("div.list-container#"+currentListId+" h3").text();
+        
+        target.replaceWith("<a id=\""+currentListId+"\" href=\"#\">"+currentListName+"</a>");
+        item.insertBefore($("div#"+newListId+" .new-item"));
+    }
+
+    resetDisabledArrows(newListId);
+    resetDisabledArrows(currentListId);
+});
+
+$(document).on('mouseup', '.btn', function() {
+   $(this).blur();
+});
+
 
 // Helper Methods
 
@@ -195,7 +298,10 @@ var getMoveButton = function(listId) {
         }
     });
 
-    moveList += "</ul></div>";
+    moveList +=  "<li class=\"divider\"></li>"+
+    "<li><a class=\"edit\" href=\"\">Edit</a></li>"+
+    "<li><a class=\"delete\" href=\"\">Delete</a></li>"+
+    "</ul></div>";
 
     return moveList;
 }
@@ -220,6 +326,16 @@ function getHeader(fieldSpec) {
     }
     header += "</div>";
     return header;
+}
+
+// If a listId is supplied, just reset the arrows in that given list
+function resetDisabledArrows(listId) {
+    if (listId !== undefined) {
+        var list = $(".list-container#"+listId);
+        list.find(".mvmt-inside-list").removeClass("disabled");
+        list.find("div.item .mvmt-inside-list#up").first().addClass("disabled");
+        list.find("div.item .mvmt-inside-list#down").last().addClass("disabled");
+    }
 }
 
 

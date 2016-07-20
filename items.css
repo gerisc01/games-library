@@ -10,6 +10,10 @@
     float: right;
 }
 
+.btn.edit {
+    float: right;
+}
+
 .green {
     color: green;
 }
@@ -19,5 +23,9 @@
 }
 
 input.quick-add {
+    width: 95%;
+}
+
+input.edit {
     width: 95%;
 }
