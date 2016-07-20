@@ -104,7 +104,20 @@ $(document).on('click', '.quick-add.add', function(event) {
     }
 
     var newItem = target.closest(".new-item");
-    newItem.append("<div class=\"col-md-6\"><span id=\"title\"><input class=\"quick-add\"/></span></div>");
+
+    // Grab the previous item and get ids and column widths from there
+    var item = target.closest(".new-item").prev(".item");
+    if (item.length !== 0) {
+        item.children("div").each(function() {
+            var id = $(this).children("span").attr("id");
+            var div = jQuery("<div/>");
+            if (id !== undefined) {
+                div.addClass($(this).attr("class"));
+                div.append(jQuery("<span id=\""+id+"\"/>").append("<input class=\"quick-add\"/>"));
+                newItem.append(div);
+            }
+        });
+    }
 
     target.replaceWith("<button type=\"button\" class=\"btn btn-default quick-add accept\"><span class=\"glyphicon glyphicon-ok green\"></span></button>"+
         " <button type=\"button\" class=\"btn btn-default quick-add cancel\"><span class=\"glyphicon glyphicon-minus red\"></span></button>");
@@ -188,7 +201,7 @@ var getMoveArrows = function() {
 }
 
 function getHeader(fieldSpec) {
-    var header = "<div class=\"row\">"+
+    var header = "<div class=\"row header\">"+
         "<div class=\"col-md-2\"></div>";
 
     for (var i=0;i<fieldSpec.length;i++) {
