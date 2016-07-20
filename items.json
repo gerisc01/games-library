@@ -17,19 +17,23 @@
                 "fields" : [
                     {
                         "name" : "Name",
-                        "id" : "name"
+                        "id" : "name",
+                        "width" : 3
                     },
                     {
                         "name" : "Length",
-                        "id" : "length"
+                        "id" : "length",
+                        "width" : 2
                     },
                     {
                         "name" : "Genre",
-                        "id" : "genre"
+                        "id" : "genre",
+                        "width" : 3
                     },
                     {
                         "name" : "Platform",
-                        "id" : "platform"
+                        "id" : "platform",
+                        "width" : 2
                     }
                 ]
             },
@@ -39,19 +43,23 @@
                 "fields" : [
                     {
                         "name" : "Name",
-                        "id" : "name"
+                        "id" : "name",
+                        "width" : 3
                     },
                     {
                         "name" : "Length",
-                        "id" : "length"
+                        "id" : "length",
+                        "width" : 2
                     },
                     {
                         "name" : "Genre",
-                        "id" : "genre"
+                        "id" : "genre",
+                        "width" : 3
                     },
                     {
                         "name" : "Platform",
-                        "id" : "platform"
+                        "id" : "platform",
+                        "width" : 2
                     }
                 ]
             },
@@ -61,19 +69,23 @@
                 "fields" : [
                     {
                         "name" : "Name",
-                        "id" : "name"
+                        "id" : "name",
+                        "width" : 3
                     },
                     {
                         "name" : "Length",
-                        "id" : "length"
+                        "id" : "length",
+                        "width" : 2
                     },
                     {
                         "name" : "Genre",
-                        "id" : "genre"
+                        "id" : "genre",
+                        "width" : 3
                     },
                     {
                         "name" : "Platform",
-                        "id" : "platform"
+                        "id" : "platform",
+                        "width" : 2
                     }
                 ]
             }
@@ -85,7 +97,8 @@
                 "fields" : [
                     {
                         "name" : "Name",
-                        "id" : "name"
+                        "id" : "name",
+                        "width" : 6
                     }
                 ]
             },
@@ -95,7 +108,8 @@
                 "fields" : [
                     {
                         "name" : "Name",
-                        "id" : "name"
+                        "id" : "name",
+                        "width" : 6
                     }
                 ]
             }

@@ -24,6 +24,7 @@ function reloadList() {
 
 function populateLists(lists,items) {
     // Build the lists and headers for the active collection
+    var fieldsSpec = {};
     for (var i=0;i<lists.length;i++) {
         // Create a div for each list
         var list = "<div class=\"row\">"+
@@ -35,9 +36,12 @@ function populateLists(lists,items) {
         "</div>";
         $("div.lists").append(list);
 
+        // Build up the fieldsSpec to be used later
+        fieldsSpec[lists[i]["id"]] = lists[i]["fields"];
+
         // Append list header
         $(".list-container#"+lists[i]["id"]).children("div.list")
-            .append(getHeader());
+            .append(getHeader(fieldsSpec[lists[i]["id"]]));
     }
 
     for (var key in items) { if (items.hasOwnProperty(key)) {
@@ -51,40 +55,21 @@ function populateLists(lists,items) {
             var movement = jQuery("<div class=\"col-md-2\"/>");
             movement.append(getMoveArrows());
             movement.append(getMoveButton(key));
-            
-            var title = jQuery("<div class=\"col-md-3\"/>");
-
-            jQuery(" <span/>", {
-                id: "title",
-                text: listItems[i]["name"]
-            }).appendTo(title);
-
-            var length = jQuery("<div class=\"col-md-2\"/>");
-
-            jQuery(" <span/>", {
-                id: "length",
-                text: listItems[i]["length"]
-            }).appendTo(length);
-
-            var genre = jQuery("<div class=\"col-md-3\"/>");
-
-            jQuery(" <span/>", {
-                id: "genre",
-                text: listItems[i]["genre"]
-            }).appendTo(genre);
-
-            var platform = jQuery("<div class=\"col-md-2\"/>");
-
-            jQuery(" <span/>", {
-                id: "platform",
-                text: listItems[i]["platform"]
-            }).appendTo(platform);
 
             row.append(movement);
-            row.append(title);
-            row.append(length);
-            row.append(genre);
-            row.append(platform);
+
+            var listSpec = fieldsSpec[key];
+            for (var j=0;j<listSpec.length;j++) {
+                var field = listSpec[j];
+                var column = jQuery("<div class=\"col-md-"+field["width"]+"\"/>");
+
+                jQuery(" <span/>", {
+                    id: field["id"],
+                    text: listItems[i][field["id"]]
+                }).appendTo(column);
+
+                row.append(column);
+            }
 
             list.append(row);
         }
@@ -202,14 +187,15 @@ var getMoveArrows = function() {
     "</button>";
 }
 
-function getHeader() {
-    return "<div class=\"row\">"+
-        "<div class=\"col-md-2\"></div>"+
-        "<div class=\"col-md-3\"><h4>Title</h4></div>"+
-        "<div class=\"col-md-2\"><h4>Length</h4></div>"+
-        "<div class=\"col-md-3\"><h4>Genre</h4></div>"+
-        "<div class=\"col-md-2\"><h4>Platform</h4></div>"+
-        "</div>";
+function getHeader(fieldSpec) {
+    var header = "<div class=\"row\">"+
+        "<div class=\"col-md-2\"></div>";
+
+    for (var i=0;i<fieldSpec.length;i++) {
+        header += "<div class=\"col-md-"+fieldSpec[i]["width"]+"\"><h4>"+fieldSpec[i]["name"]+"</h4></div>";
+    }
+    header += "</div>";
+    return header;
 }
 
 
