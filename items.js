@@ -98,6 +98,10 @@ $(document).on('click', '.tabs#collections li a', function(event) {
     $(this).blur();
 });
 
+$(document).on('click', '.save', function() {
+    saveChangesToDb();
+});
+
 $(document).on('mouseup', '.btn', function() {
    $(this).blur();
 });
