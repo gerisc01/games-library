@@ -23,12 +23,50 @@
     width: 90%;
 }
 
-.green {
-    color: green;
+.content {
+    float:left;
 }
 
-.red {
-    color: red;
+/* LIST TAB CSS classes*/
+
+.list-tabs {
+    width:200px;
+    height:500px;
+    margin-top:70px;
+}
+
+.list-tab {
+    width:200px;
+    height:50px;
+    margin-top:5px;
+    margin-bottom: 5px;
+    padding:0px;
+    cursor:pointer;
+}
+
+.list-tab.active {
+    font-weight: bold;
+}
+.list-tab h4 {
+    font-weight: inherit;
+}
+
+.list-tab-text {
+    float:left;
+    height:50px;
+    width:175px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow-right {
+    float:left;
+    width: 0; 
+    height: 0; 
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-left: 25px solid;
 }
 
 input.quick-add {

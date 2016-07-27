@@ -22,29 +22,4 @@ var isButtonDisabled = function(eventTarget) {
     }
     var isDisabled = target.hasClass("disabled") ? true : false;
     return isDisabled;
-}
-
-var getStandardRowButtons = function(listId) {
-    var buttons = $("<div/>",{class: "col-md-2 buttons"});
-    // Create move arrows
-    buttons.append(getButton("arrow-down").addClass("movement shiftDown"));
-    buttons.append(getButton("arrow-up").addClass("movement shiftUp"));
-    // Create move button
-    var moveButton = "<div class=\"movement dropdown\">"+
-        "<button type=\"button\" data-toggle=\"dropdown\" class=\"btn btn-default dropdown-toggle\">"+
-        "<span class=\"glyphicon glyphicon-tasks\"></span>"+
-        "</button>"+
-        "<ul class=\"dropdown-menu\">";
-    $(".list-container").each(function() {
-        if ($(this).attr("id") !== listId) { 
-            moveButton += "<li><a id=\""+$(this).attr("id")+"\" class=\"moveList\" href=\"#\">"+
-                $(this).children("h3").text()+"</a></li>";
-        }
-    });
-    moveButton +=  "<li class=\"divider\"></li>"+
-    "<li><a class=\"edit start\" href=\"\">Edit</a></li>"+
-    "<li><a class=\"delete\" href=\"\">Delete</a></li>"+
-    "</ul></div>";
-    buttons.append(moveButton);
-    return buttons;
-}
+}   

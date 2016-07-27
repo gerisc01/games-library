@@ -1,3 +1,6 @@
+var collectionLists = null;
+var collectionItems = null;
+
 function initializePage() {
     $.getJSON("items.json", function(data) {
         // Get list of collections and build tabs
@@ -10,78 +13,90 @@ function initializePage() {
 
         // Populate lists with the items
         var collectionId = $(".tabs#collections li.active").attr("id");
-        populateLists(data.lists[collectionId],data.items[collectionId]);
+        collectionLists = data.lists[collectionId];
+        collectionItems = data.items[collectionId];
+
+        populateTabs();
+        var activeList = $(".list-tab.active").attr("id");
+        populateList(activeList);
     });
 }
 
-function reloadList() {
+function loadNewCollection() {
     $.getJSON("items.json", function(data) {
-        // Populate lists with the items
+        // Populate lists with the items saved in collection lists and items
         var collectionId = $(".tabs#collections li.active").attr("id");
-        populateLists(data.lists[collectionId],data.items[collectionId]);
+        collectionLists = data.lists[collectionId];
+        collectionItems = data.items[collectionId];
+
+        populateTabs();
+        var activeList = $(".list-tab.active").attr("id");
+        populateList(activeList);
     });
 }
 
-function populateLists(lists,allItems) {
-    // Build the lists and headers for the active collection
-    var fieldsSpec = {};
-    for (var i=0;i<lists.length;i++) {
-        // Create a div for each list
-        $("div.lists")
-            .append($("<div/>",{class: "row"})
-                .append($("<div/>",{id: lists[i]["id"],class: "list-container"})
-                    .append($("<div/>",{class: "col-md-1"}))
-                    .append($("<h3/>",{text:lists[i]["title"]}))
-                    .append($("<div/>",{class: "container list"}))
-        ));
+function populateTabs() {
+    var tabs = $("div.list-tabs");
+    for (var i=0;i<collectionLists.length;i++) {
+        tabs.append($("<div/>",{id: collectionLists[i]["id"],class: "list-tab"})
+            .append($("<div/>",{class:"list-tab-text "+collectionLists[i]["color"]+"-bg"})
+                .append($("<h4/>",{text: collectionLists[i]["title"]}))
+            ).append($("<div/>",{class:"arrow-right "+collectionLists[i]["color"]}))
+        );
+    }
+    $(".list-tab").first().addClass("active");
+}
 
-        // Build up the fieldsSpec to be used later
-        fieldsSpec[lists[i]["id"]] = lists[i]["fields"];
+function populateList(list) {
+    var tabIndex = findTabIndex(list);
+    var title = collectionLists[tabIndex]["title"];
+    var fieldSpec = collectionLists[tabIndex]["fields"];
+    var items = collectionItems[list];
 
-        // Create header
-        var listObj = $(".list-container#"+lists[i]["id"]).children("div.list");
-        listObj.append(getHeader(fieldsSpec[lists[i]["id"]]));
-        // Initiate Listeners
-        initiateListListeners(lists[i]["id"],lists[i]["title"],listObj);
+    $("div.lists")
+    .append($("<div/>",{class: "row"})
+        .append($("<div/>",{id: list,class: "list-container"})
+            .append($("<div/>",{class: "col-md-1"}))
+            .append($("<h3/>",{text:title}))
+            .append($("<div/>",{class: "list"}))
+    ));
+
+    // Create header
+    var listObj = $(".list-container#"+list).children("div.list");
+    listObj.append(getHeader(fieldSpec));
+    // Initiate Listeners
+    initiateListListeners(list,title,listObj);
+
+    for (var i=0;i<items.length;i++) {
+        var row = $("<div/>",{class: "row item"});
+        row.append(getStandardRowButtons(list));
+
+        for (var j=0;j<fieldSpec.length;j++) {
+            var field = fieldSpec[j];
+            var column = $("<div class=\"col-md-"+field["width"]+" data\"/>");
+
+            jQuery(" <span/>", {
+                id: field["id"],
+                text: items[i][field["id"]]
+            }).appendTo(column);
+
+            row.append(column);
+        }
+        listObj.append(row);
     }
 
-    for (var key in allItems) { if (allItems.hasOwnProperty(key)) {
-        var listItems = allItems[key];
-        var listItemsLength = listItems.length;
-        var list = $(".list-container#"+key).children("div.list");
+    //Create the quick add row
+    var quickAdd = jQuery("<div class=\"row item new-item\"/>");
+    // Add the quick add button to the row
+    quickAdd.append($("<div/>",{class: "col-md-2 buttons"}).append(getButton("plus","green").addClass("edit start")));
+    for (var j=0;j<fieldSpec.length;j++) {
+        var field = fieldSpec[j];
+        var column = $("<div/>",{class: "data col-md-"+field["width"]});
+        column.append($("<span/>",{id: field["id"]})).appendTo(quickAdd);
+    }
+    listObj.append(quickAdd);
 
-        for (var i=0;i<listItemsLength;i++) {
-            var row = $("<div/>",{class: "row item"});
-            row.append(getStandardRowButtons(key));
-
-            var listSpec = fieldsSpec[key];
-            for (var j=0;j<listSpec.length;j++) {
-                var field = listSpec[j];
-                var column = $("<div class=\"col-md-"+field["width"]+" data\"/>");
-
-                jQuery(" <span/>", {
-                    id: field["id"],
-                    text: listItems[i][field["id"]]
-                }).appendTo(column);
-
-                row.append(column);
-            }
-            list.append(row);
-        }
-
-        // Create the quick add row
-        var quickAdd = jQuery("<div class=\"row item new-item\"/>");
-        // Add the quick add button to the row
-        quickAdd.append($("<div/>",{class: "col-md-2 buttons"}).append(getButton("plus","green").addClass("edit start")));
-        for (var j=0;j<listSpec.length;j++) {
-            var field = listSpec[j];
-            var column = $("<div/>",{class: "data col-md-"+field["width"]});
-            column.append($("<span/>",{id: field["id"]})).appendTo(quickAdd);
-        }
-        list.append(quickAdd);
-
-        resetDisabledArrows(key);
-    }}
+    resetDisabledArrows(list);
 }
 
 /*-----------------------------------------------------------------------------
@@ -93,13 +108,29 @@ $(document).on('click', '.tabs#collections li a', function(event) {
     $(".tabs#collections li.active").removeClass("active");
     target.parent("li").addClass("active");
 
-    $(".container.lists").empty();
-    reloadList();
+    $(".lists").empty();
+    $(".list-tabs").empty();
+    loadNewCollection();
     $(this).blur();
 });
 
+$(document).on('click', '.list-tab', function(event) {
+    var target = $(event.target);
+    while (target && !target.hasClass("list-tab")) {
+        target = target.parent();
+    }
+    // save the list changes before switching lists
+    saveListChanges();
+    // empty out the list
+    $(".lists").empty();
+    $(".list-tab.active").removeClass("active");
+    // populate the new list
+    target.addClass("active");
+    populateList(target.attr("id"));
+});
+
 $(document).on('click', '.save', function() {
-    saveChangesToDb();
+    saveToDb();
 });
 
 $(document).on('mouseup', '.btn', function() {
@@ -139,11 +170,7 @@ var initiateListListeners = function(listId,listName,listObj) {
         var item = target.closest("div.item");
         var newListId = target.attr("id");
         
-        target.replaceWith($("<a/>",{id: listId, href: "#", text: listName, class: "moveList"}));
-        item.insertBefore($("div#"+newListId+" .new-item"));
-
-        resetDisabledArrows(newListId);
-        resetDisabledArrows(listId);
+        moveList(item,listId,newListId);
     });
 
     // Completing Quick Add Process
@@ -237,7 +264,32 @@ function acceptEdit(item,listId) {
     });
 
     if (item.hasClass("new-item")) item.trigger("addNewItem");
-} 
+}
+
+function moveList(item,oldList,newList) {
+    var itemIndex = $(".item").index(item);
+    var itemJson = collectionItems[oldList][itemIndex];
+    collectionItems[newList].push(itemJson);
+    // Delete item from viewable oldList and json oldList
+    item.remove();
+    collectionItems[oldList].splice(itemIndex,1);
+
+    resetDisabledArrows(oldList);
+}
+
+function findTabIndex(id) {
+    return $(".list-tab").index($(".list-tab#"+id));
+}
+
+// If a listId is supplied, just reset the arrows in that given list
+function resetDisabledArrows(listId) {
+    if (listId !== undefined) {
+        var list = $(".list-container#"+listId);
+        list.find(".shiftUp,.shiftDown").removeClass("disabled");
+        list.find(".item .shiftUp").first().addClass("disabled");
+        list.find(".item .shiftDown").last().addClass("disabled");
+    }
+}
 
 function getHeader(fieldSpec) {
     var header = "<div class=\"row header\">"+
@@ -250,13 +302,60 @@ function getHeader(fieldSpec) {
     return header;
 }
 
-// If a listId is supplied, just reset the arrows in that given list
-function resetDisabledArrows(listId) {
-    if (listId !== undefined) {
-        var list = $(".list-container#"+listId);
-        list.find(".shiftUp,.shiftDown").removeClass("disabled");
-        list.find(".item .shiftUp").first().addClass("disabled");
-        list.find(".item .shiftDown").last().addClass("disabled");
+var getStandardRowButtons = function(listId) {
+    var buttons = $("<div/>",{class: "col-md-2 buttons"});
+    // Create move arrows
+    buttons.append(getButton("arrow-down").addClass("movement shiftDown"));
+    buttons.append(getButton("arrow-up").addClass("movement shiftUp"));
+    // Create move button
+    var moveButton = "<div class=\"movement dropdown\">"+
+        "<button type=\"button\" data-toggle=\"dropdown\" class=\"btn btn-default dropdown-toggle\">"+
+        "<span class=\"glyphicon glyphicon-tasks\"></span>"+
+        "</button>"+
+        "<ul class=\"dropdown-menu\">";
+    for (var i=0;i<collectionLists.length;i++) {
+        if (collectionLists[i]["id"] !== listId) {
+            moveButton += "<li><a id=\""+collectionLists[i]["id"]+"\" class=\"moveList\" href=\"#\">"+
+                collectionLists[i]["title"]+"</a></li>";
+        }
     }
+    moveButton +=  "<li class=\"divider\"></li>"+
+    "<li><a class=\"edit start\" href=\"\">Edit</a></li>"+
+    "<li><a class=\"delete\" href=\"\">Delete</a></li>"+
+    "</ul></div>";
+    buttons.append(moveButton);
+    return buttons;
+}
+
+var saveListChanges = function() {
+    var activeListId = $(".list-tab.active").attr("id");
+    // If sublists are introducted will eventually go back to .list-container.each,
+    // but for now we will always just have one list container
+    var items = [];
+    $(".list-container").find(".item").each(function() {
+        if (!$(this).hasClass("new-item")) {
+            var item = {};
+            $(this).find(".data span").each(function() {
+                item[$(this).attr("id")] = $(this).text();
+            });
+            items.push(item);
+        }
+    });
+    collectionItems[activeListId] = items;
+}
+
+var saveToDb = function() {
+    // Start by retrieving the items from the stored json list because only the
+    // currently activated collection is available on the page
+    saveListChanges();
+    $.getJSON("items.json", function(data) {
+        var collection = $(".tabs#collections li.active").attr("id");
+        var json = data;
+        json.lists[collection] = collectionLists;
+        json.items[collection] = collectionItems;
+
+        var data = {"db" : json, "fileName" : "items.json"};
+        $.post( "write_db.php", data);
+    });
 }
 
