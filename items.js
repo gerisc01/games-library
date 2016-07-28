@@ -1,5 +1,7 @@
 var collectionLists = null;
 var collectionItems = null;
+var cancelDrop = false;
+var cancelDropFinal = false;
 
 function initializePage() {
     $.getJSON("items.json", function(data) {
@@ -45,6 +47,21 @@ function populateTabs() {
         );
     }
     $(".list-tab").first().addClass("active");
+    $(".list-tab").droppable({
+        tolerance: 'pointer',
+        activeClass: 'ui-droppable-accept',
+        drop: function(event, ui) {
+            var item = $(ui.draggable);
+            var newListId = $(event.target).attr("id");
+            var oldListId = item.closest(".list-container").attr("id");
+
+            cancelDrop = newListId === oldListId ? true : false;
+            if (!cancelDrop) {
+                saveListChanges();
+                moveList(item,oldListId,newListId);
+            }
+        }
+    });
 }
 
 function populateList(list) {
@@ -85,7 +102,7 @@ function populateList(list) {
         listObj.append(row);
     }
 
-    //Create the quick add row
+    // Create the quick add row
     var quickAdd = jQuery("<div class=\"row item new-item\"/>");
     // Add the quick add button to the row
     quickAdd.append($("<div/>",{class: "col-md-2 buttons"}).append(getButton("plus","green").addClass("edit start")));
@@ -95,6 +112,35 @@ function populateList(list) {
         column.append($("<span/>",{id: field["id"]})).appendTo(quickAdd);
     }
     listObj.append(quickAdd);
+    listObj.sortable({
+        tolerance: "pointer",
+        items: ".item:not(.new-item)",
+        start: function(event,ui) {
+            cancelDrop = false;
+        },
+        beforeStop: function(event,ui) {
+            // Because beforeStop cannot call $(this).sortable('cancel') without
+            // errors and because out is called between beforeStop() and stop()
+            // (and thus causing the drop to always be canceled even if it
+            // shouldn't be), use the beforeStop() method to set a cancelDropFinal
+            // variable that stop() will use to know if the drop should be 
+            // canceled or not
+            if (cancelDrop) cancelDropFinal = true;
+        },
+        stop: function(event,ui) {
+            // Use the final flag from beforeStop to know whether the drag event
+            // should be canceled or not
+            if (cancelDropFinal) $(this).sortable('cancel');
+            cancelDropFinal = false;
+            resetDisabledArrows(list);
+        },
+        out: function(event,ui) {
+            cancelDrop = true;
+        },
+        over: function(event,ui) {
+            cancelDrop = false;
+        }
+    });
 
     resetDisabledArrows(list);
 }

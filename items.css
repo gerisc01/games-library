@@ -47,6 +47,17 @@
 .list-tab.active {
     font-weight: bold;
 }
+.list-tab.active.ui-droppable-accept {
+    font-weight: normal;
+    color: gray;
+}
+.list-tab.ui-droppable-accept:not(.active) {
+    font-weight: bold;
+}
+.list-tab.ui-droppable-hover {
+    color: white;
+}
+
 .list-tab h4 {
     font-weight: inherit;
 }
