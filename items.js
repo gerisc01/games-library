@@ -826,11 +826,11 @@ var saveToDb = function() {
     $.getJSON("items.json", function(data) {
         var collection = $(".tabs#collections li.active").attr("id");
         var json = data;
-        console.log(collectionLists);
         json.lists[collection] = collectionLists;
         json.items[collection] = collectionItems;
+        console.log(data);
 
-        var data = {"db" : json, "fileName" : "items.json"};
+        var data = {"db" : JSON.stringify(json), "fileName" : "items.json"};
         $.post( "write_db.php", data);
     });
 }
