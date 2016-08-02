@@ -23,3 +23,20 @@ var isButtonDisabled = function(eventTarget) {
     var isDisabled = target.hasClass("disabled") ? true : false;
     return isDisabled;
 }   
+
+var getAddFieldGroup = function(fieldNumber) {
+    var selectInput = $("<select/>",{id: "field-"+fieldNumber+"-size", class: "form-control"});
+    for (var i=2;i<11;i++) {
+        selectInput.append($("<option/>",{text: i}));
+    }
+
+    return $("<div/>",{class: "form-group field-group"})
+        .append($("<label/>",{for: "field-"+fieldNumber+"-name",class:"col-sm-2 control-label",text: "Field "+fieldNumber}))
+        .append($("<div/>",{class:"col-sm-7"})
+            .append($("<input/>",{type: "text",class: "form-control",id: "field-"+fieldNumber+"-name",placeholder:"Field "+fieldNumber+" Name"}))
+        )
+        .append($("<label/>",{for: "field-"+fieldNumber+"-size",class: "col-sm-1 control-label",text: "Size"}))
+        .append($("<div/>",{class: "col-sm-2"})
+            .append(selectInput)
+        );
+}

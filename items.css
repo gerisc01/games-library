@@ -27,6 +27,11 @@
     float:left;
 }
 
+.tabs .glyphicon {
+    margin-right:10px;
+    cursor: pointer;
+}
+
 /* LIST TAB CSS classes*/
 
 .list-tabs {
@@ -42,6 +47,12 @@
     margin-bottom: 5px;
     padding:0px;
     cursor:pointer;
+}
+
+.list-tab.new .list-tab-text {
+    width:50px;
+    border: dashed;
+    font-size: 20px;
 }
 
 .list-tab.active {
@@ -80,7 +91,37 @@
     border-left: 25px solid;
 }
 
-input.quick-add {
+/*JQUERY UI DIALOG CLASSES*/
+
+#addList .form-group {
+    width:99%;
+}
+
+.alert {
+    white-space: pre-wrap;
+}
+
+/*EDIT LISTS CLASSES*/
+
+.edit.list-container {
+    border: dotted;
+    margin-left: 40px;
+    margin-top: 10px;
+    padding: 15px;
+    cursor: move;
+}
+
+/*For the edit/cancel/ok logos in collection tab*/
+.tabs .active a {
+    cursor: pointer;
+    pointer-events: none;
+}
+.tabs .active a span {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.list-container.edit input[type=text] {
     width: 95%;
 }
 
