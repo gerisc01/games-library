@@ -1,0 +1,76 @@
+COLLECTION
+    _id
+    order
+    name
+
+LISTS
+    _id
+    collectionId
+    order
+    name
+    color
+    fields
+        _id
+        name
+        width
+
+ITEMS
+    _id
+    listId
+    order
+    field_id 1
+    field_id 2
+    etc.
+
+/* COPY AND PASTE THE FOLLOWING BLOCK INTO MONGODB SHELL */
+
+use lists
+db.collections.insert({"name" : "Movies", _id: "movies", "order" : 2})
+db.collections.insert({"name" : "Games", _id: "games", "order" : 1})
+
+db.lists.insert({_id: "current", "collectionId" : "games", "order" : 1, "name" : "Currently Playing", "color" : "pastel-blue", "fields" : [
+    {"_id" : "column1", "name" : "Name", "width" : "3"},
+    {"_id" : "column2", "name" : "Length", "width" : "2"},
+    {"_id" : "column3", "name" : "Genre", "width" : "3"},
+    {"_id" : "column4", "name" : "Platform", "width" : "2"},
+]})
+db.lists.insert({_id: "next", "collectionId" : "games", "order" : 2, "name" : "To Play Next", "color" : "pastel-yellow", "fields" : [
+    {"_id" : "column1", "name" : "Name", "width" : "3"},
+    {"_id" : "column2", "name" : "Length", "width" : "2"},
+    {"_id" : "column3", "name" : "Genre", "width" : "3"},
+    {"_id" : "column4", "name" : "Platform", "width" : "2"},
+]})
+db.lists.insert({_id: "backlog", "collectionId" : "games", "order" : 3, "name" : "Backlog", "color" : "pastel-purple", "fields" : [
+    {"_id" : "column1", "name" : "Name", "width" : "3"},
+    {"_id" : "column2", "name" : "Length", "width" : "2"},
+    {"_id" : "column3", "name" : "Genre", "width" : "3"},
+    {"_id" : "column4", "name" : "Platform", "width" : "2"},
+]})
+db.lists.insert({_id: "completed", "collectionId" : "games", "order" : 4, "name" : "Completed", "color" : "pastel-orange", "fields" : [
+    {"_id" : "column1", "name" : "Name", "width" : "3"},
+    {"_id" : "column2", "name" : "Completed Date", "width" : "2"},
+    {"_id" : "column3", "name" : "100% Date", "width" : "2"}
+]})
+
+db.lists.insert({_id: "soon", "collectionId" : "movies", "order" : 1, "name" : "Watch Soon", "color" : "pastel-green", "fields" : [
+    {"_id" : "column1", "name" : "Name", "width" : "6"}
+]})
+db.lists.insert({_id: "watched", "collectionId" : "movies", "order" : 2, "name" : "Watched", "color" : "pastel-orange", "fields" : [
+    {"_id" : "column1", "name" : "Name", "width" : "6"}
+]})
+
+db.items.insert({"listId" : "current","order" : 1,"column1": "Uncharted 4", "column2" : "12Hrs","column3" : "Action Adventure", "column4" : "PS4"})
+db.items.insert({"listId" : "current","order" : 2,"column1": "MLB the Show 16", "column2" : "--","column3" : "Sports", "column4" : "PS4"})
+db.items.insert({"listId" : "current","order" : 3,"column1": "Borderlands 2", "column2" : "31Hrs","column3" : "First Person Shooter", "column4" : "PC"})
+db.items.insert({"listId" : "current","order" : 4,"column1": "Rayman Origins", "column2" : "10.5 Hrs","column3" : "Platformer", "column4" : "PC"})
+
+db.items.insert({"listId" : "next","order" : 1,"column1": "Furi", "column2" : "4 Hrs","column3" : "Action", "column4" : "PS4"})
+db.items.insert({"listId" : "next","order" : 1,"column1": "The Banner Saga", "column2" : "11 Hrs","column3" : "Strategy", "column4" : "PC"})
+
+db.items.insert({"listId" : "backlog","order" : 1,"column1": "Volume", "column2" : "8 Hrs","column3" : "Action Stealth", "column4" : "PC"})
+
+db.items.insert({"listId" : "soon", "column1" : "Mockingjay Part 1", "order" : 2})
+db.items.insert({"listId" : "soon", "column1" : "Start Wars: Force Awakens", "order" : 1})
+
+db.items.insert({"listId" : "watched", "column1" : "Zootopia", "order" : 1})
+db.items.insert({"listId" : "watched", "column1" : "The Amazing Spiderman", "order" : 2})
