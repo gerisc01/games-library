@@ -29,34 +29,34 @@ db.collections.insert({"name" : "Movies", _id: "movies", "order" : 2})
 db.collections.insert({"name" : "Games", _id: "games", "order" : 1})
 
 db.lists.insert({_id: "current", "collectionId" : "games", "order" : 1, "name" : "Currently Playing", "color" : "pastel-blue", "fields" : [
-    {"_id" : "column1", "name" : "Name", "width" : "3"},
-    {"_id" : "column2", "name" : "Length", "width" : "2"},
-    {"_id" : "column3", "name" : "Genre", "width" : "3"},
-    {"_id" : "column4", "name" : "Platform", "width" : "2"},
+    {"id" : "column1", "name" : "Name", "width" : "3"},
+    {"id" : "column2", "name" : "Length", "width" : "2"},
+    {"id" : "column3", "name" : "Genre", "width" : "3"},
+    {"id" : "column4", "name" : "Platform", "width" : "2"},
 ]})
 db.lists.insert({_id: "next", "collectionId" : "games", "order" : 2, "name" : "To Play Next", "color" : "pastel-yellow", "fields" : [
-    {"_id" : "column1", "name" : "Name", "width" : "3"},
-    {"_id" : "column2", "name" : "Length", "width" : "2"},
-    {"_id" : "column3", "name" : "Genre", "width" : "3"},
-    {"_id" : "column4", "name" : "Platform", "width" : "2"},
+    {"id" : "column1", "name" : "Name", "width" : "3"},
+    {"id" : "column2", "name" : "Length", "width" : "2"},
+    {"id" : "column3", "name" : "Genre", "width" : "3"},
+    {"id" : "column4", "name" : "Platform", "width" : "2"},
 ]})
 db.lists.insert({_id: "backlog", "collectionId" : "games", "order" : 3, "name" : "Backlog", "color" : "pastel-purple", "fields" : [
-    {"_id" : "column1", "name" : "Name", "width" : "3"},
-    {"_id" : "column2", "name" : "Length", "width" : "2"},
-    {"_id" : "column3", "name" : "Genre", "width" : "3"},
-    {"_id" : "column4", "name" : "Platform", "width" : "2"},
+    {"id" : "column1", "name" : "Name", "width" : "3"},
+    {"id" : "column2", "name" : "Length", "width" : "2"},
+    {"id" : "column3", "name" : "Genre", "width" : "3"},
+    {"id" : "column4", "name" : "Platform", "width" : "2"},
 ]})
 db.lists.insert({_id: "completed", "collectionId" : "games", "order" : 4, "name" : "Completed", "color" : "pastel-orange", "fields" : [
-    {"_id" : "column1", "name" : "Name", "width" : "3"},
-    {"_id" : "column2", "name" : "Completed Date", "width" : "2"},
-    {"_id" : "column3", "name" : "100% Date", "width" : "2"}
+    {"id" : "column1", "name" : "Name", "width" : "3"},
+    {"id" : "column2", "name" : "Completed Date", "width" : "2"},
+    {"id" : "column3", "name" : "100% Date", "width" : "2"}
 ]})
 
 db.lists.insert({_id: "soon", "collectionId" : "movies", "order" : 1, "name" : "Watch Soon", "color" : "pastel-green", "fields" : [
-    {"_id" : "column1", "name" : "Name", "width" : "6"}
+    {"id" : "column1", "name" : "Name", "width" : "6"}
 ]})
 db.lists.insert({_id: "watched", "collectionId" : "movies", "order" : 2, "name" : "Watched", "color" : "pastel-orange", "fields" : [
-    {"_id" : "column1", "name" : "Name", "width" : "6"}
+    {"id" : "column1", "name" : "Name", "width" : "6"}
 ]})
 
 db.items.insert({"listId" : "current","order" : 1,"column1": "Uncharted 4", "column2" : "12Hrs","column3" : "Action Adventure", "column4" : "PS4"})
