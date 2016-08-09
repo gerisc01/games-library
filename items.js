@@ -5,29 +5,62 @@ var cancelDrop = false;
 var cancelDropFinal = false;
 var colorList = {"pastel-green": "Green", "pastel-red": "Red", "pastel-purple": "Purple", "pastel-orange": "Orange",
         "pastel-yellow": "Yellow", "pastel-blue": "Blue"};
+var database = new LocalDB("items.json");
 
 /* Standard initalization */
 function initializePage() {
-    $.getJSON("items.json", function(data) {
-        // Get list of collections and build tabs
-        var collections = data.collections;
-        for (var i=0;i<collections.length;i++) {
-            var tab = jQuery("<li id=\""+collections[i]["id"]+"\"><a href=\"#\">"+collections[i]["title"]+"</a></li>");
-            if (i == 0) tab.addClass("active");
-            $(".tabs#collections").append(tab);
-        }
-        $(".tabs#collections li.active a").prepend($("<span/> ",{class: "glyphicon glyphicon-pencil edit-list"}));
+    loadCollections();
+    // $.getJSON("items.json", function(data) {
+    //     // Get list of collections and build tabs
+    //     var collections = data.collections;
+    //     for (var i=0;i<collections.length;i++) {
+    //         var tab = jQuery("<li id=\""+collections[i]["id"]+"\"><a href=\"#\">"+collections[i]["title"]+"</a></li>");
+    //         if (i == 0) tab.addClass("active");
+    //         $(".tabs#collections").append(tab);
+    //     }
+    //     $(".tabs#collections li.active a").prepend($("<span/> ",{class: "glyphicon glyphicon-pencil edit-list"}));
 
-        // Populate lists with the items
-        var collectionId = $(".tabs#collections li.active").attr("id");
-        collectionLists = data.lists[collectionId];
-        collectionItems = data.items[collectionId];
+    //     // Populate lists with the items
+    //     var collectionId = $(".tabs#collections li.active").attr("id");
+    //     collectionLists = data.lists[collectionId];
+    //     collectionItems = data.items[collectionId];
 
-        populateTabs();
-        $(".list-tab").first().addClass("active");
-        activeList = $(".list-tab.active").attr("id");
-        populateList(activeList);
-    });
+    //     populateTabs();
+    //     $(".list-tab").first().addClass("active");
+    //     activeList = $(".list-tab.active").attr("id");
+    //     populateList(activeList);
+    // });
+}
+
+function loadCollections() {
+    database.getCollections();
+}
+
+function loadLists() {
+    database.loadLists();
+}
+
+function loadItems() {
+
+}
+
+function populateCollections(collections) {
+    var collectionList = collections;
+
+    for (var i=0;i<collections.length;i++) {
+        var tab = jQuery("<li id=\""+collections[i]["id"]+"\"><a href=\"#\">"+collections[i]["title"]+"</a></li>");
+        if (i == 0) tab.addClass("active");
+        $(".tabs#collections").append(tab);
+    }
+    $(".tabs#collections li.active a").prepend($("<span/> ",{class: "glyphicon glyphicon-pencil edit-list"}));
+}
+
+function populateLists(data) {
+
+}
+
+function populateItems(data) {
+
 }
 
 function loadNewCollection() {
