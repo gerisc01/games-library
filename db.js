@@ -7,21 +7,15 @@ var LocalDB = function (fileLocation) {
 }
 
 LocalDB.prototype.getCollections = function() {
-    $.getJSON("items.json", function(data) {
-        populateCollections(data.collections);
-    });
+    return $.getJSON("items.json").then(function(data) { return data.collections; });
 };
 
 LocalDB.prototype.getLists = function(collection) {
-    $.getJSON("items.json", function(data) {
-        populateLists(data.lists[collection]);
-    });
+    return $.getJSON("items.json").then(function(data) { return data.lists[collection]; });
 };
 
-LocalDB.prototype.getItem = function(collection,list) {
-    $.getJSON("items.json", function(data) {
-        populateItems(data.items[collection]);
-    });
+LocalDB.prototype.getItems = function(collection) {
+    return $.getJSON("items.json").then(function(data) { return data.items[collection]; });
 };
 
 /******************************************************************************

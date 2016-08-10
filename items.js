@@ -1,5 +1,6 @@
 var collectionLists = null;
 var collectionItems = null;
+var activeCollection = null;
 var activeList = null;
 var cancelDrop = false;
 var cancelDropFinal = false;
@@ -9,7 +10,21 @@ var database = new LocalDB("items.json");
 
 /* Standard initalization */
 function initializePage() {
-    loadCollections();
+    // Retrieve data for collections
+    loadCollections()
+        .then(function(collections) { 
+            loadLists(collections[0]["id"]); 
+        })
+        .then(function(collections) { 
+            loadItems(collections[0]["id"]); 
+        })
+
+    // loadCollections().done(function(collections) { populateCollections(collections); })
+    // .then(function(collections) { loadLists(collections[0]["id"]).done(function(lists) { populateLists(lists); }) })
+    // .then(function(lists) { loadItems(lists[0]["id"]); }).done(function)
+
+    // Retrieve data for 
+
     // $.getJSON("items.json", function(data) {
     //     // Get list of collections and build tabs
     //     var collections = data.collections;
@@ -33,30 +48,72 @@ function initializePage() {
 }
 
 function loadCollections() {
-    database.getCollections();
+    return database.getCollections().then(function(collections) {
+        activeCollection = collections[0]["id"];
+        return collections;
+    }).done(function(collections) { populateCollections(collections); });
 }
 
-function loadLists() {
-    database.loadLists();
+function loadLists(collection) {
+    return database.getLists(collection).then(function(lists) {
+        collectionLists = lists;
+        return lists;
+    }).done(function(lists) { populateLists(lists); });
 }
 
-function loadItems() {
-
+function loadItems(collection) {
+    return database.getItems(collection).then(function(items) {
+        collectionItems = items;
+        return items;
+    });
 }
 
 function populateCollections(collections) {
-    var collectionList = collections;
-
     for (var i=0;i<collections.length;i++) {
         var tab = jQuery("<li id=\""+collections[i]["id"]+"\"><a href=\"#\">"+collections[i]["title"]+"</a></li>");
-        if (i == 0) tab.addClass("active");
+        if (i == 0) {
+            tab.addClass("active");
+            activeCollection = collections[i]["id"];
+        }
         $(".tabs#collections").append(tab);
     }
     $(".tabs#collections li.active a").prepend($("<span/> ",{class: "glyphicon glyphicon-pencil edit-list"}));
 }
 
-function populateLists(data) {
+function populateLists(lists) {
+    var tabs = $("div.list-tabs");
+    for (var i=0;i<lists.length;i++) {
+        var tab = $("<div/>",{id: lists[i]["id"],class: "list-tab"})
+            .append($("<div/>",{class:"list-tab-text "+lists[i]["color"]+"-bg"})
+                .append($("<h4/>",{text: lists[i]["title"]}))
+            ).append($("<div/>",{class:"arrow-right "+lists[i]["color"]}));
 
+        if (i === 0 && $(".list-tab.active").length === 0) tab.addClass("active");
+        tabs.append(tab);
+    }
+    $(".list-tab").droppable({
+        tolerance: 'pointer',
+        activeClass: 'ui-droppable-accept',
+        drop: function(event, ui) {
+            var item = $(ui.draggable);
+            var newListId = $(event.target).attr("id");
+            var oldListId = item.closest(".list-container").attr("id");
+
+            cancelDrop = newListId === oldListId ? true : false;
+            if (!cancelDrop) {
+                saveItemChanges();
+                moveList(item,oldListId,newListId);
+            }
+        }
+    });
+
+    // Add new list button after making the other tabs accept droppable
+    tabs.append(
+        $("<div/>",{class: "list-tab new"})
+        .append($("<div/>",{class: "list-tab-text"})
+            .append($("<span/>",{class: "glyphicon glyphicon-plus pastel-green"}))
+        ).append($("<div/>",{class: "arrow-right"}))
+    );
 }
 
 function populateItems(data) {
@@ -861,7 +918,6 @@ var saveToDb = function() {
         var json = data;
         json.lists[collection] = collectionLists;
         json.items[collection] = collectionItems;
-        console.log(data);
 
         var data = {"db" : JSON.stringify(json), "fileName" : "items.json"};
         $.post( "write_db.php", data);
