@@ -10,41 +10,15 @@ var database = new LocalDB("items.json");
 
 /* Standard initalization */
 function initializePage() {
-    // Retrieve data for collections
     loadCollections()
-        .then(function(collections) { 
-            loadLists(collections[0]["id"]); 
+        .then(function(collections) {
+            activeCollection = collections[0]["id"];
+            return loadLists(activeCollection); 
         })
-        .then(function(collections) { 
-            loadItems(collections[0]["id"]); 
+        .then(function(lists) {
+            activeList = lists[0]["id"];
+            loadItems(activeCollection); 
         })
-
-    // loadCollections().done(function(collections) { populateCollections(collections); })
-    // .then(function(collections) { loadLists(collections[0]["id"]).done(function(lists) { populateLists(lists); }) })
-    // .then(function(lists) { loadItems(lists[0]["id"]); }).done(function)
-
-    // Retrieve data for 
-
-    // $.getJSON("items.json", function(data) {
-    //     // Get list of collections and build tabs
-    //     var collections = data.collections;
-    //     for (var i=0;i<collections.length;i++) {
-    //         var tab = jQuery("<li id=\""+collections[i]["id"]+"\"><a href=\"#\">"+collections[i]["title"]+"</a></li>");
-    //         if (i == 0) tab.addClass("active");
-    //         $(".tabs#collections").append(tab);
-    //     }
-    //     $(".tabs#collections li.active a").prepend($("<span/> ",{class: "glyphicon glyphicon-pencil edit-list"}));
-
-    //     // Populate lists with the items
-    //     var collectionId = $(".tabs#collections li.active").attr("id");
-    //     collectionLists = data.lists[collectionId];
-    //     collectionItems = data.items[collectionId];
-
-    //     populateTabs();
-    //     $(".list-tab").first().addClass("active");
-    //     activeList = $(".list-tab.active").attr("id");
-    //     populateList(activeList);
-    // });
 }
 
 function loadCollections() {
@@ -65,7 +39,7 @@ function loadItems(collection) {
     return database.getItems(collection).then(function(items) {
         collectionItems = items;
         return items;
-    });
+    }).done(function(items) { populateItems(items); });
 }
 
 function populateCollections(collections) {
@@ -116,80 +90,28 @@ function populateLists(lists) {
     );
 }
 
-function populateItems(data) {
-
-}
-
-function loadNewCollection() {
-    $.getJSON("items.json", function(data) {
-        // Populate lists with the items saved in collection lists and items
-        var collectionId = $(".tabs#collections li.active").attr("id");
-        collectionLists = data.lists[collectionId];
-        collectionItems = data.items[collectionId];
-
-        populateTabs();
-        $(".list-tab").first().addClass("active");
-        activeList = $(".list-tab.active").attr("id");
-        populateList(activeList);
-    });
-}
-
-function populateTabs() {
-    var tabs = $("div.list-tabs");
-    for (var i=0;i<collectionLists.length;i++) {
-        tabs.append($("<div/>",{id: collectionLists[i]["id"],class: "list-tab"})
-            .append($("<div/>",{class:"list-tab-text "+collectionLists[i]["color"]+"-bg"})
-                .append($("<h4/>",{text: collectionLists[i]["title"]}))
-            ).append($("<div/>",{class:"arrow-right "+collectionLists[i]["color"]}))
-        );
-    }
-    $(".list-tab").droppable({
-        tolerance: 'pointer',
-        activeClass: 'ui-droppable-accept',
-        drop: function(event, ui) {
-            var item = $(ui.draggable);
-            var newListId = $(event.target).attr("id");
-            var oldListId = item.closest(".list-container").attr("id");
-
-            cancelDrop = newListId === oldListId ? true : false;
-            if (!cancelDrop) {
-                saveItemChanges();
-                moveList(item,oldListId,newListId);
-            }
-        }
-    });
-
-    // Add new list button after making the other tabs accept droppable
-    tabs.append(
-        $("<div/>",{class: "list-tab new"})
-        .append($("<div/>",{class: "list-tab-text"})
-            .append($("<span/>",{class: "glyphicon glyphicon-plus pastel-green"}))
-        ).append($("<div/>",{class: "arrow-right"}))
-    );
-}
-
-function populateList(list) {
-    var tabIndex = findTabIndex(list);
+function populateItems(items) {
+    var tabIndex = findTabIndex(activeList);
     var title = collectionLists[tabIndex]["title"];
     var fieldSpec = collectionLists[tabIndex]["fields"];
-    var items = collectionItems[list];
+    var listItems = items[activeList];
 
     $("div.lists")
     .append($("<div/>",{class: "row"})
-        .append($("<div/>",{id: list,class: "list-container"})
+        .append($("<div/>",{id: activeList,class: "list-container"})
             .append($("<h3/>",{text:title, class: "col-sm-offset-1"}))
             .append($("<div/>",{class: "list"}))
     ));
 
     // Create header
-    var listObj = $(".list-container#"+list).children("div.list");
+    var listObj = $(".list-container#"+activeList).children("div.list");
     listObj.append(getHeader(fieldSpec));
     // Initiate Listeners
-    initiateListListeners(list,title,listObj);
+    loadListListeners($(".list-container#"+activeList),activeList,title)
 
-    for (var i=0;i<items.length;i++) {
+    for (var i=0;i<listItems.length;i++) {
         var row = $("<div/>",{class: "row item"});
-        row.append(getStandardRowButtons(list));
+        row.append(getStandardRowButtons(activeList));
 
         for (var j=0;j<fieldSpec.length;j++) {
             var field = fieldSpec[j];
@@ -197,7 +119,7 @@ function populateList(list) {
 
             jQuery(" <span/>", {
                 id: field["id"],
-                text: items[i][field["id"]]
+                text: listItems[i][field["id"]]
             }).appendTo(column);
 
             row.append(column);
@@ -235,7 +157,7 @@ function populateList(list) {
             // should be canceled or not
             if (cancelDropFinal) $(this).sortable('cancel');
             cancelDropFinal = false;
-            resetDisabledArrows(list);
+            resetDisabledArrows(activeList);
         },
         out: function(event,ui) {
             cancelDrop = true;
@@ -245,12 +167,26 @@ function populateList(list) {
         }
     });
 
-    resetDisabledArrows(list);
+    resetDisabledArrows(activeList);
 }
 
-/* Edit initalization*/
+function loadNewCollection() {
+    $.getJSON("items.json", function(data) {
+        // Populate lists with the items saved in collection lists and items
+        var collectionId = $(".tabs#collections li.active").attr("id");
+        collectionLists = data.lists[collectionId];
+        collectionItems = data.items[collectionId];
 
-function initializeEdit() {
+        populateTabs();
+        $(".list-tab").first().addClass("active");
+        activeList = $(".list-tab.active").attr("id");
+        populateList(activeList);
+    });
+}
+
+/* Edit Lists initalization*/
+
+function editList() {
     for (var i=0;i<collectionLists.length;i++) {
         populateEditRow(collectionLists[i]);
         initializeEditListeners(collectionLists[i]["id"]);
@@ -328,110 +264,6 @@ function populateEditRow(list) {
 /*-----------------------------------------------------------------------------
 * LISTENERS
 *-----------------------------------------------------------------------------*/
-/* Standard listeners */
-$(document).on('click', '.list-tab', function(event) {
-    var target = $(event.target);
-    while (target && !target.hasClass("list-tab")) {
-        target = target.parent();
-    }
-    if (target.hasClass("new")) return showListCreateDialog();
-
-    // save the list changes before switching lists
-    saveItemChanges();
-    // empty out the list
-    $(".lists").empty();
-    $(".list-tab.active").removeClass("active");
-    // populate the new list
-    target.addClass("active");
-    activeList = target.attr("id");
-    populateList(activeList);
-});
-
-$(document).on('click', '.save', function() {
-    saveToDb();
-});
-
-$(document).on('mouseup', '.btn', function() {
-   $(this).blur();
-});
-
-var initiateListListeners = function(listId,listName,listObj) {
-    // Edit (AND Quick Add) Row
-    $(".list-container#"+listId).on('click', 'a.edit,.btn.edit.start', function(event) {
-        event.preventDefault(); // To prevent <a> from clicking and redirecting
-        var item = $(event.target).closest(".item");
-        editItem(item);
-    });
-
-    $(".list-container#"+listId).on('click', '.edit.cancel', function(event) {
-        var item = $(event.target).closest(".item");
-        cancelEdit(item,listId);
-    });
-
-    $(".list-container#"+listId).on('click', '.edit.accept', function(event) {
-        var item = $(event.target).closest(".item");
-        acceptEdit(item,listId);
-    });
-
-    // Delete Row
-    $(".list-container#"+listId).on('click', 'a.delete', function(event) {
-        event.preventDefault(); // To prevent <a> from clicking and redirecting
-        var item = $(event.target).closest(".item");
-        // Delete Item
-        item.remove();
-    });
-
-    // Move Row Between Lists
-    $(".list-container#"+listId).on('click', 'a.moveList', function(event) {
-        event.preventDefault(); // To prevent <a> from clicking and redirecting
-        var target = $(event.target);
-        var item = target.closest("div.item");
-        var newListId = target.attr("id");
-        
-        moveList(item,listId,newListId);
-    });
-
-    // Completing Quick Add Process
-    $(".list-container#"+listId).on('addNewItem', function(event) {
-        // Get item from target and throw and error if it isn't of the type new-item
-        var item = $(event.target);
-        if (!item.hasClass("new-item")) throw "The addNewItem target must have the type 'new-item'";
-        // Remove the new-item class from the passed item
-        item.removeClass("new-item");
-        // Reset the arrows so that the new item has a disabled down arrow
-        resetDisabledArrows(listId);
-        
-        // Create new Quick Add row
-        var row = jQuery("<div class=\"row item new-item\"/>");
-        // Create buttons and append to row
-        var buttons = jQuery("<div class=\"col-md-2 buttons\"/>");
-        buttons.append(getButton("plus","green").addClass("edit start"));
-        row.append(buttons);
-        // Iterate through the previous created item to get the column ids/widths
-        item.children("div.data").each(function() {
-            var column = $(this).clone();
-            column.children("span").empty();
-            row.append(column);
-        });
-        // Add the new row to the list
-        listObj.append(row);
-    });
-
-    // Shift UP and DOWN within the list
-    $(".list-container#"+listId).on('click', '.item .shiftUp', function(event) {
-        if (isButtonDisabled(event.target)) return;
-        var item = $(event.target).closest(".item");
-        item.insertBefore($(item.prev(".item")));
-        resetDisabledArrows(listId);
-    });
-
-    $(".list-container#"+listId).on('click', '.item .shiftDown', function(event) {
-        if (isButtonDisabled(event.target)) return;
-        var item = $(event.target).closest(".item");
-        item.insertAfter($(item.next(".item")));
-        resetDisabledArrows(listId);
-    });
-}
 
 /* Edit listeners */
 $(document).ready(function() {
@@ -470,7 +302,7 @@ $(document).ready(function() {
         $(".list-tabs").addClass("hidden");
         $(".list-tabs").empty();
         $(".content.lists").empty();
-        initializeEdit();
+        editList();
     });
 });
 
