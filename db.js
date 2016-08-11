@@ -18,6 +18,10 @@ LocalDB.prototype.getItems = function(collection) {
     return $.getJSON("items.json").then(function(data) { return data.items[collection]; });
 };
 
+LocalDB.prototype.updateItems = function(items,updateMap) {
+
+};
+
 /******************************************************************************
 DATABASE DB METHODS
 ******************************************************************************/
@@ -35,5 +39,9 @@ MongoDB.prototype.getLists = function(collection) {
 };
 
 MongoDB.prototype.getItem = function(collection,list) {
+
+};
+
+MongoDB.prototype.updateItems = function(items,updateMap) {
 
 };

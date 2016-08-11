@@ -177,10 +177,10 @@ function loadNewCollection() {
         collectionLists = data.lists[collectionId];
         collectionItems = data.items[collectionId];
 
-        populateTabs();
+        populateLists(collectionLists);
         $(".list-tab").first().addClass("active");
         activeList = $(".list-tab.active").attr("id");
-        populateList(activeList);
+        populateItems(activeList);
     });
 }
 
@@ -265,6 +265,25 @@ function populateEditRow(list) {
 * LISTENERS
 *-----------------------------------------------------------------------------*/
 /* Standard listeners */
+$(document).on('click', '.tabs#collections li a', function(event) {
+    var target = $(event.target);
+    $(".tabs#collections li.active").removeClass("active");
+    $(".tabs#collections li .edit-list").remove();
+
+    target.parent("li").addClass("active");
+    $(".tabs#collections li.active a").prepend($("<span/> ",{class: "glyphicon glyphicon-pencil edit-list"}));
+    activeCollection = $(".tabs#collections li.active").attr("id");
+
+    $(".lists").empty();
+    $(".list-tabs").empty();
+    loadLists(activeCollection)
+        .then(function(lists) {
+            activeList = lists[0]["id"];
+            loadItems(activeCollection); 
+        })
+    $(this).blur();
+});
+
 $(document).on('click', '.list-tab', function(event) {
     var target = $(event.target);
     while (target && !target.hasClass("list-tab")) {
@@ -280,7 +299,7 @@ $(document).on('click', '.list-tab', function(event) {
     // populate the new list
     target.addClass("active");
     activeList = target.attr("id");
-    populateItems(activeList);
+    populateItems(collectionItems);
 });
 
 $(document).on('click', '.save', function() {
@@ -379,11 +398,11 @@ $(document).ready(function() {
         // Save the list changes
         saveListChanges();
         // Repopulate the list
-        populateTabs();
+        populateLists(collectionLists);
         $(".list-tab#"+activeList).addClass("active");
         $(".list-tabs").removeClass("hidden");
         $(".content.lists").empty();
-        populateList(activeList);
+        populateItems(collectionItems);
     });
 
     $("ul#collections").on("click",".cancel-edit",function(event) {
@@ -391,11 +410,11 @@ $(document).ready(function() {
         var editAction = $("<span/>",{class: "glyphicon glyphicon-pencil edit-list"});
         $(this).siblings("span.accept-edit").remove();
         $(this).replaceWith(editAction);
-        populateTabs();
+        populateLists(collectionLists);
         $(".list-tab#"+activeList).addClass("active");
         $(".list-tabs").removeClass("hidden");
         $(".content.lists").empty();
-        populateList(activeList);
+        populateItems(collectionItems);
     });
 
     $("ul#collections").on("click",".edit-list",function(event) {
