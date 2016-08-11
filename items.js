@@ -107,7 +107,7 @@ function populateItems(items) {
     var listObj = $(".list-container#"+activeList).children("div.list");
     listObj.append(getHeader(fieldSpec));
     // Initiate Listeners
-    loadListListeners($(".list-container#"+activeList),activeList,title)
+    initiateListListeners(activeList,title,listObj);
 
     for (var i=0;i<listItems.length;i++) {
         var row = $("<div/>",{class: "row item"});
@@ -184,9 +184,9 @@ function loadNewCollection() {
     });
 }
 
-/* Edit Lists initalization*/
+/* Edit initalization*/
 
-function editList() {
+function initializeEdit() {
     for (var i=0;i<collectionLists.length;i++) {
         populateEditRow(collectionLists[i]);
         initializeEditListeners(collectionLists[i]["id"]);
@@ -264,6 +264,110 @@ function populateEditRow(list) {
 /*-----------------------------------------------------------------------------
 * LISTENERS
 *-----------------------------------------------------------------------------*/
+/* Standard listeners */
+$(document).on('click', '.list-tab', function(event) {
+    var target = $(event.target);
+    while (target && !target.hasClass("list-tab")) {
+        target = target.parent();
+    }
+    if (target.hasClass("new")) return showListCreateDialog();
+
+    // save the list changes before switching lists
+    saveItemChanges();
+    // empty out the list
+    $(".lists").empty();
+    $(".list-tab.active").removeClass("active");
+    // populate the new list
+    target.addClass("active");
+    activeList = target.attr("id");
+    populateItems(activeList);
+});
+
+$(document).on('click', '.save', function() {
+    saveToDb();
+});
+
+$(document).on('mouseup', '.btn', function() {
+   $(this).blur();
+});
+
+var initiateListListeners = function(listId,listName,listObj) {
+    // Edit (AND Quick Add) Row
+    $(".list-container#"+listId).on('click', 'a.edit,.btn.edit.start', function(event) {
+        event.preventDefault(); // To prevent <a> from clicking and redirecting
+        var item = $(event.target).closest(".item");
+        editItem(item);
+    });
+
+    $(".list-container#"+listId).on('click', '.edit.cancel', function(event) {
+        var item = $(event.target).closest(".item");
+        cancelEdit(item,listId);
+    });
+
+    $(".list-container#"+listId).on('click', '.edit.accept', function(event) {
+        var item = $(event.target).closest(".item");
+        acceptEdit(item,listId);
+    });
+
+    // Delete Row
+    $(".list-container#"+listId).on('click', 'a.delete', function(event) {
+        event.preventDefault(); // To prevent <a> from clicking and redirecting
+        var item = $(event.target).closest(".item");
+        // Delete Item
+        item.remove();
+    });
+
+    // Move Row Between Lists
+    $(".list-container#"+listId).on('click', 'a.moveList', function(event) {
+        event.preventDefault(); // To prevent <a> from clicking and redirecting
+        var target = $(event.target);
+        var item = target.closest("div.item");
+        var newListId = target.attr("id");
+        
+        moveList(item,listId,newListId);
+    });
+
+    // Completing Quick Add Process
+    $(".list-container#"+listId).on('addNewItem', function(event) {
+        // Get item from target and throw and error if it isn't of the type new-item
+        var item = $(event.target);
+        if (!item.hasClass("new-item")) throw "The addNewItem target must have the type 'new-item'";
+        // Remove the new-item class from the passed item
+        item.removeClass("new-item");
+        // Reset the arrows so that the new item has a disabled down arrow
+        resetDisabledArrows(listId);
+        
+        // Create new Quick Add row
+        var row = jQuery("<div class=\"row item new-item\"/>");
+        // Create buttons and append to row
+        var buttons = jQuery("<div class=\"col-md-2 buttons\"/>");
+        buttons.append(getButton("plus","green").addClass("edit start"));
+        row.append(buttons);
+        // Iterate through the previous created item to get the column ids/widths
+        item.children("div.data").each(function() {
+            var column = $(this).clone();
+            column.children("span").empty();
+            row.append(column);
+        });
+        // Add the new row to the list
+        listObj.append(row);
+    });
+
+    // Shift UP and DOWN within the list
+    $(".list-container#"+listId).on('click', '.item .shiftUp', function(event) {
+        if (isButtonDisabled(event.target)) return;
+        var item = $(event.target).closest(".item");
+        item.insertBefore($(item.prev(".item")));
+        resetDisabledArrows(listId);
+    });
+
+    $(".list-container#"+listId).on('click', '.item .shiftDown', function(event) {
+        if (isButtonDisabled(event.target)) return;
+        var item = $(event.target).closest(".item");
+        item.insertAfter($(item.next(".item")));
+        resetDisabledArrows(listId);
+    });
+}
 
 /* Edit listeners */
 $(document).ready(function() {
@@ -302,7 +406,7 @@ $(document).ready(function() {
         $(".list-tabs").addClass("hidden");
         $(".list-tabs").empty();
         $(".content.lists").empty();
-        editList();
+        initializeEdit();
     });
 });
 
