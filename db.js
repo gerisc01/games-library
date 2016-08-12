@@ -46,33 +46,41 @@ var MongoDB = function (databaseUrl) {
 }
 
 MongoDB.prototype.getCollections = function() {
-
+    return $.get("/db/mongo/collections.php").then(function(data) { return data.collections; });
 };
 
 MongoDB.prototype.getLists = function(collection) {
-
+    return $.get("/db/mongo/lists.php",{"collection" : collection}).then(function(data) { return data.lists; });
 };
 
-MongoDB.prototype.getItem = function(collection,list) {
-
+MongoDB.prototype.getItems = function(collection) {
+    return $.get("/db/mongo/items.php",{"collection" : collection}).then(function(data) { return data.items; });
 };
 
 MongoDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
+    console.log(items);
+    var editItems = [];
+    for (var key in items) { if (items.hasOwnProperty(key)) {
+        for (var i=0;i<items[key].length;i++) {
+            if (items[key][i]["_edited"] === true || items[key][i]["order"] !== i+1) {
+                var item = items[key][i];
+                item["order"] = i+1;
+                delete item["_edited"];
+                editItems.push(item);
+            }
+        }
+    }}
 
-};
+    var data = {"collection" : collectionId,"lists" : lists, "items" : editItems, "deletedLists" : deletedListIds, "deletedItems" : deletedItemIds};
 
-MongoDB.prototype.updateCollections = function(collections,deletedIds) {
-
-};
-
-MongoDB.prototype.updateLists = function(lists,deletedIds) {
-
-};
-
-MongoDB.prototype.updateItems = function(items,deletedIds) {
-    // Iterate through items
-    // If the item has the tag of _edited, make the necessary edits
-    // If the item index and order are different, make the update to the order
-    // If an item doesn't already have an id, create the item in the db
-    // Go through the list of deleted ids and delete the items
+    $.ajax({
+        url:"/db/mongo/update.php",
+        type:"POST",
+        data:JSON.stringify(data),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        complete: function(response) {
+            console.log(response.responseText);
+        }
+    });
 };

@@ -8,7 +8,7 @@ var cancelDrop = false;
 var cancelDropFinal = false;
 var colorList = {"pastel-green": "Green", "pastel-red": "Red", "pastel-purple": "Purple", "pastel-orange": "Orange",
         "pastel-yellow": "Yellow", "pastel-blue": "Blue"};
-var database = new LocalDB("items.json");
+var database = new MongoDB("items.json");
 
 /* Standard initalization */
 function initializePage() {
@@ -46,7 +46,7 @@ function loadItems(collection) {
 
 function populateCollections(collections) {
     for (var i=0;i<collections.length;i++) {
-        var tab = jQuery("<li id=\""+collections[i]["_id"]+"\"><a href=\"#\">"+collections[i]["title"]+"</a></li>");
+        var tab = jQuery("<li id=\""+collections[i]["_id"]+"\"><a href=\"#\">"+collections[i]["name"]+"</a></li>");
         if (i == 0) {
             tab.addClass("active");
             activeCollection = collections[i]["_id"];
@@ -61,7 +61,7 @@ function populateLists(lists) {
     for (var i=0;i<lists.length;i++) {
         var tab = $("<div/>",{id: lists[i]["_id"],class: "list-tab"})
             .append($("<div/>",{class:"list-tab-text "+lists[i]["color"]+"-bg"})
-                .append($("<h4/>",{text: lists[i]["title"]}))
+                .append($("<h4/>",{text: lists[i]["name"]}))
             ).append($("<div/>",{class:"arrow-right "+lists[i]["color"]}));
 
         if (i === 0 && $(".list-tab.active").length === 0) tab.addClass("active");
@@ -94,7 +94,7 @@ function populateLists(lists) {
 
 function populateItems(items) {
     var tabIndex = findTabIndex(activeList);
-    var title = collectionLists[tabIndex]["title"];
+    var title = collectionLists[tabIndex]["name"];
     var fieldSpec = collectionLists[tabIndex]["fields"];
     var listItems = items[activeList];
 
@@ -112,7 +112,7 @@ function populateItems(items) {
     initiateListListeners(activeList,title,listObj);
 
     for (var i=0;i<listItems.length;i++) {
-        var row = $("<div/>",{id: listItems[i]["_id"], class: "row item"});
+        var row = $("<div/>",{id: listItems[i]["_id"], class: "row item", "data-starting-order": listItems[i]["order"]});
         row.append(getStandardRowButtons(activeList));
 
         for (var j=0;j<fieldSpec.length;j++) {
@@ -194,7 +194,7 @@ function populateEditRow(list) {
 
     // Create the title row
     var titleRow = $("<div/>",{class: "row title"})
-        .append($("<h3/>",{class: "col-md-offset-1 col-md-5",text: list["title"]}));
+        .append($("<h3/>",{class: "col-md-offset-1 col-md-5",text: list["name"]}));
 
     // Initialize the variables/first column for size/color row, name row, and id row
     var sizeRow = $("<div/>",{class: "row sizes"})
@@ -205,7 +205,7 @@ function populateEditRow(list) {
     var nameRow = $("<div/>",{class: "row names"})
     nameRow.append($("<div/>",{class: "col-md-2 "+list["color"]+"-bg"})
         .append($("<h4/>",{class: "tab-name"})
-            .append($("<input/>",{type: "text", value: list["title"]}))));
+            .append($("<input/>",{type: "text", value: list["name"]}))));
 
     var idRow = $("<div/>",{class: "row ids"});
     idRow.append($("<div/>",{class: "col-md-2"})
@@ -798,7 +798,7 @@ var getStandardRowButtons = function(listId) {
     for (var i=0;i<collectionLists.length;i++) {
         if (collectionLists[i]["_id"] !== listId) {
             moveButton += "<li><a id=\""+collectionLists[i]["_id"]+"\" class=\"moveList\" href=\"#\">"+
-                collectionLists[i]["title"]+"</a></li>";
+                collectionLists[i]["name"]+"</a></li>";
         }
     }
     moveButton +=  "<li class=\"divider\"></li>"+
@@ -814,7 +814,7 @@ var saveListChanges = function() {
     var lists = [];
     $(".list-container.edit").each(function() {
         var list = {};
-        list["title"] = $(this).find(".title").text();
+        list["name"] = $(this).find(".title").text();
         list["_id"] = $(this).attr("id");
         list["color"] = $(this).find("select#color").val();
         var listContainerObj = $(this);
@@ -844,12 +844,14 @@ var saveItemChanges = function() {
     var items = [];
     $(".list-container").find(".item").each(function() {
         var edited = $(this).attr("data-edited") === "true" ? true : false;
+        var startingOrder = parseInt($(this).attr("data-starting-order"));
         if (!$(this).hasClass("new-item")) {
             var item = {};
             $(this).find(".data span").each(function() {
                 item[$(this).attr("id")] = $(this).text();
             });
             item["_edited"] = edited;
+            item["order"] = startingOrder;
             items.push(item);
         }
     });
