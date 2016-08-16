@@ -58,12 +58,25 @@ MongoDB.prototype.getItems = function(collection) {
 };
 
 MongoDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
-    console.log(items);
+    // Iterate through lists to see which ones need to be updated in the db
+    var editLists = [];
+    for (var i=0;i<lists.length;i++) {
+        if (lists[i]["_edited"] === true) {
+            var list = lists[i];
+            list["order"] = i+1;
+            delete list["_edited"];
+            editLists.push(list);
+        }
+    }
+
+    // Iterate through items to see which ones need to be updated in the db
     var editItems = [];
     for (var key in items) { if (items.hasOwnProperty(key)) {
         for (var i=0;i<items[key].length;i++) {
             if (items[key][i]["_edited"] === true || items[key][i]["order"] !== i+1) {
                 var item = items[key][i];
+                item["collectionId"] = collectionId;
+                item["listId"] = key;
                 item["order"] = i+1;
                 delete item["_edited"];
                 editItems.push(item);
@@ -71,16 +84,12 @@ MongoDB.prototype.updateCollectionContent = function(collectionId,lists,deletedL
         }
     }}
 
-    var data = {"collection" : collectionId,"lists" : lists, "items" : editItems, "deletedLists" : deletedListIds, "deletedItems" : deletedItemIds};
+    var data = {"collection" : collectionId,"lists" : editLists, "items" : editItems, "deletedLists" : deletedListIds, "deletedItems" : deletedItemIds};
 
-    $.ajax({
+    return $.ajax({
         url:"/db/mongo/update.php",
         type:"POST",
         data:JSON.stringify(data),
-        contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        complete: function(response) {
-            console.log(response.responseText);
-        }
+        contentType:"application/json; charset=utf-8"
     });
 };

@@ -5,8 +5,6 @@ $client = new MongoDB\Client("mongodb://localhost:27017");
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $body = file_get_contents('php://input');
 
-    // echo $body."\n";
-
     $json;
     try {
         $json = json_decode($body,true);
@@ -18,19 +16,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (array_key_exists("lists",$json) && $json["lists"] != null) {
-        echo "lists\n".json_encode($json["lists"])."\n";
+        foreach ($json["lists"] as $list) {
+            if (array_key_exists("_id", $list)) {
+                $mongoId = new MongoDB\BSON\ObjectID($list["_id"]);
+                unset($list['_id']);
+                $client->lists->lists->updateOne(["_id" => $mongoId],['$set' => $list]);
+            } else {
+                $client->lists->lists->insertOne($list);
+            }
+        }
     }
 
     if (array_key_exists("items",$json) && $json["items"] != null) {
-        echo "items\n".json_encode($json["items"])."\n";
+        foreach ($json["items"] as $item) {
+            if (array_key_exists("_id", $item)) {
+                $mongoId = new MongoDB\BSON\ObjectID($item["_id"]);
+                unset($item['_id']);
+                $client->lists->items->updateOne(["_id" => $mongoId],['$set' => $item]);
+            } else {
+                $client->lists->items->insertOne($item);
+            }
+        }
     }
 
     if (array_key_exists("deletedLists",$json) && $json["deletedLists"] != null) {
-        echo json_encode($json["deletedLists"])."\n";
+        foreach ($json["deletedLists"] as $listId) {
+            $mongoId = new MongoDB\BSON\ObjectID($listId);
+            $client->lists->lists->deleteOne(["_id" => $mongoId]);
+            $client->lists->items->deleteMany(["listId" => $listId]);
+        }
     }
 
     if (array_key_exists("deletedItems",$json) && $json["deletedItems"] != null) {
-        echo json_encode($json["deletedItems"])."\n";
+        foreach ($json["deletedItems"] as $itemId) {
+            $mongoId = new MongoDB\BSON\ObjectID($itemId);
+            $client->lists->items->deleteOne(["_id" => $mongoId]);
+        }
     }
 
     // // Generate collections

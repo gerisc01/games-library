@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     // Generating all lists based on the inputted collection id
-    $listResult = $client->lists->lists->find(["collectionId"=>$collectionId],["sort"=>['order' => 1],"projection"=>['order'=>0]]);
+    $listResult = $client->lists->lists->find(["collectionId"=>$collectionId],["sort"=>['order' => 1]]);
     $lists = array();
     foreach($listResult as $a) {
         $list = array();
@@ -27,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $fields[] = $f;
                 }
                 $list["fields"] = $fields;
+            } else if ($k == "_id") {
+                $list["_id"] = (string)$v;
             } else {
                 $list[$k] = $v;
             }

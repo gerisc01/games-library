@@ -664,7 +664,7 @@ function showListCreateDialog() {
                 error = "- A field currently has an empty 'Name' or 'Size'.";
                 return;
             }
-            var fieldId = createKeyFromName(fieldName);
+            var fieldId = "column"+(fields.length+1);
             fields.push({"name": fieldName, "id": fieldId, "width": size})
         });
 
@@ -689,24 +689,32 @@ function showListCreateDialog() {
             return;
         }
 
-        // Create an id based off of the new name
-        var id = createKeyFromName(name);
         // If there were no errors, create the list
-        createList(name,id,color,fields);
+        createList(name,color,fields);
         $("#addList").dialog("close");
-        $(".list-tab#"+id).click();
     });
 }
 
-function createList(name,id,color,fields) {
+function createList(name,color,fields) {
     listObj = {
-        "title": name,
-        "id": id,
+        "name": name,
         "color": color,
-        "fields": fields
+        "fields": fields,
+        "collectionId": activeCollection,
+        "_edited": true
     };
     collectionLists.push(listObj);
-    collectionItems[id] = [];
+    database.updateCollectionContent(activeCollection,collectionLists,null,null,null)
+        .done(function(resp) {
+            console.log(resp.responseText);
+            $("div.list-tabs").empty();
+            return loadLists(activeCollection);
+        })
+        .done(function() {
+            var activeList = collectionLists[collectionLists.length-1]["_id"];
+            $("div.lists").empty();
+            loadItems(activeCollection);
+        });
 
     ($("<div/>",{id: id,class: "list-tab"})
         .append($("<div/>",{class:"list-tab-text "+color+"-bg"})
@@ -718,6 +726,7 @@ function createList(name,id,color,fields) {
 function moveList(item,oldList,newList) {
     var itemIndex = $(".item").index(item);
     var itemJson = collectionItems[oldList][itemIndex];
+    itemJson["_edited"] = true;
     collectionItems[newList].push(itemJson);
     // Delete item from viewable oldList and json oldList
     item.remove();
@@ -784,6 +793,20 @@ function getHeader(fieldSpec) {
     return header;
 }
 
+function listsEqual(list1,list2) {
+    if (list1["_id"] !== list2["_id"]) return false;
+    if (list1["name"] !== list2["name"]) return false;
+    if (list1["color"] !== list2["color"]) return false;
+    if (list1["fields"].length !== list2["fields"].length) return false;
+    for (var i=0;i<list1["fields"].length;i++) {
+        if (list1["fields"][i]["name"] !== list2["fields"][i]["name"]) return false;
+        if (list1["fields"][i]["id"] !== list2["fields"][i]["id"]) return false;
+        if (list1["fields"][i]["width"] !== list2["fields"][i]["width"]) return false;
+    }
+    // If none of those fail, the lists are equal so return true
+    return true;
+}
+
 var getStandardRowButtons = function(listId) {
     var buttons = $("<div/>",{class: "col-md-2 buttons"});
     // Create move arrows
@@ -834,6 +857,15 @@ var saveListChanges = function() {
         list["fields"] = fields;
         lists.push(list);
     });
+
+    // Iterate through lists to see if the order has changed during the edit
+    for (var i=0;i<lists.length;i++) {
+        if (i >= collectionLists.length) {
+            lists[i]["_edited"] = true;
+        } else if (!listsEqual(lists[i],collectionLists[i])) {
+            lists[i]["_edited"] = true;
+        }
+    }
     collectionLists = lists;
 }
 
@@ -845,11 +877,13 @@ var saveItemChanges = function() {
     $(".list-container").find(".item").each(function() {
         var edited = $(this).attr("data-edited") === "true" ? true : false;
         var startingOrder = parseInt($(this).attr("data-starting-order"));
+        var itemId = $(this).attr("id");
         if (!$(this).hasClass("new-item")) {
             var item = {};
             $(this).find(".data span").each(function() {
                 item[$(this).attr("id")] = $(this).text();
             });
+            if (itemId !== undefined) item["_id"] = itemId;
             item["_edited"] = edited;
             item["order"] = startingOrder;
             items.push(item);
@@ -868,5 +902,11 @@ var saveToDb = function() {
         deletedListIds,
         collectionItems,
         deletedItemIds
-    );
+    )
+    // When updating the collection is complete, reload the lists so that any created ids
+    // and the updated order can be applied to the items
+    .done(function(resp) {
+        $("div.lists").empty();
+        loadItems(activeCollection);
+    });
 }
