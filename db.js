@@ -20,22 +20,52 @@ LocalDB.prototype.getItems = function(collection) {
 
 LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
     $.getJSON("items.json", function(data) {
-        // before setting the items, iterate through them and strip out the
-        // _edited variable before it gets committed to the json file
-        for (var key in items) { if (items.hasOwnProperty(key)) {
-            for (var i=0;i<items[key].length;i++) {
-                delete items[key][i]["_edited"];
-            }
-        }}
 
         var json = data;
-        json.lists[collectionId] = lists;
-        json.items[collectionId] = items;
+        if (lists !== undefined && lists !== null) {
+            for (var i=0;i<lists.length;i++) {
+                // Create an id for the list if it is new
+                if (lists[i]["_id"] === undefined) {
+                    var listId = guid();
+                    lists[i]["_id"] = listId;
+                    items.push({listId: []});
+                }
+                // Delete the _edited key if it is in the list object
+                delete lists[i]["_edited"];
+            }
+            json.lists[collectionId] = lists;
+        }
+
+        if (items !== undefined && items !== null) {
+            for (var key in items) { if (items.hasOwnProperty(key)) {
+                for (var i=0;i<items[key].length;i++) {
+                    // Create an id for the list if it is new
+                    if (items[key][i]["_id"] === undefined) {
+                        var itemId = guid();
+                        items[key][i]["_id"] = itemId;
+                    }
+                    // Delete the _edited key for each item
+                    delete items[key][i]["_edited"];
+                }
+            }}
+            json.items[collectionId] = items;
+        }
 
         var data = {"db" : JSON.stringify(json), "fileName" : "../../items.json"};
         $.post( "db/local/write.php", data);
     });
 };
+
+// Local DB helper methods
+var guid = function() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
 
 /******************************************************************************
 DATABASE DB METHODS

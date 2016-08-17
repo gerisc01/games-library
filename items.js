@@ -8,7 +8,7 @@ var cancelDrop = false;
 var cancelDropFinal = false;
 var colorList = {"pastel-green": "Green", "pastel-red": "Red", "pastel-purple": "Purple", "pastel-orange": "Orange",
         "pastel-yellow": "Yellow", "pastel-blue": "Blue"};
-var database = new MongoDB("items.json");
+var database = new LocalDB("items.json");
 
 /* Standard initalization */
 function initializePage() {
