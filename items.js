@@ -106,7 +106,7 @@ function populateItems(items) {
     ));
 
     // Create header
-    var listObj = $(".list-container#"+activeList).children("div.list");
+    var listObj = $(".lists").find("#"+activeList).children("div.list");
     listObj.append(getHeader(fieldSpec));
     // Initiate Listeners
     initiateListListeners(activeList,title,listObj);
@@ -300,24 +300,24 @@ $(document).on('mouseup', '.btn', function() {
 
 var initiateListListeners = function(listId,listName,listObj) {
     // Edit (AND Quick Add) Row
-    $(".list-container#"+listId).on('click', 'a.edit,.btn.edit.start', function(event) {
+    $(".lists").find("#"+listId).on('click', 'a.edit,.btn.edit.start', function(event) {
         event.preventDefault(); // To prevent <a> from clicking and redirecting
         var item = $(event.target).closest(".item");
         editItem(item);
     });
 
-    $(".list-container#"+listId).on('click', '.edit.cancel', function(event) {
+    $(".lists").find("#"+listId).on('click', '.edit.cancel', function(event) {
         var item = $(event.target).closest(".item");
         cancelEdit(item,listId);
     });
 
-    $(".list-container#"+listId).on('click', '.edit.accept', function(event) {
+    $(".lists").find("#"+listId).on('click', '.edit.accept', function(event) {
         var item = $(event.target).closest(".item");
         acceptEdit(item,listId);
     });
 
     // Delete Row
-    $(".list-container#"+listId).on('click', 'a.delete', function(event) {
+    $(".lists").find("#"+listId).on('click', 'a.delete', function(event) {
         event.preventDefault(); // To prevent <a> from clicking and redirecting
         var item = $(event.target).closest(".item");
         deletedItemIds.push(item.attr("id"));
@@ -326,7 +326,7 @@ var initiateListListeners = function(listId,listName,listObj) {
     });
 
     // Move Row Between Lists
-    $(".list-container#"+listId).on('click', 'a.moveList', function(event) {
+    $(".lists").find("#"+listId).on('click', 'a.moveList', function(event) {
         event.preventDefault(); // To prevent <a> from clicking and redirecting
         var target = $(event.target);
         var item = target.closest("div.item");
@@ -336,7 +336,7 @@ var initiateListListeners = function(listId,listName,listObj) {
     });
 
     // Completing Quick Add Process
-    $(".list-container#"+listId).on('addNewItem', function(event) {
+    $(".lists").find("#"+listId).on('addNewItem', function(event) {
         // Get item from target and throw and error if it isn't of the type new-item
         var item = $(event.target);
         if (!item.hasClass("new-item")) throw "The addNewItem target must have the type 'new-item'";
@@ -362,14 +362,14 @@ var initiateListListeners = function(listId,listName,listObj) {
     });
 
     // Shift UP and DOWN within the list
-    $(".list-container#"+listId).on('click', '.item .shiftUp', function(event) {
+    $(".lists").find("#"+listId).on('click', '.item .shiftUp', function(event) {
         if (isButtonDisabled(event.target)) return;
         var item = $(event.target).closest(".item");
         item.insertBefore($(item.prev(".item")));
         resetDisabledArrows(listId);
     });
 
-    $(".list-container#"+listId).on('click', '.item .shiftDown', function(event) {
+    $(".lists").find("#"+listId).on('click', '.item .shiftDown', function(event) {
         if (isButtonDisabled(event.target)) return;
         var item = $(event.target).closest(".item");
         item.insertAfter($(item.next(".item")));
@@ -388,7 +388,7 @@ $(document).ready(function() {
         saveListChanges();
         // Repopulate the list
         populateLists(collectionLists);
-        $(".list-tab#"+activeList).addClass("active");
+        $(".list-tabs").find("#"+activeList).addClass("active");
         $(".list-tabs").removeClass("hidden");
         $(".content.lists").empty();
         populateItems(collectionItems);
@@ -400,7 +400,7 @@ $(document).ready(function() {
         $(this).siblings("span.accept-edit").remove();
         $(this).replaceWith(editAction);
         populateLists(collectionLists);
-        $(".list-tab#"+activeList).addClass("active");
+        $(".list-tabs").find("#"+activeList).addClass("active");
         $(".list-tabs").removeClass("hidden");
         $(".content.lists").empty();
         populateItems(collectionItems);
@@ -715,12 +715,6 @@ function createList(name,color,fields) {
             $("div.lists").empty();
             loadItems(activeCollection);
         });
-
-    ($("<div/>",{id: id,class: "list-tab"})
-        .append($("<div/>",{class:"list-tab-text "+color+"-bg"})
-            .append($("<h4/>",{text: name}))
-        ).append($("<div/>",{class:"arrow-right "+color}))
-    ).insertBefore($(".list-tab.new"));
 }
 
 function moveList(item,oldList,newList) {
