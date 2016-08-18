@@ -112,7 +112,8 @@ function populateItems(items) {
     initiateListListeners(activeList,title,listObj);
 
     for (var i=0;i<listItems.length;i++) {
-        var row = $("<div/>",{id: listItems[i]["_id"], class: "row item", "data-starting-order": listItems[i]["order"]});
+        var row = $("<div/>",{id: listItems[i]["_id"], class: "row item"});
+        if (listItems[i]["order"] !== undefined) row.attr("data-starting-order",listItems[i]["order"]);
         row.append(getStandardRowButtons(activeList));
 
         for (var j=0;j<fieldSpec.length;j++) {
@@ -869,8 +870,10 @@ var saveItemChanges = function() {
     // but for now we will always just have one list container
     var items = [];
     $(".list-container").find(".item").each(function() {
-        var edited = $(this).attr("data-edited") === "true" ? true : false;
-        var startingOrder = parseInt($(this).attr("data-starting-order"));
+        var edited,startingOrder;
+        
+        edited = $(this).attr("data-edited") === "true" ? true : false;
+        if ($(this).attr("data-starting-order")) startingOrder = parseInt($(this).attr("data-starting-order"));
         var itemId = $(this).attr("id");
         if (!$(this).hasClass("new-item")) {
             var item = {};

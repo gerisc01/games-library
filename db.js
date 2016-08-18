@@ -19,7 +19,7 @@ LocalDB.prototype.getItems = function(collection) {
 };
 
 LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
-    $.getJSON("items.json", function(data) {
+    return $.getJSON("items.json", function(data) {
 
         var json = data;
         if (lists !== undefined && lists !== null) {
@@ -28,7 +28,11 @@ LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedL
                 if (lists[i]["_id"] === undefined) {
                     var listId = guid();
                     lists[i]["_id"] = listId;
-                    items.push({listId: []});
+                    if (items !== null && items !== undefined) { 
+                        items.push({listId: []}); 
+                    } else {
+                        json.items[collectionId][listId] = [];
+                    }
                 }
                 // Delete the _edited key if it is in the list object
                 delete lists[i]["_edited"];
@@ -52,7 +56,7 @@ LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedL
         }
 
         var data = {"db" : JSON.stringify(json), "fileName" : "../../items.json"};
-        $.post( "db/local/write.php", data);
+        return $.post( "db/local/write.php", data);
     });
 };
 
