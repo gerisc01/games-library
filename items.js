@@ -760,7 +760,9 @@ function getColorSelect() {
 /* General helpers */
 
 function findTabIndex(id) {
-    return $(".list-tab").index($(".list-tab#"+id));
+    for (var i=0;i<collectionLists.length;i++) {
+        if (collectionLists[i]["_id"] === id) return i;
+    }
 }
 
 function createKeyFromName(name) {
