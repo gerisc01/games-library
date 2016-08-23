@@ -7,19 +7,38 @@ var LocalDB = function (fileLocation) {
 }
 
 LocalDB.prototype.getCollections = function() {
-    return $.getJSON("items.json").then(function(data) { return data.collections; });
+    return $.ajax({
+        cache: false,
+        url: this.file,
+        dataType: "json"
+    })
+    .then(function(data) { return data.collections; });
 };
 
 LocalDB.prototype.getLists = function(collection) {
-    return $.getJSON("items.json").then(function(data) { return data.lists[collection]; });
+    return $.ajax({
+        cache: false,
+        url: this.file,
+        dataType: "json"
+    })
+    .then(function(data) { return data.lists[collection]; });
 };
 
 LocalDB.prototype.getItems = function(collection) {
-    return $.getJSON("items.json").then(function(data) { return data.items[collection]; });
+    return $.ajax({
+        cache: false,
+        url: this.file,
+        dataType: "json"
+    })
+    .then(function(data) { return data.items[collection]; });
 };
 
 LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
-    return $.getJSON("items.json", function(data) {
+    return $.ajax({
+        cache: false,
+        url: this.file,
+        dataType: "json"
+    }).then(function(data) {
 
         var json = data;
         if (lists !== undefined && lists !== null) {

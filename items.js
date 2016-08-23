@@ -706,13 +706,14 @@ function createList(name,color,fields) {
     };
     collectionLists.push(listObj);
     database.updateCollectionContent(activeCollection,collectionLists,null,null,null)
-        .done(function(resp) {
-            console.log(resp.responseText);
+        .then(function(resp) {
             $("div.list-tabs").empty();
             return loadLists(activeCollection);
         })
-        .done(function() {
-            var activeList = collectionLists[collectionLists.length-1]["_id"];
+        .then(function() {
+            $("div.list-tab").removeClass("active");
+            activeList = collectionLists[collectionLists.length-1]["_id"];
+            $("div.list-tabs").find("#"+activeList).addClass("active");
             $("div.lists").empty();
             loadItems(activeCollection);
         });
