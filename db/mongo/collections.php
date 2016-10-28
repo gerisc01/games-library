@@ -9,6 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $results = $client->lists->collections->find([],["sort"=>['order' => 1],"projection"=>['order'=>0]]);
     $collections = array();
     foreach ($results as $collection) {
+        // Convert the collection id from an object to a string
+        $collection["_id"] = (string)$collection["_id"];
         $collections[] = $collection;
     }
     $json["collections"] = $collections;

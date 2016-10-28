@@ -4,6 +4,11 @@ LOCAL JSON DB METHODS
 
 var LocalDB = function (fileLocation) {
     this.file = fileLocation;
+    this.initalizeDb();
+}
+
+LocalDB.prototype.initalizeDb = function() {
+    console.log("Initializing the database");
 }
 
 LocalDB.prototype.getCollections = function() {
@@ -95,8 +100,14 @@ DATABASE DB METHODS
 ******************************************************************************/
 
 var MongoDB = function (databaseUrl) {
+    if (databaseUrl === undefined) databaseUrl = "mongodb://localhost:27017"
     this.db = databaseUrl;
+    this.initalizeDb();
 }
+
+MongoDB.prototype.initalizeDb = function() {
+    return $.post("/db/mongo/initialize.php","");
+};
 
 MongoDB.prototype.getCollections = function() {
     return $.get("/db/mongo/collections.php").then(function(data) { return data.collections; });

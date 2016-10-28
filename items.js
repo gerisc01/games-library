@@ -8,7 +8,8 @@ var cancelDrop = false;
 var cancelDropFinal = false;
 var colorList = {"pastel-green": "Green", "pastel-red": "Red", "pastel-purple": "Purple", "pastel-orange": "Orange",
         "pastel-yellow": "Yellow", "pastel-blue": "Blue"};
-var database = new LocalDB("items.json");
+// var database = new LocalDB("items.json");
+var database = new MongoDB();
 
 /* Standard initalization */
 function initializePage() {
@@ -18,7 +19,7 @@ function initializePage() {
             return loadLists(activeCollection); 
         })
         .then(function(lists) {
-            activeList = lists[0]["_id"];
+            if (lists.length > 0) activeList = lists[0]["_id"];
             loadItems(activeCollection); 
         })
 }
@@ -93,6 +94,7 @@ function populateLists(lists) {
 }
 
 function populateItems(items) {
+    if (!activeList) return;
     var tabIndex = findTabIndex(activeList);
     var title = collectionLists[tabIndex]["name"];
     var fieldSpec = collectionLists[tabIndex]["fields"];
@@ -267,7 +269,7 @@ $(document).on('click', '.tabs#collections li a', function(event) {
     $(".list-tabs").empty();
     loadLists(activeCollection)
         .then(function(lists) {
-            activeList = lists[0]["_id"];
+            activeList = lists.length > 0 ? lists[0]["_id"] : undefined;
             loadItems(activeCollection); 
         })
     $(this).blur();
@@ -773,7 +775,7 @@ function createKeyFromName(name) {
 // If a listId is supplied, just reset the arrows in that given list
 function resetDisabledArrows(listId) {
     if (listId !== undefined) {
-        var list = $(".list-container#"+listId);
+        var list = $(".lists").find("#"+listId);
         list.find(".shiftUp,.shiftDown").removeClass("disabled");
         list.find(".item .shiftUp").first().addClass("disabled");
         list.find(".item .shiftDown").last().addClass("disabled");
