@@ -8,8 +8,7 @@ var cancelDrop = false;
 var cancelDropFinal = false;
 var colorList = {"pastel-green": "Green", "pastel-red": "Red", "pastel-purple": "Purple", "pastel-orange": "Orange",
         "pastel-yellow": "Yellow", "pastel-blue": "Blue"};
-// var database = new LocalDB("items.json");
-var database = new MongoDB();
+var database = new LocalDB();
 
 /* Standard initalization */
 function initializePage() {
@@ -210,11 +209,6 @@ function populateEditRow(list) {
         .append($("<h4/>",{class: "tab-name"})
             .append($("<input/>",{type: "text", value: list["name"]}))));
 
-    var idRow = $("<div/>",{class: "row ids"});
-    idRow.append($("<div/>",{class: "col-md-2"})
-        .text(" Modify Field Ids when Field Name edited?")
-        .prepend($("<input/>",{type: "checkbox",id:"auto-modify-ids"}).prop("checked",true)));
-
     // Get the sum of all the field sizes
     var totalFieldSize = 0;
     for (var i=0;i<fieldsLen;i++) {
@@ -233,10 +227,6 @@ function populateEditRow(list) {
         nameRow.append($("<div/>",{class:"edit-column col-md-"+fieldSize, id: "field-"+(i+1)})
             .append($("<h4/>",{class: "column-name"})
                 .append($("<input/>",{type: "text",value: field["name"]}))));
-
-        // Id row
-        idRow.append($("<div/>",{class:"edit-column col-md-"+fieldSize, id: "field-"+(i+1)})
-            .append($("<h5/>",{class: "column-id field-id", text: field["id"]})));
     }
 
     if (totalFieldSize !== 10) nameRow.append($("<h4/>",{class: "add-column col-md-1"}).append(getButton("plus","green")));
@@ -246,7 +236,6 @@ function populateEditRow(list) {
             .append(titleRow)
             .append(sizeRow)
             .append(nameRow)
-            .append(idRow)
         );
 
     $(".lists").append(editRow);
@@ -465,7 +454,7 @@ function initializeEditListeners(listId) {
     });
 
     listContainer.on("click","h4.add-column",function(event) {
-        if ($(event.target).prop("tagName") !== "BUTTON") return;
+        if (!($(event.target).prop("tagName") === "BUTTON" || $(event.target).prop("tagName") === "SPAN")) return;
 
         var totalFieldSize = 0;
         listContainer.find("select#size").each(function() {
@@ -494,10 +483,6 @@ function initializeEditListeners(listId) {
         listContainer.find(".row.names").append($("<div/>",{class:"edit-column col-md-"+fieldSize, id: fieldNum})
             .append($("<h4/>",{class: "column-name"})
                 .append($("<input/>",{type: "text"}))));
-
-        // Id row
-        listContainer.find(".row.ids").append($("<div/>",{class:"edit-column col-md-"+fieldSize, id: fieldNum})
-            .append($("<h5/>",{class: "column-id field-id"})));
 
         // If the field size is still under 10, append the add column button
         if (totalFieldSize<10) listContainer.find(".row.names").append($("<h4/>",{class: "add-column col-md-1"}).append(getButton("plus","green")));
@@ -842,21 +827,19 @@ var saveListChanges = function() {
         list["color"] = $(this).find("select#color").val();
         var listContainerObj = $(this);
         var fields = [];
+        var column = 1;
         $(this).find(".sizes .column").each(function() {
             var field = {};
             var fieldId = $(this).attr("id");
             field["name"] = listContainerObj.find(".names #"+fieldId+" input").val();
-            if (listContainerObj.find("input#auto-modify-ids").prop("checked")) {
-                field["id"] = listContainerObj.find(".ids #"+fieldId).text();
-            } else {
-                field["id"] = listContainerObj.find(".ids #"+fieldId+" input").val();
-            }
+            field["id"] = "column"+column; column +=1;
             field["width"] = $(this).find("select#size").val();
             fields.push(field);
         });
         list["fields"] = fields;
         lists.push(list);
     });
+    console.log(lists);
 
     // Iterate through lists to see if the order has changed during the edit
     for (var i=0;i<lists.length;i++) {

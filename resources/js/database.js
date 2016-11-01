@@ -3,12 +3,13 @@ LOCAL JSON DB METHODS
 ******************************************************************************/
 
 var LocalDB = function (fileLocation) {
+    if (fileLocation === undefined) fileLocation = "/db/items.json";
     this.file = fileLocation;
     this.initalizeDb();
 }
 
 LocalDB.prototype.initalizeDb = function() {
-    console.log("Initializing the database");
+    return $.post("resources/php/database/local/initialize.php","");
 }
 
 LocalDB.prototype.getCollections = function() {
@@ -79,8 +80,8 @@ LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedL
             json.items[collectionId] = items;
         }
 
-        var data = {"db" : JSON.stringify(json), "fileName" : "../../items.json"};
-        return $.post( "db/local/write.php", data);
+        var data = {"db" : JSON.stringify(json), "fileName" : "db/items.json"};
+        return $.post( "/resources/php/database/local/write.php", data);
     });
 };
 
@@ -106,19 +107,19 @@ var MongoDB = function (databaseUrl) {
 }
 
 MongoDB.prototype.initalizeDb = function() {
-    return $.post("/db/mongo/initialize.php","");
+    return $.post("/resources/php/database/mongo/initialize.php","");
 };
 
 MongoDB.prototype.getCollections = function() {
-    return $.get("/db/mongo/collections.php").then(function(data) { return data.collections; });
+    return $.get("/resources/php/database/mongo/collections.php").then(function(data) { return data.collections; });
 };
 
 MongoDB.prototype.getLists = function(collection) {
-    return $.get("/db/mongo/lists.php",{"collection" : collection}).then(function(data) { return data.lists; });
+    return $.get("/resources/php/database/mongo/lists.php",{"collection" : collection}).then(function(data) { return data.lists; });
 };
 
 MongoDB.prototype.getItems = function(collection) {
-    return $.get("/db/mongo/items.php",{"collection" : collection}).then(function(data) { return data.items; });
+    return $.get("/resources/php/database/mongo/items.php",{"collection" : collection}).then(function(data) { return data.items; });
 };
 
 MongoDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
@@ -151,7 +152,7 @@ MongoDB.prototype.updateCollectionContent = function(collectionId,lists,deletedL
     var data = {"collection" : collectionId,"lists" : editLists, "items" : editItems, "deletedLists" : deletedListIds, "deletedItems" : deletedItemIds};
 
     return $.ajax({
-        url:"/db/mongo/update.php",
+        url:"/resources/php/database/mongo/update.php",
         type:"POST",
         data:JSON.stringify(data),
         contentType:"application/json; charset=utf-8"

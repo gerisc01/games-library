@@ -1,5 +1,5 @@
 <?php
-require '../../vendor/autoload.php'; // include Composer goodies
+require '../../../../vendor/autoload.php'; // include Composer goodies
 
 $client = new MongoDB\Client("mongodb://localhost:27017");
 $json = array();
