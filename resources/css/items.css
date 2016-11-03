@@ -27,9 +27,17 @@
     float:left;
 }
 
-.tabs .glyphicon {
+.tabs .edit-list,.cancel-edit,.accept-edit {
     margin-right:10px;
     cursor: pointer;
+}
+
+.tabs .new-collection input {
+    margin-right: 10px;
+}
+
+.tabs .new-collection .cancel-collection,.accept-collection {
+    margin-right: 10px;
 }
 
 /* LIST TAB CSS classes*/

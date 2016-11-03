@@ -39,6 +39,36 @@ LocalDB.prototype.getItems = function(collection) {
     .then(function(data) { return data.items[collection]; });
 };
 
+LocalDB.prototype.createCollection = function(collectionName) {
+    return $.ajax({
+        cache: false,
+        url: this.file,
+        dataType: "json"
+    }).then(function(data) {
+        var json = data;
+        var collectionId = guid();
+        json.collections.push({"_id": collectionId,"name": collectionName,"order": (json.collections.length+1).toString()})
+        json.lists[collectionId] = [];
+        json.items[collectionId] = {};
+
+        var data = {"db" : JSON.stringify(json)};
+        return $.post( "/resources/php/database/local/write.php", data);
+    });
+}
+
+LocalDB.prototype.updateCollection = function(collectionId,collectionName) {
+    return $.ajax({
+        cache: false,
+        url: this.file,
+        dataType: "json"
+    }).then(function(data) {
+        var json = data;
+
+        var data = {"db" : JSON.stringify(json)};
+        return $.post( "/resources/php/database/local/write.php", data);
+    });
+}
+
 LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
     return $.ajax({
         cache: false,
@@ -80,7 +110,7 @@ LocalDB.prototype.updateCollectionContent = function(collectionId,lists,deletedL
             json.items[collectionId] = items;
         }
 
-        var data = {"db" : JSON.stringify(json), "fileName" : "db/items.json"};
+        var data = {"db" : JSON.stringify(json)};
         return $.post( "/resources/php/database/local/write.php", data);
     });
 };

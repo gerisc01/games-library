@@ -12,10 +12,12 @@ var database = new LocalDB();
 
 /* Standard initalization */
 function initializePage() {
+    $(".tabs#collections").empty();
+    $("div.list-tabs").empty();
+    $("div.lists").empty();
     loadCollections()
         .then(function(collections) {
-            activeCollection = collections[0]["_id"];
-            return loadLists(activeCollection); 
+            return loadLists(activeCollection);
         })
         .then(function(lists) {
             if (lists.length > 0) activeList = lists[0]["_id"];
@@ -25,7 +27,7 @@ function initializePage() {
 
 function loadCollections() {
     return database.getCollections().then(function(collections) {
-        activeCollection = collections[0]["_id"];
+        if (activeCollection == null) activeCollection = collections[0]["_id"];
         return collections;
     }).done(function(collections) { populateCollections(collections); });
 }
@@ -47,12 +49,16 @@ function loadItems(collection) {
 function populateCollections(collections) {
     for (var i=0;i<collections.length;i++) {
         var tab = jQuery("<li id=\""+collections[i]["_id"]+"\"><a href=\"#\">"+collections[i]["name"]+"</a></li>");
-        if (i == 0) {
-            tab.addClass("active");
-            activeCollection = collections[i]["_id"];
-        }
+        if (collections[i]["_id"] === activeCollection) tab.addClass("active");
         $(".tabs#collections").append(tab);
     }
+    // Append add new collection button
+    $(".tabs#collections").append(
+        $("<li/>",{class: "new-collection"}).append(
+            $("<a href=\"#\"/>").append($("<span/>",{class: "glyphicon glyphicon-plus pastel-green"}))
+        )
+    );
+    // Prepend edit currently selected collection button
     $(".tabs#collections li.active a").prepend($("<span/> ",{class: "glyphicon glyphicon-pencil edit-list"}));
 }
 
@@ -245,7 +251,7 @@ function populateEditRow(list) {
 * LISTENERS
 *-----------------------------------------------------------------------------*/
 /* Standard listeners */
-$(document).on('click', '.tabs#collections li a', function(event) {
+$(document).on('click', '.tabs#collections li:not(.new-collection) a', function(event) {
     var target = $(event.target);
     $(".tabs#collections li.active").removeClass("active");
     $(".tabs#collections li .edit-list").remove();
@@ -262,6 +268,33 @@ $(document).on('click', '.tabs#collections li a', function(event) {
             loadItems(activeCollection); 
         })
     $(this).blur();
+});
+
+$(document).on('click','.tabs#collections li.new-collection', function(event) {
+    var newTab = $(".tabs#collections li.new-collection");
+    if (newTab.find("input").length !== 0) {
+        // If clicking to accept new collection
+        if ($(event.target).hasClass("accept-collection")) {
+            var newCollectionName = newTab.find("input").val();
+            if (newCollectionName !== "") createCollection(newCollectionName);
+        } 
+        // If clicking to reject new collection
+        else if ($(event.target).hasClass("cancel-collection")) {
+            newTab.find("a").empty();
+            // Append add new collection button again
+            newTab.find("a").append($("<span/>",{class: "glyphicon glyphicon-plus pastel-green"}));
+        }
+    } 
+    // If clicking to add a new collection
+    else {
+        // Add an input box to input the new collection name
+        newTab.find("a").prepend($("<input/>"));
+        // Replace the plus button with reject and accept buttons
+        var acceptCancelActions = $("<span/>",{class: "glyphicon glyphicon-remove red cancel-collection"})
+                    .add($("<span/>",{class: "glyphicon glyphicon-ok green accept-collection"}));
+        newTab.find("span").replaceWith(acceptCancelActions);
+    }
+    $(this).find("a").blur();
 });
 
 $(document).on('click', '.list-tab', function(event) {
@@ -579,6 +612,17 @@ function acceptEdit(item,listId) {
     });
 
     if (item.hasClass("new-item")) item.trigger("addNewItem");
+}
+
+function createCollection(name) {
+    database.createCollection(name)
+        .then(function(resp) {
+            return loadCollections();
+        })
+        .then(function(resp) {
+            activeCollection = resp[resp.length-1]["_id"];
+            initializePage();
+        });
 }
 
 function showListCreateDialog() {
