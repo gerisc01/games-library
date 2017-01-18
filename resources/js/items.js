@@ -211,7 +211,7 @@ function populateEditRow(list) {
                 .append(getColorSelect().val(list["color"]))));
 
     var nameRow = $("<div/>",{class: "row names"})
-    nameRow.append($("<div/>",{class: "col-md-2 "+list["color"]+"-bg"})
+    nameRow.append($("<div/>",{class: "colmd-2 "+list["color"]+"-bg"})
         .append($("<h4/>",{class: "tab-name"})
             .append($("<input/>",{type: "text", value: list["name"]}))));
 
@@ -325,8 +325,8 @@ $(document).on('mouseup', '.btn', function() {
 
 var initiateListListeners = function(listId,listName,listObj) {
     // Edit (AND Quick Add) Row
-    $(".lists").find("#"+listId).on('click', 'a.edit,.btn.edit.start', function(event) {
-        event.preventDefault(); // To prevent <a> from clicking and redirecting
+
+    $(".lists").find("#"+listId).on('click', ".btn .edit.start", function(event) {
         var item = $(event.target).closest(".item");
         editItem(item);
     });
@@ -342,8 +342,7 @@ var initiateListListeners = function(listId,listName,listObj) {
     });
 
     // Delete Row
-    $(".lists").find("#"+listId).on('click', 'a.delete', function(event) {
-        event.preventDefault(); // To prevent <a> from clicking and redirecting
+    $(".lists").find("#"+listId).on('click', '.btn.delete', function(event) {
         var item = $(event.target).closest(".item");
         deletedItemIds.push(item.attr("id"));
         // Delete Item
@@ -838,26 +837,28 @@ function listsEqual(list1,list2) {
 
 var getStandardRowButtons = function(listId) {
     var buttons = $("<div/>",{class: "col-md-2 buttons"});
-    // Create move arrows
-    buttons.append(getButton("arrow-down").addClass("movement shiftDown"));
-    buttons.append(getButton("arrow-up").addClass("movement shiftUp"));
-    // Create move button
-    var moveButton = "<div class=\"movement dropdown\">"+
-        "<button type=\"button\" data-toggle=\"dropdown\" class=\"btn btn-default dropdown-toggle\">"+
-        "<span class=\"glyphicon glyphicon-tasks\"></span>"+
-        "</button>"+
-        "<ul class=\"dropdown-menu\">";
-    for (var i=0;i<collectionLists.length;i++) {
-        if (collectionLists[i]["_id"] !== listId) {
-            moveButton += "<li><a id=\""+collectionLists[i]["_id"]+"\" class=\"moveList\" href=\"#\">"+
-                collectionLists[i]["name"]+"</a></li>";
-        }
-    }
-    moveButton +=  "<li class=\"divider\"></li>"+
-    "<li><a class=\"edit start\" href=\"\">Edit</a></li>"+
-    "<li><a class=\"delete\" href=\"\">Delete</a></li>"+
-    "</ul></div>";
-    buttons.append(moveButton);
+    buttons.append(getButton("pencil").addClass("edit start"));
+    buttons.append(getButton("trash").addClass("delete"));
+    // // Create move arrows
+    // buttons.append(getButton("arrow-down").addClass("movement shiftDown"));
+    // buttons.append(getButton("arrow-up").addClass("movement shiftUp"));
+    // // Create move button
+    // var moveButton = "<div class=\"movement dropdown\">"+
+    //     "<button type=\"button\" data-toggle=\"dropdown\" class=\"btn btn-default dropdown-toggle\">"+
+    //     "<span class=\"glyphicon glyphicon-tasks\"></span>"+
+    //     "</button>"+
+    //     "<ul class=\"dropdown-menu\">";
+    // for (var i=0;i<collectionLists.length;i++) {
+    //     if (collectionLists[i]["_id"] !== listId) {
+    //         moveButton += "<li><a id=\""+collectionLists[i]["_id"]+"\" class=\"moveList\" href=\"#\">"+
+    //             collectionLists[i]["name"]+"</a></li>";
+    //     }
+    // }
+    // moveButton +=  "<li class=\"divider\"></li>"+
+    // "<li><a class=\"edit start\" href=\"\">Edit</a></li>"+
+    // "<li><a class=\"delete\" href=\"\">Delete</a></li>"+
+    // "</ul></div>";
+    // buttons.append(moveButton);
     return buttons;
 }
 

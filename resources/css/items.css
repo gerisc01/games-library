@@ -1,9 +1,13 @@
-.movement {
+/*.movement {
     float: right;
 }
 
 .movement.dropdown {
     margin-right: 10px;
+}
+*/
+.buttons button {
+    float: right;
 }
 
 .btn.quick-add {
