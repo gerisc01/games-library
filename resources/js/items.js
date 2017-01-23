@@ -8,7 +8,8 @@ var cancelDrop = false;
 var cancelDropFinal = false;
 var colorList = {"pastel-green": "Green", "pastel-red": "Red", "pastel-purple": "Purple", "pastel-orange": "Orange",
         "pastel-yellow": "Yellow", "pastel-blue": "Blue"};
-var database = new LocalDB();
+// var database = new LocalDB();
+var database = new GistDB();
 
 /* Standard initalization */
 function initializePage() {

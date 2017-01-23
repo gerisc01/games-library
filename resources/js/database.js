@@ -188,3 +188,102 @@ MongoDB.prototype.updateCollectionContent = function(collectionId,lists,deletedL
         contentType:"application/json; charset=utf-8"
     });
 };
+
+/******************************************************************************
+GIST DB METHODS
+******************************************************************************/
+
+var GistDB = function (username,fileName) {
+    this.username = "gerisc01";
+    this.gistId = "6f6097e90c5d7e05a67fbe20068d2340";
+    this.fileName = "games-library.db";
+    this.gistDbUrl = "https://gist.githubusercontent.com/"+this.username+"/"+this.gistId+"/raw/"+this.fileName;
+    this.initalizeDb();
+}
+
+GistDB.prototype.initalizeDb = function() {
+    return $.ajax({
+        cache: false,
+        url: this.gistDbUrl,
+        dataType: "json",
+        success: function() {
+            // Maybe do some cacheing if this does work for the first getCollections/Lists/Items calls?
+        },
+        error: function() {
+            // TODO - If the file doesn't exist, create a new empty db file
+        }
+    });
+};
+
+GistDB.prototype.getCollections = function() {
+    return $.ajax({
+        cache: false,
+        url: this.gistDbUrl,
+        dataType: "json"
+    })
+    .then(function(data) { console.log(data.collections); return data.collections; });
+};
+
+GistDB.prototype.getLists = function(collection) {
+    return $.ajax({
+        cache: false,
+        url: this.gistDbUrl,
+        dataType: "json"
+    })
+    .then(function(data) { console.log(data.lists[collection]); return data.lists[collection]; });
+};
+
+GistDB.prototype.getItems = function(collection) {
+    return $.ajax({
+        cache: false,
+        url: this.gistDbUrl,
+        dataType: "json"
+    })
+    .then(function(data) { console.log(data.items[collections]); return data.items[collection]; });
+};
+
+GistDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
+    return $.ajax({
+        cache: false,
+        url: this.gistDbUrl,
+        dataType: "json"
+    }).then(function(data) {
+
+        var json = data;
+        if (lists !== undefined && lists !== null) {
+            for (var i=0;i<lists.length;i++) {
+                // Create an id for the list if it is new
+                if (lists[i]["_id"] === undefined) {
+                    var listId = guid();
+                    lists[i]["_id"] = listId;
+                    if (items !== null && items !== undefined) { 
+                        items.push({listId: []}); 
+                    } else {
+                        json.items[collectionId][listId] = [];
+                    }
+                }
+                // Delete the _edited key if it is in the list object
+                delete lists[i]["_edited"];
+            }
+            json.lists[collectionId] = lists;
+        }
+
+        if (items !== undefined && items !== null) {
+            for (var key in items) { if (items.hasOwnProperty(key)) {
+                for (var i=0;i<items[key].length;i++) {
+                    // Create an id for the list if it is new
+                    if (items[key][i]["_id"] === undefined) {
+                        var itemId = guid();
+                        items[key][i]["_id"] = itemId;
+                    }
+                    // Delete the _edited key for each item
+                    delete items[key][i]["_edited"];
+                }
+            }}
+            json.items[collectionId] = items;
+        }
+
+        var data = {"db" : JSON.stringify(json)};
+        return $.post( "/resources/php/database/local/write.php", data);
+    });
+};
