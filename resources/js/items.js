@@ -327,7 +327,7 @@ $(document).on('mouseup', '.btn', function() {
 var initiateListListeners = function(listId,listName,listObj) {
     // Edit (AND Quick Add) Row
 
-    $(".lists").find("#"+listId).on('click', ".btn .edit.start", function(event) {
+    $(".lists").find("#"+listId).on('click', ".edit.start", function(event) {
         var item = $(event.target).closest(".item");
         editItem(item);
     });
