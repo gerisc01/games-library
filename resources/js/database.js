@@ -197,22 +197,11 @@ var GistDB = function (username,fileName) {
     this.username = "gerisc01";
     this.gistId = "6f6097e90c5d7e05a67fbe20068d2340";
     this.fileName = "games-library.db";
-    this.gistDbUrl = "https://gist.githubusercontent.com/"+this.username+"/"+this.gistId+"/raw/"+this.fileName;
-    this.initalizeDb();
+    this.gistDbUrl;
 }
 
 GistDB.prototype.initalizeDb = function() {
-    return $.ajax({
-        cache: false,
-        url: this.gistDbUrl,
-        dataType: "json",
-        success: function() {
-            // Maybe do some cacheing if this does work for the first getCollections/Lists/Items calls?
-        },
-        error: function() {
-            // TODO - If the file doesn't exist, create a new empty db file
-        }
-    });
+    return this.retrieveRawUrl();
 };
 
 GistDB.prototype.getCollections = function() {
@@ -221,7 +210,9 @@ GistDB.prototype.getCollections = function() {
         url: this.gistDbUrl,
         dataType: "json"
     })
-    .then(function(data) { return data.collections; });
+    .then(function(data) {
+        return data.collections;
+    });
 };
 
 GistDB.prototype.getLists = function(collection) {
@@ -234,6 +225,7 @@ GistDB.prototype.getLists = function(collection) {
 };
 
 GistDB.prototype.getItems = function(collection) {
+    console.log(this.gistDbUrl);
     return $.ajax({
         cache: false,
         url: this.gistDbUrl,
@@ -243,8 +235,7 @@ GistDB.prototype.getItems = function(collection) {
 };
 
 GistDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
-    var dbFileName = this.fileName;
-    var dbGistId = this.gistId;
+    var thisGistDb = this;
     return $.ajax({
         cache: false,
         url: this.gistDbUrl,
@@ -253,14 +244,18 @@ GistDB.prototype.updateCollectionContent = function(collectionId,lists,deletedLi
 
         var json = data;
         if (lists !== undefined && lists !== null) {
+
             for (var i=0;i<lists.length;i++) {
                 // Create an id for the list if it is new
                 if (lists[i]["_id"] === undefined) {
                     var listId = guid();
                     lists[i]["_id"] = listId;
-                    if (items !== null && items !== undefined) { 
-                        items.push({listId: []}); 
+                    // A new list needs to add the an empty item list in the items object
+                    if (items !== undefined && items !== null) {
+                        // If items was passed, add that new list to the passed items object
+                        items[listId] = [];
                     } else {
+                        // If no items were passed, add that new list to the json items
                         json.items[collectionId][listId] = [];
                     }
                 }
@@ -285,10 +280,29 @@ GistDB.prototype.updateCollectionContent = function(collectionId,lists,deletedLi
             json.items[collectionId] = items;
         }
 
-        var data = {"db" : JSON.stringify(json), "id" : dbGistId, "name" : dbFileName}
-        return $.post( "/resources/php/database/gist/write.php", data);
+        var data = {"db" : JSON.stringify(json), "id" : thisGistDb.gistId, "name" : thisGistDb.fileName}
+        return $.post( "/resources/php/database/gist/write.php", data)
+        .then(function() { return json; });
     });
 };
+
+GistDB.prototype.retrieveRawUrl = function() {
+    var thisGistDb = this;
+    return $.ajax({
+        cache: false,
+        url: "https://api.github.com/gists/"+this.gistId,
+        dataType: "json",
+        success: function(data) {
+            // Get the raw url for games-library.db and save it in gistDbUrl to make calls faster in the
+            // future.
+            var rawUrl = data["files"][thisGistDb.fileName]["raw_url"];
+            thisGistDb.gistDbUrl = rawUrl;
+        },
+        error: function() {
+            // TODO - If the file doesn't exist, create a new empty db file
+        }
+    });
+}
 
 GistDB.prototype.updateGist = function(content,apiKey) {
     var updateData = {};

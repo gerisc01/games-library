@@ -16,7 +16,8 @@ function initializePage() {
     $(".tabs#collections").empty();
     $("div.list-tabs").empty();
     $("div.lists").empty();
-    loadCollections()
+    database.initalizeDb()
+        .then(function() { return loadCollections(); })
         .then(function(collections) {
             return loadLists(activeCollection);
         })
@@ -736,18 +737,18 @@ function createList(name,color,fields) {
         "_edited": true
     };
     collectionLists.push(listObj);
-    database.updateCollectionContent(activeCollection,collectionLists,null,null,null)
-        .then(function(resp) {
+    saveToDb()
+        .then(function() {
             $("div.list-tabs").empty();
-            return loadLists(activeCollection);
+            populateLists(collectionLists);
         })
         .then(function() {
             $("div.list-tab").removeClass("active");
             activeList = collectionLists[collectionLists.length-1]["_id"];
             $("div.list-tabs").find("#"+activeList).addClass("active");
             $("div.lists").empty();
-            loadItems(activeCollection);
-        });
+            populateItems(collectionItems);
+        })
 }
 
 function moveList(item,oldList,newList) {
@@ -927,7 +928,7 @@ var saveToDb = function() {
     // Start by retrieving the items from the stored json list because only the
     // currently activated collection is available on the page
     saveItemChanges();
-    database.updateCollectionContent(
+    return database.updateCollectionContent(
         activeCollection,
         collectionLists,
         deletedListIds,
@@ -936,8 +937,10 @@ var saveToDb = function() {
     )
     // When updating the collection is complete, reload the lists so that any created ids
     // and the updated order can be applied to the items
-    .done(function(resp) {
+    .done(function(json) {
         $("div.lists").empty();
-        loadItems(activeCollection);
+        collectionLists = json["lists"][activeCollection];
+        collectionItems = json["items"][activeCollection];
+        populateItems(collectionItems);
     });
 }
