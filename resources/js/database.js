@@ -221,7 +221,7 @@ GistDB.prototype.getCollections = function() {
         url: this.gistDbUrl,
         dataType: "json"
     })
-    .then(function(data) { console.log(data.collections); return data.collections; });
+    .then(function(data) { return data.collections; });
 };
 
 GistDB.prototype.getLists = function(collection) {
@@ -230,7 +230,7 @@ GistDB.prototype.getLists = function(collection) {
         url: this.gistDbUrl,
         dataType: "json"
     })
-    .then(function(data) { console.log(data.lists[collection]); return data.lists[collection]; });
+    .then(function(data) { return data.lists[collection]; });
 };
 
 GistDB.prototype.getItems = function(collection) {
@@ -239,10 +239,12 @@ GistDB.prototype.getItems = function(collection) {
         url: this.gistDbUrl,
         dataType: "json"
     })
-    .then(function(data) { console.log(data.items[collections]); return data.items[collection]; });
+    .then(function(data) { return data.items[collection]; });
 };
 
 GistDB.prototype.updateCollectionContent = function(collectionId,lists,deletedListIds,items,deletedItemIds) {
+    var dbFileName = this.fileName;
+    var dbGistId = this.gistId;
     return $.ajax({
         cache: false,
         url: this.gistDbUrl,
@@ -283,7 +285,26 @@ GistDB.prototype.updateCollectionContent = function(collectionId,lists,deletedLi
             json.items[collectionId] = items;
         }
 
-        var data = {"db" : JSON.stringify(json)};
-        return $.post( "/resources/php/database/local/write.php", data);
+        var data = {"db" : JSON.stringify(json), "id" : dbGistId, "name" : dbFileName}
+        return $.post( "/resources/php/database/gist/write.php", data);
+    });
+};
+
+GistDB.prototype.updateGist = function(content,apiKey) {
+    var updateData = {};
+    updateData["files"] = {};
+    updateData["files"][dbFileName] = {"content" : JSON.stringify(content)};
+
+    var gistPatchUrl = "https://api.github.com/gists/"+this.gistId;
+    return $.ajax({
+      url : gistPatchUrl,
+      data : JSON.stringify(updateData),
+      headers : {
+        "Authorization" : "Bearer "+apiKey
+      },
+      type : 'PATCH',
+      contentType : 'application/json',
+      processData: false,
+      dataType: 'json'
     });
 };
