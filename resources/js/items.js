@@ -304,17 +304,23 @@ $(document).on('click', '.list-tab', function(event) {
     while (target && !target.hasClass("list-tab")) {
         target = target.parent();
     }
-    if (target.hasClass("new")) return showListCreateDialog();
 
     // save the list changes before switching lists
     saveItemChanges();
     // empty out the list
     $(".lists").empty();
     $(".list-tab.active").removeClass("active");
-    // populate the new list
-    target.addClass("active");
-    activeList = target.attr("id");
-    populateItems(collectionItems);
+
+    // If the click was to create a new list, show the new list page
+    if (target.hasClass("new")) {
+        showCreateListOptions();
+    }
+    // If not, populate the new list
+    else {
+        target.addClass("active");
+        activeList = target.attr("id");
+        populateItems(collectionItems);
+    }
 });
 
 $(document).on('click', '.save', function() {
@@ -626,6 +632,28 @@ function createCollection(name) {
         });
 }
 
+function showCreateListOptions() {
+    var title="List input text box to go here";
+    $("div.lists")
+    .append($("<div/>",{class: "row"})
+        .append($("<div/>",{id: "new-list",class: "list-container"})
+            .append($("<h3/>",{text:title, class: "col-sm-offset-1"}))
+            .append($("<div/>",{class: "list"}))
+    ));
+
+    // fieldSpec = [{"width" : 2,"name" : "<input id=\"column-1\"></input>"}]
+    fieldSpec = [
+        {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 1\"></input>"},
+        {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 2\"></input>"},
+        {"width" : 2, "name" : "<input id=\"col-1\" value=\"Column 3\"></input>"}]
+
+    // Create header
+    var listObj = $(".lists").find("#new-list").children("div.list");
+    listObj.append(getHeader(fieldSpec));
+    // // Grab the first col-md-2
+    $(".header").children(".buttons").append("<h4 class=\"header-name\"><button id=\"create-list\" class=\"btn btn-default\">Create List</button></h4>");
+}
+
 function showListCreateDialog() {
     // Create a form that will be used for inputting data for the new list
     var addListDiv = $("<div/>",{id: "addList",title:"Add List",class: "form-horizontal"});
@@ -814,7 +842,7 @@ function resetDisabledArrows(listId) {
 
 function getHeader(fieldSpec) {
     var header = "<div class=\"row header\">"+
-        "<div class=\"col-md-2\"></div>";
+        "<div class=\"col-md-2 buttons\"></div>";
 
     for (var i=0;i<fieldSpec.length;i++) {
         header += "<div class=\"col-md-"+fieldSpec[i]["width"]+"\"><h4 class=\"header-name\">"+fieldSpec[i]["name"]+"</h4></div>";
