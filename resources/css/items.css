@@ -6,6 +6,11 @@
     margin-right: 10px;
 }
 */
+
+span.adjust-column-size {
+    padding: 2px;
+}
+
 .buttons button {
     float: right;
 }

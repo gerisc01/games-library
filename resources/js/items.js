@@ -641,11 +641,14 @@ function showCreateListOptions() {
             .append($("<div/>",{class: "list"}))
     ));
 
+    var moveColumn = "<span class=\"fa fa-caret-left adjust-column-size\"><span class=\"fa fa-caret-right adjust-column-size\">"
+
     // fieldSpec = [{"width" : 2,"name" : "<input id=\"column-1\"></input>"}]
+    $("<span/>",{class: "glyphicon glyphicon-plus pastel-green"})
     fieldSpec = [
-        {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 1\"></input>"},
-        {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 2\"></input>"},
-        {"width" : 2, "name" : "<input id=\"col-1\" value=\"Column 3\"></input>"}]
+        {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 1\" style=\"width:90%\"></input>"+moveColumn},
+        {"width" : 3, "name" : "<input id=\"col-2\" value=\"Column 2\" style=\"width:90%\"></input>"+moveColumn},
+        {"width" : 2, "name" : "<input id=\"col-3\" value=\"Column 3\" style=\"width:90%\"></input>"+moveColumn}]
 
     // Create header
     var listObj = $(".lists").find("#new-list").children("div.list");
