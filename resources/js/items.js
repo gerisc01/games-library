@@ -641,14 +641,24 @@ function showCreateListOptions() {
             .append($("<div/>",{class: "list"}))
     ));
 
-    var moveColumn = "<span class=\"fa fa-caret-left adjust-column-size\"><span class=\"fa fa-caret-right adjust-column-size\">"
+    fieldSpec = [];
+
+    var minusCol = "<span class=\"fa fa-caret-left column-minus\"></span>";
+    var plusCol  = "<span class=\"fa fa-caret-right column-plus\"></span>";
+    for (var i=1; i < 4; i++) {
+        var columnName = "<input id=\""+i+"\" value=\"Column "+i+"\"></input>";
+        var createColumnDetail = "<div id=\""+i+"\" class=\"create-column-detail\">"+
+            "<div>"+columnName+minusCol+plusCol+"</div><div><h4>3/10</h4></div>"+
+            "</div>";
+        fieldSpec.push({"width" : 3, "name" : createColumnDetail})
+    }
 
     // fieldSpec = [{"width" : 2,"name" : "<input id=\"column-1\"></input>"}]
-    $("<span/>",{class: "glyphicon glyphicon-plus pastel-green"})
-    fieldSpec = [
-        {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 1\" style=\"width:90%\"></input>"+moveColumn},
-        {"width" : 3, "name" : "<input id=\"col-2\" value=\"Column 2\" style=\"width:90%\"></input>"+moveColumn},
-        {"width" : 2, "name" : "<input id=\"col-3\" value=\"Column 3\" style=\"width:90%\"></input>"+moveColumn}]
+    // $("<span/>",{class: "glyphicon glyphicon-plus pastel-green"})
+    // fieldSpec = [
+    //     {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 1\" style=\"width:90%\"></input>"+moveColumn},
+    //     {"width" : 3, "name" : "<input id=\"col-2\" value=\"Column 2\" style=\"width:90%\"></input>"+moveColumn},
+    //     {"width" : 2, "name" : "<input id=\"col-3\" value=\"Column 3\" style=\"width:90%\"></input>"+moveColumn}]
 
     // Create header
     var listObj = $(".lists").find("#new-list").children("div.list");

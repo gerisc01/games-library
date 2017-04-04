@@ -1,16 +1,3 @@
-/*.movement {
-    float: right;
-}
-
-.movement.dropdown {
-    margin-right: 10px;
-}
-*/
-
-span.adjust-column-size {
-    padding: 2px;
-}
-
 .buttons button {
     float: right;
 }
@@ -116,6 +103,23 @@ span.adjust-column-size {
 
 .alert {
     white-space: pre-wrap;
+}
+
+/* CREATE LIST CSS */
+
+.create-column-detail {
+    width: 100%;
+}
+
+.create-column-detail .column-plus,.column-minus {
+    padding: 2px;
+    cursor: pointer;
+}
+
+.create-column-detail input {
+    width: -webkit-calc(100% - 22px);
+    width:    -moz-calc(100% - 22px);
+    width:         calc(100% - 22px);
 }
 
 /*EDIT LISTS CLASSES*/
