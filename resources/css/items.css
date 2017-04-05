@@ -122,6 +122,10 @@
     width:         calc(100% - 22px);
 }
 
+.create-column-detail button.column-delete {
+    margin-top: 5px;
+}
+
 /*EDIT LISTS CLASSES*/
 
 .edit.list-container {

@@ -645,26 +645,41 @@ function showCreateListOptions() {
 
     var minusCol = "<span class=\"fa fa-caret-left column-minus\"></span>";
     var plusCol  = "<span class=\"fa fa-caret-right column-plus\"></span>";
+    var deleteCol = "<button class=\"column-delete\"><span class=\"glyphicon glyphicon-trash\"></span></button>";
+    var addCol = "<button class=\"column-add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>";
+
+    // Create the fieldSpec for the starter columns
     for (var i=1; i < 4; i++) {
         var columnName = "<input id=\""+i+"\" value=\"Column "+i+"\"></input>";
         var createColumnDetail = "<div id=\""+i+"\" class=\"create-column-detail\">"+
-            "<div>"+columnName+minusCol+plusCol+"</div><div><h4>3/10</h4></div>"+
+            "<div>"+columnName+minusCol+plusCol+"</div><div>"+deleteCol+"</div>"+
             "</div>";
         fieldSpec.push({"width" : 3, "name" : createColumnDetail})
     }
 
-    // fieldSpec = [{"width" : 2,"name" : "<input id=\"column-1\"></input>"}]
-    // $("<span/>",{class: "glyphicon glyphicon-plus pastel-green"})
-    // fieldSpec = [
-    //     {"width" : 3, "name" : "<input id=\"col-1\" value=\"Column 1\" style=\"width:90%\"></input>"+moveColumn},
-    //     {"width" : 3, "name" : "<input id=\"col-2\" value=\"Column 2\" style=\"width:90%\"></input>"+moveColumn},
-    //     {"width" : 2, "name" : "<input id=\"col-3\" value=\"Column 3\" style=\"width:90%\"></input>"+moveColumn}]
+    // Create the a fieldSpec entry for the add field button
+    fieldSpec.push({"width" : 1, "name" : addCol});
 
     // Create header
     var listObj = $(".lists").find("#new-list").children("div.list");
     listObj.append(getHeader(fieldSpec));
-    // // Grab the first col-md-2
+
+    // Create a create list button in the 
     $(".header").children(".buttons").append("<h4 class=\"header-name\"><button id=\"create-list\" class=\"btn btn-default\">Create List</button></h4>");
+
+    // Listener for resizing columns
+    $(".create-column-detail").on("click", ".column-plus,.column-minus", function(event) {
+        var biggerColumn = true;
+        var target = $(event.target);
+        if (target.hasClass("column-minus")) { biggerColumn = false; }
+
+        var id = target.closest(".create-column-detail").attr("id");
+        if (biggerColumn) {
+            console.log("Add to column " + id);
+        } else {
+            console.log("Remove from column " + id);
+        }
+    });
 }
 
 function showListCreateDialog() {
