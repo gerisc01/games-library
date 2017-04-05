@@ -649,12 +649,14 @@ function showCreateListOptions() {
     var addCol = "<button class=\"column-add\"><span class=\"glyphicon glyphicon-plus green\"></span></button>";
 
     // Create the fieldSpec for the starter columns
+    columnWidths = [];
     for (var i=1; i < 4; i++) {
         var columnName = "<input id=\""+i+"\" value=\"Column "+i+"\"></input>";
-        var createColumnDetail = "<div id=\""+i+"\" class=\"create-column-detail\">"+
+        var createColumnDetail = "<div class=\"create-column-detail\">"+
             "<div>"+columnName+minusCol+plusCol+"</div><div>"+deleteCol+"</div>"+
             "</div>";
-        fieldSpec.push({"width" : 3, "name" : createColumnDetail})
+        columnWidths.push(3);
+        fieldSpec.push({"width" : columnWidths[i-1], "name" : createColumnDetail})
     }
 
     // Create the a fieldSpec entry for the add field button
@@ -668,16 +670,55 @@ function showCreateListOptions() {
     $(".header").children(".buttons").append("<h4 class=\"header-name\"><button id=\"create-list\" class=\"btn btn-default\">Create List</button></h4>");
 
     // Listener for resizing columns
-    $(".create-column-detail").on("click", ".column-plus,.column-minus", function(event) {
+    $(".header").on("click", ".create-column-detail .column-plus,.column-minus", function(event) {
         var biggerColumn = true;
         var target = $(event.target);
         if (target.hasClass("column-minus")) { biggerColumn = false; }
 
-        var id = target.closest(".create-column-detail").attr("id");
-        if (biggerColumn) {
-            console.log("Add to column " + id);
-        } else {
-            console.log("Remove from column " + id);
+        var column = target.closest(".create-column-detail");
+        var columnIndex = $(".create-column-detail").index(column);
+        var sum = columnWidths.reduce(function(a,b) { return a + b; },0);
+        // If the column can be moved (doesn't go over 10 cumulatively or under 1 individually)
+        if ((biggerColumn && sum < 10) || (!biggerColumn && columnWidths[columnIndex] !== 1)) {
+            // Get the parent and the old bootstrap column width class based on the columnIndex width
+            var parent = target.closest(".header-name").parent();
+            var oldClass = "col-md-"+columnWidths[columnIndex];
+            biggerColumn ? columnWidths[columnIndex] += 1 : columnWidths[columnIndex] -= 1;
+            var newClass = "col-md-"+columnWidths[columnIndex];
+            parent.removeClass(oldClass);
+            parent.addClass(newClass);
+
+            // Hide or show the add column button if the column was pushed or subtracted from 10
+            if (biggerColumn && sum === 9) $(".header").children().last().hide();
+            if (!biggerColumn && sum === 10) $(".header").children().last().show();
+        }
+    });
+
+    // Listener for deleting columns
+    $(".header").on("click", ".create-column-detail button.column-delete", function(event) {
+        // Delete the targeted column from columnWidths and the DOM
+        var column = $(event.target).closest(".create-column-detail");
+        columnWidths.splice($(".create-column-detail").index(column),1);
+        column.closest(".header-name").parent().remove();
+        // Show the add column button again (will do nothing if it is already showing)
+        $(".header").children().last().show();
+    });
+
+    // Listner for creating columns
+    $(".header").on("click",".column-add",function() {
+        var sum = columnWidths.reduce(function(a,b) { return a + b; },0);
+        // Don't add if the rows are already full
+        if (sum < 10) {
+            var cNumber = $(".create-column-detail").size()+1;
+            var columnName = "<input id=\""+cNumber+"\" value=\"Column "+cNumber+"\"></input>";
+            var createColumnDetail = "<div class=\"create-column-detail\">"+
+                "<div>"+columnName+minusCol+plusCol+"</div><div>"+deleteCol+"</div>"+
+                "</div>";
+            var width = sum == 9 ? 1 : 2;
+            var newColumn = "<div class=\"col-md-"+width+"\"><h4 class=\"header-name\">"+createColumnDetail+"</h4></div>";
+            if (sum + width >= 10) $(".header").children().last().hide();
+            $(newColumn).insertBefore($(".header").children().last());
+            columnWidths.push(width);
         }
     });
 }
