@@ -1,13 +1,19 @@
 import React from 'react'
 import Collection from './Collection'
+import { Tabs,Nav,Navbar } from 'react-bootstrap'
 
-const Collections = ({ collections, activeCollection }) => (
-  <span className="collections">
-    <p>
-    {collections.map(collection => (
-      <Collection key={collection.id} {...collection} />
-    ))}
-    </p>
-  </span>
+const Collections = ({ collections, activeCollection, setActiveCollection }) => (
+  <Navbar>
+    <Nav bsStyle="tabs" activeKey={activeCollection} navbar='true'>
+      {collections.map(collection => (
+        <Collection 
+          key={collection.id}
+          {...collection}
+          activeCollection={collection.id === activeCollection}
+          onClick={() => setActiveCollection(collection.id)}
+        />
+      ))}
+    </Nav>
+  </Navbar>
 )
 export default Collections;

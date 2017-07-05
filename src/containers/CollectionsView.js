@@ -1,24 +1,20 @@
 import { connect } from 'react-redux'
-import { actions } from '../actions'
 import Collections from '../components/Collections'
-
-const getCollections = (collections) => {
-  return collections;
-}
+import { actions } from '../actions'
 
 const mapStateToProps = state => {
-  let collections = state.collections;
-  let activeCollection = !activeCollection && collections.length !== 0 
-    ? collections[0].id 
-    : activeCollection;
   return {
-    collections,
-    activeCollection
+    collections: state.collections.items,
+    activeCollection: state.collections.active,
   }
 }
 
 const CollectionsView = connect(
-  mapStateToProps
+  mapStateToProps,
+  // Dispatch to Props
+  {
+    setActiveCollection: actions.setActiveCollection
+  }
 )(Collections)
 
 export default CollectionsView

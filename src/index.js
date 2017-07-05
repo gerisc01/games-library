@@ -10,7 +10,7 @@ import App from './components/App';
 
 import { actions } from './actions'
 
-let store = createStore(gamesLibraryApp, applyMiddleware(thunk), devToolsEnhancer());
+let store = createStore(gamesLibraryApp, devToolsEnhancer(), applyMiddleware(thunk));
 
 store.dispatch(actions.fetchCollections())
 
