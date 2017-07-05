@@ -1,6 +1,6 @@
 import React from 'react'
 import Collection from './Collection'
-import { Tabs,Nav,Navbar } from 'react-bootstrap'
+import { Nav,Navbar } from 'react-bootstrap'
 
 const Collections = ({ collections, activeCollection, setActiveCollection }) => (
   <Navbar>

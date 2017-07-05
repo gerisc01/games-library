@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tab,NavItem } from 'react-bootstrap'
+import { NavItem } from 'react-bootstrap'
 
 
 const Collection = ({ dispatch, id, name, activeCollection, onClick }) => (

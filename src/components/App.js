@@ -10,7 +10,7 @@ const App = () => (
     <CollectionsView />
     <ListsView />
     <ItemsView />
-  </div>
+    </div>
 )
 
 export default App

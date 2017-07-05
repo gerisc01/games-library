@@ -1,9 +1,15 @@
 import React from 'react'
 import List from './List'
 
+const listsStyle = {
+  float: 'left',
+  width: '200px',
+  height: '500px',
+  marginTop: '70px'
+}
+
 const Lists = ({ lists, activeList, setActiveList }) => (
-  <span className="lists">
-    <p>
+  <div className="lists" style={listsStyle}>
     {lists.map(list => (
       <List 
         key={list.id}
@@ -12,7 +18,6 @@ const Lists = ({ lists, activeList, setActiveList }) => (
         onClick={() => setActiveList(list.id)}
       />
     ))}
-    </p>
-  </span>
+  </div>
 )
 export default Lists;
