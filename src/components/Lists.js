@@ -1,12 +1,12 @@
 import React from 'react'
 import List from './List'
 
-const Lists = ({ lists, activeList, setActiveList }) => (
+const Lists = ({ lists, activeListId, setActiveList }) => (
   <div className="lists" style={listsStyle}>
     {lists.map(list => (
       <List 
         key={list.id}
-        activeList={list.id === activeList}
+        activeList={list.id === activeListId}
         onClick={() => setActiveList(list.id)}
         {...list}
       />
