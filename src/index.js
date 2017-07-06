@@ -10,6 +10,8 @@ import App from './components/App';
 
 import { actions } from './actions'
 
+import 'bootstrap/dist/css/bootstrap.css';
+
 let store = createStore(gamesLibraryApp, devToolsEnhancer(), applyMiddleware(thunk));
 
 store.dispatch(actions.fetchCollections())
