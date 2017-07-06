@@ -1,15 +1,47 @@
 import React from 'react'
+import { colorMap } from '../resources/js/utils'
 
-const listStyle = {
+function List({ id,name,color,activeList,onClick }) {
+  // Create the style for the list flag container
+  let listFlagContainerStyle = Object.assign({},listFlagContainerStyleBase);
+  if (activeList) {
+    // If the current list is active, set the font weight to bold
+    listFlagContainerStyle['fontWeight'] = 'bold'
+  } else {
+    // If the current list is not active, set the cursor to a pointer
+    listFlagContainerStyle['cursor'] = 'pointer'
+  }
+
+  // Create the style for the list flag text
+  let listFlagTextStyle = Object.assign({},listFlagTextStyleBase)
+
+  // Add the proper color to the list tab text and arrow right
+  let coloredArrowRight = Object.assign({},arrowRight)
+  if (colorMap[color] !== undefined) {
+    listFlagTextStyle['backgroundColor'] = colorMap[color]
+    coloredArrowRight['color'] = colorMap[color]
+  }
+
+  // Return the Component HTML
+  return (
+    <div onClick={onClick} style={listFlagContainerStyle}>
+      <div style={listFlagTextStyle}>
+        {name}
+      </div>
+      <div style={coloredArrowRight} />
+    </div>
+  )
+}
+
+const listFlagContainerStyleBase = {
   width: '200px',
   height: '50px',
   marginTop: '5px',
   marginBottom: '5px',
-  padding: '0px',
-  cursor: 'pointer'
+  padding: '0px'
 }
 
-const textStyle = {
+const listFlagTextStyleBase = {
   float: 'left',
   height: '50px',
   width: '175px',
@@ -27,29 +59,4 @@ const arrowRight = {
   borderLeft: '25px solid'
 }
 
-const List = ({ id, name, activeList, onClick }) => (
-  <div
-    className={id}
-    onClick={onClick}
-    style={
-      Object.assign(
-      activeList
-      // Style if the list is currently active
-      ? {
-        fontWeight: 'bold'
-      }
-      // Style if the list is not currently active 
-      : {
-        cursor: 'pointer'
-      },
-      listStyle
-    )}
-  >
-    <div style={Object.assign({backgroundColor: '#77DD77'},textStyle)}>
-    {name}
-    </div>
-    <div style={arrowRight} />
-    
-  </div>
-)
 export default List;

@@ -4,7 +4,7 @@ import { Nav,Navbar } from 'react-bootstrap'
 
 const Collections = ({ collections, activeCollection, setActiveCollection }) => (
   <Navbar>
-    <Nav bsStyle="tabs" activeKey={activeCollection} navbar='true'>
+    <Nav bsStyle="tabs" activeKey={activeCollection}>
       {collections.map(collection => (
         <Collection 
           key={collection.id}

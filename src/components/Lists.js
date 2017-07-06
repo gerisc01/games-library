@@ -1,6 +1,19 @@
 import React from 'react'
 import List from './List'
 
+const Lists = ({ lists, activeList, setActiveList }) => (
+  <div className="lists" style={listsStyle}>
+    {lists.map(list => (
+      <List 
+        key={list.id}
+        activeList={list.id === activeList}
+        onClick={() => setActiveList(list.id)}
+        {...list}
+      />
+    ))}
+  </div>
+)
+
 const listsStyle = {
   float: 'left',
   width: '200px',
@@ -8,16 +21,4 @@ const listsStyle = {
   marginTop: '70px'
 }
 
-const Lists = ({ lists, activeList, setActiveList }) => (
-  <div className="lists" style={listsStyle}>
-    {lists.map(list => (
-      <List 
-        key={list.id}
-        {...list}
-        activeList={list.id === activeList}
-        onClick={() => setActiveList(list.id)}
-      />
-    ))}
-  </div>
-)
 export default Lists;
