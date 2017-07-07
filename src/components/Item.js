@@ -1,12 +1,15 @@
 import React from 'react'
-import { Col,Row } from 'react-bootstrap'
+import { Button,Col,Row } from 'react-bootstrap'
+import FontAwesome from 'react-fontawesome'
 
-// export const Item = props => (
-//   <li className={props.id}>{props.column1}</li>
-// )
 export const Item = ({ fields,item }) => (
   <Row>
-    <Col md={2}>{/*The edit buttons will eventually go here*/}</Col>
+    <Col md={2} >
+      <div style={{float: 'right'}}>
+        <Button><FontAwesome name='pencil'/></Button>
+        <Button><FontAwesome name='trash'/></Button>
+      </div>
+    </Col>
     {fields.map(field => {
       return (
         <Col 

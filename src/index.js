@@ -1,16 +1,18 @@
+// Regular React imports
 import React from 'react';
 import { render } from 'react-dom';
+// Redux imports
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
 import devToolsEnhancer from 'remote-redux-devtools';
-
+import thunk from 'redux-thunk'
+// Application imports
 import gamesLibraryApp from './reducers'
 import App from './components/App';
-
 import { actions } from './actions'
-
-import 'bootstrap/dist/css/bootstrap.css';
+// Import bootstrap and font awesome css files
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 let store = createStore(gamesLibraryApp, devToolsEnhancer(), applyMiddleware(thunk));
 
