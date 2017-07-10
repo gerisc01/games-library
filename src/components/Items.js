@@ -1,8 +1,8 @@
 import React from 'react'
-import { Item,ItemHeader } from './Item'
+import { Item,ItemEdit,ItemHeader } from './Item'
 import { Col,Grid,Row } from 'react-bootstrap'
 
-function Items({ items,activeList }) {
+function Items({ items,activeList,editingId,onClicks }) {
   return (
     <div className="items" style={itemsStyle}>
       <Grid>
@@ -11,7 +11,19 @@ function Items({ items,activeList }) {
         </Row>
         <ItemHeader fields={activeList.fields}/>
         {items.map(item => {
-          return <Item key={item.id} fields={activeList.fields} item={item} />
+          if (item.id === editingId) {
+            return <ItemEdit
+              key={item.id}
+              fields={activeList.fields}
+              item={item} 
+              acceptClick={() => onClicks.acceptEditingItem(item.id,item)} />
+          } else {
+            return <Item
+              key={item.id}
+              fields={activeList.fields}
+              item={item}
+              editClick={() => onClicks.setEditingItem(item.id)} />
+          }
         })}
       </Grid>
     </div>
@@ -21,17 +33,4 @@ function Items({ items,activeList }) {
 const itemsStyle = {
   float: 'left'
 }
-
-/*const Items = ({ items,activeList }) => (
-  <div style={itemsStyle}>
-    <ul className={activeList.id}>
-      {items.map(item => (
-        <Item
-          key={item.id}
-          {...item}
-        />
-      ))}
-    </ul>
-  </div>
-)*/
 export default Items;

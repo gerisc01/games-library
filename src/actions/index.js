@@ -11,8 +11,9 @@ export const types = {
   SET_ACTIVE_COLLECTION: 'SET_ACTIVE_COLLECTION',
   SET_ACTIVE_LIST: 'SET_ACTIVE_LIST',
 
-  ADD_ACTIVE_COLLECTION: 'ADD_ACTIVE_COLLECTION',
-  ADD_ACTIVE_LIST: 'ADD_ACTIVE_LIST',
+  // EDIT ACTIONS
+  EDIT_ITEM: 'EDIT_ITEM',
+  EDIT_ACCEPT: 'EDIT_ACCEPT',
 }
 
 export const actions = {
@@ -68,6 +69,19 @@ export const actions = {
     return {
       type: types.ADD_ACTIVE_LIST,
       id
+    }
+  },
+  editItem: id => {
+    return {
+      type: types.EDIT_ITEM,
+      id
+    }
+  },
+  editAccept: (id,item) => {
+    return {
+      type: types.EDIT_ACCEPT,
+      id,
+      item
     }
   }
 }
