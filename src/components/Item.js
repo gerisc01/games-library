@@ -35,7 +35,11 @@ export const ItemEdit = ({ fields,item,acceptClick }) => (
         <Col 
           key={field.id.toString()+"-"+item.id.toString()}
           md={parseInt(field.width,10)}>
-        <input type="text" defaultValue={item[field.id]} style={{width: '95%'}} onBlur={(event) => console.log(event.target)} />
+        <input 
+          type="text"
+          defaultValue={item[field.id]}
+          style={{width: '95%'}}
+          onBlur={(event) => { item[field.id] = event.target.value }} />
         </Col>
       )
     })}
