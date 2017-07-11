@@ -7,7 +7,7 @@ const mapStateToProps = state => {
     return list.id === state.lists.active;
   })[0]
   return {
-    items: state.items.items,
+    items: state.items.items.slice(),
     activeList,
     editingId: state.items.editing
   }
@@ -18,6 +18,7 @@ const mapDispatchToProps = dispatch => {
     onClicks: {
       setEditingItem: (id) => dispatch(actions.editItem(id)),
       acceptEditingItem: (id,item) => dispatch(actions.editAccept(id,item)),
+      cancelEditingItem: (id) => dispatch(actions.editCancel(id)),
     }
   }
 }

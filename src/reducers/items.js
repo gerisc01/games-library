@@ -21,14 +21,17 @@ const items = (state = {items: []}, action) => {
         editing: action.id
       }
     case types.EDIT_ACCEPT:
-      console.log(action.id);
-      console.log(action.item);
       return {
         ...state,
         editing: undefined,
         items: state.items.map(item => {
           return item.id === action.id ? action.item : item
         })
+      }
+    case types.EDIT_CANCEL:
+      return {
+        ...state,
+        editing: undefined
       }
     default:
       return state

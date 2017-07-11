@@ -14,6 +14,7 @@ export const types = {
   // EDIT ACTIONS
   EDIT_ITEM: 'EDIT_ITEM',
   EDIT_ACCEPT: 'EDIT_ACCEPT',
+  EDIT_CANCEL: 'EDIT_CANCEL',
 }
 
 export const actions = {
@@ -82,6 +83,12 @@ export const actions = {
       type: types.EDIT_ACCEPT,
       id,
       item
+    }
+  },
+  editCancel: (id) => {
+    return {
+      type: types.EDIT_CANCEL,
+      id
     }
   }
 }

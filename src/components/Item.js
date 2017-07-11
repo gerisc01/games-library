@@ -22,11 +22,11 @@ export const Item = ({ fields,item,editClick }) => (
   </Row>
 )
 
-export const ItemEdit = ({ fields,item,acceptClick }) => (
+export const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
   <Row>
     <Col md={2} >
       <div style={{float: 'right'}}>
-        <Button><FontAwesome name='remove' style={{color: 'red'}}/></Button>
+        <Button onClick={cancelClick}><FontAwesome name='remove' style={{color: 'red'}}/></Button>
         <Button onClick={acceptClick}><FontAwesome name='check' style={{color: 'green'}}/></Button>
       </div>
     </Col>

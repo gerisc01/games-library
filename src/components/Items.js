@@ -16,7 +16,8 @@ function Items({ items,activeList,editingId,onClicks }) {
               key={item.id}
               fields={activeList.fields}
               item={item} 
-              acceptClick={() => onClicks.acceptEditingItem(item.id,item)} />
+              acceptClick={() => onClicks.acceptEditingItem(item.id,item)}
+              cancelClick={() => onClicks.cancelEditingItem(item.id)} />
           } else {
             return <Item
               key={item.id}
