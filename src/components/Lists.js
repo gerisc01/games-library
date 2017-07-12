@@ -1,7 +1,7 @@
 import React from 'react'
-import List from './List'
+import { AddList,List } from './List'
 
-const Lists = ({ lists, activeListId, setActiveList }) => (
+const Lists = ({ lists,activeListId,setActiveList,addList }) => (
   <div className="lists" style={listsStyle}>
     {lists.map(list => (
       <List 
@@ -11,6 +11,7 @@ const Lists = ({ lists, activeListId, setActiveList }) => (
         {...list}
       />
     ))}
+    <AddList onClick={addList}/>
   </div>
 )
 

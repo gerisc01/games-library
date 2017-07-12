@@ -15,6 +15,9 @@ export const types = {
   EDIT_ITEM: 'EDIT_ITEM',
   EDIT_ACCEPT: 'EDIT_ACCEPT',
   EDIT_CANCEL: 'EDIT_CANCEL',
+
+  // ADD ACTIONS
+  ADD_LIST: 'ADD_LIST',
 }
 
 export const actions = {
@@ -60,18 +63,6 @@ export const actions = {
       dispatch(actions.fetchItems(getState().collections.active,listId))
     }
   },
-  addActiveCollection: id => {
-    return {
-      type: types.ADD_ACTIVE_COLLECTION,
-      id
-    }
-  },
-  addActiveList: id => {
-    return {
-      type: types.ADD_ACTIVE_LIST,
-      id
-    }
-  },
   editItem: id => {
     return {
       type: types.EDIT_ITEM,
@@ -89,6 +80,11 @@ export const actions = {
     return {
       type: types.EDIT_CANCEL,
       id
+    }
+  },
+  addList: () => {
+    return {
+      type: types.ADD_LIST
     }
   }
 }

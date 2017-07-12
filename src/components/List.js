@@ -1,7 +1,8 @@
 import React from 'react'
 import { colorMap } from '../resources/js/utils'
+import FontAwesome from 'react-fontawesome'
 
-function List({ id,name,color,activeList,onClick }) {
+export function List({ id,name,color,activeList,onClick }) {
   // Create the style for the list flag container
   let listFlagContainerStyle = Object.assign({},listFlagContainerStyleBase);
   if (activeList) {
@@ -33,6 +34,24 @@ function List({ id,name,color,activeList,onClick }) {
   )
 }
 
+export function AddList({ onClick }) {
+  // Create the style for the add list flag text
+  let addListFlagTextStyle = Object.assign({},listFlagTextStyleBase)
+  addListFlagTextStyle['cursor'] = "pointer"
+  addListFlagTextStyle['width'] = "50px"
+  addListFlagTextStyle['fontSize'] = "20px"
+  addListFlagTextStyle['border'] = "dashed"
+
+  return (
+    <div style={listFlagContainerStyleBase}>
+      <div onClick={onClick} style={addListFlagTextStyle}>
+        <FontAwesome name='plus' style={{color: colorMap['pastel-green']}}/>
+      </div>
+      <div style={arrowRight} />
+    </div>
+  )
+}
+
 const listFlagContainerStyleBase = {
   width: '200px',
   height: '50px',
@@ -58,5 +77,3 @@ const arrowRight = {
   borderBottom: '25px solid transparent',
   borderLeft: '25px solid'
 }
-
-export default List;

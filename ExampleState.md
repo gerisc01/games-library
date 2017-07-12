@@ -6,6 +6,7 @@
     lists: {
         items: LIST (LISTS),
         active: STRING (ID),
+        isAdding: BOOLEAN
     },
     items: {
         items: LIST (ITEMS),

@@ -14,7 +14,8 @@ const ListsView = connect(
   mapStateToProps,
   // Dispatch to Props
   {
-    setActiveList: actions.setActiveList
+    setActiveList: actions.setActiveList,
+    addList: actions.addList,
   }
 )(Lists)
 

@@ -8,13 +8,20 @@ const lists = (state = {items: []}, action) => {
       });
       const active = items.length > 0 ? items[0].id : undefined;
       return {
+        ...state,
         items,
         active
       }
     case types.SET_ACTIVE_LIST:
       return {
+        ...state,
         items: state.items,
         active: action.id
+      }
+    case types.ADD_LIST:
+      return {
+        ...state,
+        isAdding: true
       }
     default:
       return state
