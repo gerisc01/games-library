@@ -2,7 +2,7 @@ import React from 'react'
 import { NavItem } from 'react-bootstrap'
 
 
-const Collection = ({ dispatch, id, name, activeCollection, onClick }) => (
+export const Collection = ({ dispatch, id, name, activeCollection, onClick }) => (
   <NavItem
     eventKey={id}
     onClick={onClick}
@@ -21,4 +21,3 @@ const Collection = ({ dispatch, id, name, activeCollection, onClick }) => (
   {name}
   </NavItem>
 )
-export default Collection;

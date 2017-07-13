@@ -1,8 +1,8 @@
 import React from 'react'
-import Collection from './Collection'
+import { Collection } from './CollectionComponents'
 import { Nav,Navbar } from 'react-bootstrap'
 
-const Collections = ({ collections, activeCollection, setActiveCollection }) => (
+const Collections = ({ collections,activeCollection,setActiveCollection }) => (
   <Navbar>
     <Nav bsStyle="tabs" activeKey={activeCollection}>
       {collections.map(collection => (

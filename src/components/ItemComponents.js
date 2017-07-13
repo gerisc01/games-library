@@ -2,6 +2,19 @@ import React from 'react'
 import { Button,Col,Row } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
+export function ItemRow({ item,fields,isEditing,onClicks }) {
+  return isEditing
+    ? <ItemEdit
+        fields={fields}
+        item={item}
+        acceptClick={() => onClicks.acceptEditingItem(item.id,item)}
+        cancelClick={() => onClicks.cancelEditingItem(item.id)} />
+    : <Item
+        fields={fields}
+        item={item}
+        editClick={() => onClicks.setEditingItem(item.id)} />
+}
+
 export const Item = ({ fields,item,editClick }) => (
   <Row>
     <Col md={2} >
@@ -42,18 +55,6 @@ export const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
           onBlur={(event) => { item[field.id] = event.target.value }} />
         </Col>
       )
-    })}
-  </Row>
-)
-
-// Item header is a special type of Item with bolded header names and no edit/move events
-export const ItemHeader = ({ fields }) => (
-  <Row>
-    {fields.map((header,i) => {
-      return (
-      <Col key={header.id} mdOffset={i === 0 ? 2 : undefined} md={parseInt(header.width,10)}>
-        <h4 style={{fontWeight: 'bold'}}>{header.name}</h4>
-      </Col>)
     })}
   </Row>
 )

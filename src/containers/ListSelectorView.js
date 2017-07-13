@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Lists from '../components/Lists'
+import ListSelector from '../components/ListSelector'
 import { actions } from '../actions'
 
 const mapStateToProps = state => {
@@ -10,13 +10,13 @@ const mapStateToProps = state => {
 }
 
 
-const ListsView = connect(
+const ListSelectorView = connect(
   mapStateToProps,
   // Dispatch to Props
   {
     setActiveList: actions.setActiveList,
     addList: actions.addList,
   }
-)(Lists)
+)(ListSelector)
 
-export default ListsView
+export default ListSelectorView

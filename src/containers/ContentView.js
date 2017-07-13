@@ -1,14 +1,22 @@
+import React from 'react'
 import { connect } from 'react-redux'
-import Items from '../components/Items'
+import List from '../components/List'
 import { actions } from '../actions'
+
+const Content = (props) => {
+  return (
+    <List {...props} />
+  )
+}
 
 const mapStateToProps = state => {
   const activeList = state.lists.items.filter(list => {
     return list.id === state.lists.active;
   })[0]
   return {
+    title: activeList ? activeList.name : "",
+    fields: activeList ? activeList.fields : [],
     items: state.items.items.slice(),
-    activeList,
     editingId: state.items.editing
   }
 }
@@ -23,9 +31,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const ItemsView = connect(
+const ContentView = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Items)
+)(Content)
 
-export default ItemsView
+export default ContentView

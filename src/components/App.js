@@ -1,14 +1,14 @@
 import React from 'react'
 import CollectionsView from '../containers/CollectionsView'
-import ListsView from '../containers/ListsView'
-import ItemsView from '../containers/ItemsView'
+import ListSelectorView from '../containers/ListSelectorView'
+import ContentView from '../containers/ContentView'
 
 const App = () => (
   <div>
     <CollectionsView />
-    <ListsView />
-    <ItemsView />
-    </div>
+    <ListSelectorView />
+    <ContentView />
+  </div>
 )
 
 export default App

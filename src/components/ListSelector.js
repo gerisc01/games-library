@@ -1,25 +1,25 @@
 import React from 'react'
-import { AddList,List } from './List'
+import { ListAddButton,ListButton } from './ListComponents'
 
-const Lists = ({ lists,activeListId,setActiveList,addList }) => (
-  <div className="lists" style={listsStyle}>
+const ListSelector = ({ lists,activeListId,setActiveList,addList }) => (
+  <div style={listSelectorStyle}>
     {lists.map(list => (
-      <List 
+      <ListButton
         key={list.id}
         activeList={list.id === activeListId}
         onClick={() => setActiveList(list.id)}
         {...list}
       />
     ))}
-    <AddList onClick={addList}/>
+    <ListAddButton onClick={addList}/>
   </div>
 )
 
-const listsStyle = {
+const listSelectorStyle = {
   float: 'left',
   width: '200px',
   height: '500px',
   marginTop: '70px'
 }
 
-export default Lists;
+export default ListSelector;
