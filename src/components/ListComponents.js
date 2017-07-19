@@ -1,7 +1,7 @@
 import React from 'react'
 import { colorMap } from '../resources/js/utils'
 import FontAwesome from 'react-fontawesome'
-import { Col,Row } from 'react-bootstrap'
+import { Button,Col,Row } from 'react-bootstrap'
 
 export function ListButton({ id,name,color,activeList,onClick }) {
   // Create the style for the list flag container
@@ -54,21 +54,84 @@ export function ListAddButton({ onClick }) {
   )
 }
 
-export const ListTitle = ({ title,edit,onChange }) => (
+export const ListTitle = ({ title,onEdit }) => (
   <Row>
-    <Col mdOffset={1}><h3>{edit ? <input value={title}/> : title}</h3></Col>
+    <Col mdOffset={1}>
+      <h3>{title}</h3>
+    </Col>
   </Row>
 )
 
-export const ListHeader = ({ fields,edit,onChange }) => (
+export const ListTitleEdit = ({ title,onEdit }) => (
   <Row>
-    {fields.map((header,i) => {
-      return (
-      <Col key={header.id} mdOffset={i === 0 ? 2 : undefined} md={parseInt(header.width,10)}>
-        <h4 style={{fontWeight: 'bold'}}>{header.name}</h4>
-      </Col>)
-    })}
+    <Col mdOffset={1}>
+      <h3><input value={title} onChange={(e) => onEdit(e.target.value)}/></h3>
+    </Col>
   </Row>
+)
+
+export const ListHeader = ({ fields }) => {
+  return (
+    <Row>
+      {fields.map((header,i) => {
+        return (
+        <Col key={header.id} mdOffset={i === 0 ? '2' : undefined} md={parseInt(header.width,10)}>
+          <h4 style={{fontWeight: 'bold'}}> 
+            <div>{header.name}</div>
+          </h4>
+        </Col>)
+      })}
+    </Row>
+  )
+}
+
+export const ListHeaderEdit = ({ fields,onSave,onAdd,onEdit,onDelete }) => {
+  // If the fields widths sum up to less than 10, add a 'add field' button
+  const rowWidth = fields.reduce((sum,field) => { return sum + parseInt(field.width,10)},0);
+  return (
+    <Row>
+      <Col key='save-changes' md={2}>
+        {onSave ? <SaveListButton onSave={onSave}/> : null}
+      </Col>
+      {fields.map((header) => {
+        const width = parseInt(header.width,10)
+        return (
+        <Col key={header.id} md={width}>
+          <h4>
+            <div>
+              <input value={header.name} style={editHeaderInputStyle} onChange={(e) => {onEdit(header.id,"name",e.target.value)}} />
+              <FontAwesome name='caret-left' style={changeFieldWidthStyle} 
+                onClick={width > 1 ? () => onEdit(header.id,"width",width-1) : null}/>
+              <FontAwesome name='caret-right' style={changeFieldWidthStyle}
+                onClick={width <10 ? () => onEdit(header.id,"width",width+1) : null}/>
+            </div>
+            <div style={{marginTop: '5px'}}>
+              <Button onClick={() => {onDelete(header.id)}}><FontAwesome name='trash' /></Button>
+            </div>
+          </h4>
+        </Col>
+        )
+      })}
+      {rowWidth < 10 ? <AddFieldColumn onAdd={onAdd} /> : null}
+    </Row>
+  )
+}
+
+/************************************************
+ * HELPER COMPONENTS
+ ***********************************************/
+const SaveListButton = ({ onSave }) => (
+  <h4>
+    <Button bsStyle='primary' style={{float: 'right'}} onClick={() => onSave}>Save</Button>
+  </h4>
+)
+
+const AddFieldColumn = ({ onAdd }) => (
+  <Col key='new-field' md={1}>
+    <h4>
+      <Button onClick={onAdd}><FontAwesome name='plus' style={{color: 'green'}} /></Button>
+    </h4>
+  </Col>
 )
 
 /************************************************
@@ -99,4 +162,15 @@ const arrowRight = {
   borderTop: '25px solid transparent',
   borderBottom: '25px solid transparent',
   borderLeft: '25px solid'
+}
+
+const editHeaderInputStyle = {
+  width: '-webkit-calc(100% - 22px)',
+  width:    '-moz-calc(100% - 22px)',
+  width:         'calc(100% - 22px)',
+}
+
+const changeFieldWidthStyle = {
+  padding: '2px',
+  cursor: 'pointer'
 }

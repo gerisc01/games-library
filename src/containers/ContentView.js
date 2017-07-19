@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import List from '../components/List'
+import ListEdit from '../components/ListEdit'
 import { actions } from '../actions'
 
 const Content = (props) => {
   return (
-    <List {...props} />
+    <ListEdit />
+    // <List {...props} />
   )
 }
 

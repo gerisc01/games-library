@@ -18,6 +18,7 @@ export const types = {
 
   // ADD ACTIONS
   ADD_LIST: 'ADD_LIST',
+  ADD_LIST_ACCEPT: 'ADD_LIST_ACCEPT',
 }
 
 export const actions = {
@@ -85,6 +86,12 @@ export const actions = {
   addList: () => {
     return {
       type: types.ADD_LIST
+    }
+  },
+  addListAccept: (list) => {
+    return {
+      type: types.ADD_LIST_ACCEPT,
+      list
     }
   }
 }

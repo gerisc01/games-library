@@ -1,6 +1,6 @@
 import { types } from '../actions'
 
-const lists = (state = {items: []}, action) => {
+const lists = (state = {items: [], isAdding: false}, action) => {
   switch (action.type) {
     case types.FETCH_LISTS:
       let items = action.data.map(list => {
@@ -16,12 +16,19 @@ const lists = (state = {items: []}, action) => {
       return {
         ...state,
         items: state.items,
-        active: action.id
+        active: action.id,
+        isAdding: false,
       }
     case types.ADD_LIST:
       return {
         ...state,
         isAdding: true
+      }
+    case types.ADD_LIST_ACCEPT:
+      return {
+        ...state,
+        isAdding: false,
+        items: items.concat(action.item),
       }
     default:
       return state
