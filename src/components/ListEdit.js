@@ -4,11 +4,12 @@ import { ItemRow } from './ItemComponents'
 import { Grid } from 'react-bootstrap'
 
 class ListEdit extends React.Component {  
-  constructor({ title,fields }, context) {
-    super({ title,fields }, context);
+  constructor(props, context) {
+    super(props, context);
+    this.onSave = props.onSave;
     this.state = {
-      title: title ? title : "",
-      fields: fields ? fields : [{
+      title: props.title ? props.title : "",
+      fields: props.fields ? props.fields : [{
         id: "column1",
         name: "Column 1",
         width: "3"
@@ -16,8 +17,8 @@ class ListEdit extends React.Component {
     };
   }
 
-  onSave = () => {
-    
+  componentWillUpdate(props,state) {
+    this.onSave(state);
   }
 
   onTitleChange = (value) => {
@@ -61,23 +62,17 @@ class ListEdit extends React.Component {
 
   render() {
     return (
-      <div style={listStyle}>
-        <Grid>
-          <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.title}  />
-          <ListHeaderEdit 
-            onSave={undefined}
-            onAdd={() => this.onFieldChange()}
-            onEdit={(id,name,value) => this.onFieldChange(id,name,value)} 
-            onDelete={(id) => this.onFieldChange(id,'delete')}
-            fields={this.state.fields} />
-        </Grid>
-      </div>
+      <div>
+        <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.title}  />
+        <ListHeaderEdit 
+          onSave={undefined}
+          onAdd={() => this.onFieldChange()}
+          onEdit={(id,name,value) => this.onFieldChange(id,name,value)} 
+          onDelete={(id) => this.onFieldChange(id,'delete')}
+          fields={this.state.fields} />
+       </div> 
     )
   }
-}
-
-const listStyle = {
-  float: 'left',
 }
 
 export default ListEdit

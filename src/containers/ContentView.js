@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import List from '../components/List'
-import ListEdit from '../components/ListEdit'
+import ListCreate from '../components/ListCreate'
 import { actions } from '../actions'
 
 const Content = (props) => {
   return (
-    <ListEdit />
+    <ListCreate />
     // <List {...props} />
   )
 }
