@@ -1,7 +1,5 @@
 import React from 'react'
 import { ListTitleEdit,ListHeaderEdit } from './ListComponents'
-import { ItemRow } from './ItemComponents'
-import { Grid } from 'react-bootstrap'
 
 class ListEdit extends React.Component {  
   constructor(props, context) {

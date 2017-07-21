@@ -46,7 +46,7 @@ export const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
     {fields.map(field => {
       return (
         <Col 
-          key={field.id.toString()+"-"+item.id.toString()}
+          key={field.id.toString()+"-"+(item ? item.id.toString() : "new")}
           md={parseInt(field.width,10)}>
         <input 
           type="text"
@@ -56,5 +56,15 @@ export const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
         </Col>
       )
     })}
+  </Row>
+)
+
+export const ItemAddButton = ({ onClick }) => (
+  <Row>
+    <Col md={2}>
+      <Button onClick={() => onClick()} style={{float: 'right'}}>
+        <FontAwesome name='plus' style={{color: 'green'}}/>
+      </Button>
+    </Col>
   </Row>
 )

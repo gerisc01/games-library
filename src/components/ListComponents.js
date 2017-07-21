@@ -165,8 +165,6 @@ const arrowRight = {
 }
 
 const editHeaderInputStyle = {
-  width: '-webkit-calc(100% - 22px)',
-  width:    '-moz-calc(100% - 22px)',
   width:         'calc(100% - 22px)',
 }
 

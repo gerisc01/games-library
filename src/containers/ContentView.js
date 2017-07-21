@@ -26,6 +26,7 @@ const mapStateToProps = state => {
     items: state.items.items.slice(),
     editingId: state.items.editing,
     isAddList: state.lists.isAdding,
+    isAddItem: state.items.isAdding
   }
 }
 
@@ -35,6 +36,7 @@ const mapDispatchToProps = dispatch => {
     onAcceptEditingItem: (id,item) => dispatch(actions.editItemAccept(id,item)),
     onCancelEditingItem: (id) => dispatch(actions.editItemCancel(id)),
     onAddListAccept: (list) => dispatch(actions.addListAccept(list)),
+    onAddItem: () => dispatch(actions.addItem()),
   }
 }
 

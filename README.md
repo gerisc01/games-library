@@ -9,6 +9,8 @@ A rewrite of the games-library app in react
   - npm i remote-redux-webtools
 - Installed Redux Thunk middleware
   - npm i --save redux-thunk
-- Installed React Bookstrap
+- Installed React Bootstrap
   - npm i --save react react-dom
   - npm i --save react react-dom
+- Installed UUID
+  - npm i --save uuid

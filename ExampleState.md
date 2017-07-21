@@ -10,6 +10,7 @@
     },
     items: {
         items: LIST (ITEMS),
-        editing: STRING (ID)
+        editing: STRING (ID),
+        isAdding: BOOLEAN
     }
 }

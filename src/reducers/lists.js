@@ -1,3 +1,4 @@
+import uuid from 'uuid'
 import { types } from '../actions'
 
 const lists = (state = {items: [], isAdding: false}, action) => {
@@ -25,11 +26,14 @@ const lists = (state = {items: [], isAdding: false}, action) => {
         isAdding: true
       }
     case types.ADD_LIST_ACCEPT:
-      console.log(action);
+      let list = action.list
+      let listId = uuid()
+      list["_id"] = listId
+      list["id"] = listId
       return {
         ...state,
         isAdding: false,
-        items: state.items.concat(action.list),
+        items: state.items.concat(list),
       }
     default:
       return state

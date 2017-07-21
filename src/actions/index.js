@@ -11,14 +11,18 @@ export const types = {
   SET_ACTIVE_COLLECTION: 'SET_ACTIVE_COLLECTION',
   SET_ACTIVE_LIST: 'SET_ACTIVE_LIST',
 
-  // EDIT ACTIONS
+  // EDIT ITEM ACTIONS
   EDIT_ITEM: 'EDIT_ITEM',
   EDIT_ACCEPT: 'EDIT_ACCEPT',
   EDIT_CANCEL: 'EDIT_CANCEL',
 
-  // ADD ACTIONS
+  // ADD LIST ACTIONS
   ADD_LIST: 'ADD_LIST',
   ADD_LIST_ACCEPT: 'ADD_LIST_ACCEPT',
+
+  // ADD ITEM ACTIONS
+  ADD_ITEM: 'ADD_ITEM',
+
 }
 
 export const actions = {
@@ -92,6 +96,11 @@ export const actions = {
     return {
       type: types.ADD_LIST_ACCEPT,
       list
+    }
+  },
+  addItem: () => {
+    return {
+      type: types.ADD_ITEM
     }
   }
 }

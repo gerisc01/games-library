@@ -18,6 +18,7 @@ const items = (state = {items: []}, action) => {
     case types.EDIT_ITEM:
       return {
         ...state,
+        isAdding: false,
         editing: action.id
       }
     case types.EDIT_ACCEPT:
@@ -31,6 +32,13 @@ const items = (state = {items: []}, action) => {
     case types.EDIT_CANCEL:
       return {
         ...state,
+        isAdding: false,
+        editing: undefined
+      }
+    case types.ADD_ITEM:
+      return {
+        ...state,
+        isAdding: true,
         editing: undefined
       }
     default:
