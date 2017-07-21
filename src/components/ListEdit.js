@@ -8,12 +8,8 @@ class ListEdit extends React.Component {
     super(props, context);
     this.onSave = props.onSave;
     this.state = {
-      title: props.title ? props.title : "",
-      fields: props.fields ? props.fields : [{
-        id: "column1",
-        name: "Column 1",
-        width: "3"
-      }]
+      name: props.list.name ? props.list.name : "",
+      fields: props.list.fields ? props.list.fields : []
     };
   }
 
@@ -22,7 +18,7 @@ class ListEdit extends React.Component {
   }
 
   onTitleChange = (value) => {
-    this.setState({ title: value })
+    this.setState({ name: value })
   }
 
   onFieldChange = (id,name,value) => {
@@ -63,7 +59,7 @@ class ListEdit extends React.Component {
   render() {
     return (
       <div>
-        <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.title}  />
+        <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.name}  />
         <ListHeaderEdit 
           onSave={undefined}
           onAdd={() => this.onFieldChange()}

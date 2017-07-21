@@ -25,10 +25,11 @@ const lists = (state = {items: [], isAdding: false}, action) => {
         isAdding: true
       }
     case types.ADD_LIST_ACCEPT:
+      console.log(action);
       return {
         ...state,
         isAdding: false,
-        items: items.concat(action.item),
+        items: state.items.concat(action.list),
       }
     default:
       return state

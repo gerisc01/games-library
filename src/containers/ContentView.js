@@ -6,8 +6,13 @@ import { actions } from '../actions'
 
 const Content = (props) => {
   return (
-    <ListCreate />
-    // <List {...props} />
+    <div>
+      {
+        props.isAddList
+          ? <ListCreate {...props}/>
+          : <List {...props}/> 
+      }
+    </div>
   )
 }
 
@@ -19,17 +24,17 @@ const mapStateToProps = state => {
     title: activeList ? activeList.name : "",
     fields: activeList ? activeList.fields : [],
     items: state.items.items.slice(),
-    editingId: state.items.editing
+    editingId: state.items.editing,
+    isAddList: state.lists.isAdding,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onClicks: {
-      setEditingItem: (id) => dispatch(actions.editItem(id)),
-      acceptEditingItem: (id,item) => dispatch(actions.editAccept(id,item)),
-      cancelEditingItem: (id) => dispatch(actions.editCancel(id)),
-    }
+    onSetEditingItem: (id) => dispatch(actions.editItem(id)),
+    onAcceptEditingItem: (id,item) => dispatch(actions.editItemAccept(id,item)),
+    onCancelEditingItem: (id) => dispatch(actions.editItemCancel(id)),
+    onAddListAccept: (list) => dispatch(actions.addListAccept(list)),
   }
 }
 

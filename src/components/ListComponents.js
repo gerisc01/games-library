@@ -75,7 +75,7 @@ export const ListHeader = ({ fields }) => {
     <Row>
       {fields.map((header,i) => {
         return (
-        <Col key={header.id} mdOffset={i === 0 ? '2' : undefined} md={parseInt(header.width,10)}>
+        <Col key={header.id} mdOffset={i === 0 ? 2 : undefined} md={parseInt(header.width,10)}>
           <h4 style={{fontWeight: 'bold'}}> 
             <div>{header.name}</div>
           </h4>
