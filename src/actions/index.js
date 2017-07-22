@@ -22,6 +22,7 @@ export const types = {
 
   // ADD ITEM ACTIONS
   ADD_ITEM: 'ADD_ITEM',
+  ADD_ITEM_ACCEPT: 'ADD_ITEM_ACCEPT',
 
 }
 
@@ -74,14 +75,14 @@ export const actions = {
       id
     }
   },
-  editAccept: (id,item) => {
+  editItemAccept: (id,item) => {
     return {
       type: types.EDIT_ACCEPT,
       id,
       item
     }
   },
-  editCancel: (id) => {
+  editItemCancel: (id) => {
     return {
       type: types.EDIT_CANCEL,
       id
@@ -101,6 +102,12 @@ export const actions = {
   addItem: () => {
     return {
       type: types.ADD_ITEM
+    }
+  },
+  addItemAccept: (item) => {
+    return {
+      type: types.ADD_ITEM_ACCEPT,
+      item
     }
   }
 }

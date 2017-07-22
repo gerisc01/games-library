@@ -40,13 +40,13 @@ export const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
     <Col md={2} >
       <div style={{float: 'right'}}>
         <Button onClick={cancelClick}><FontAwesome name='remove' style={{color: 'red'}}/></Button>
-        <Button onClick={acceptClick}><FontAwesome name='check' style={{color: 'green'}}/></Button>
+        <Button onClick={() => acceptClick(item.id,item)}><FontAwesome name='check' style={{color: 'green'}}/></Button>
       </div>
     </Col>
     {fields.map(field => {
       return (
         <Col 
-          key={field.id.toString()+"-"+(item ? item.id.toString() : "new")}
+          key={field.id.toString()+"-"+('id' in item ? item.id.toString() : "new")}
           md={parseInt(field.width,10)}>
         <input 
           type="text"

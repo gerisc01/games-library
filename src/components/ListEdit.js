@@ -4,7 +4,7 @@ import { ListTitleEdit,ListHeaderEdit } from './ListComponents'
 class ListEdit extends React.Component {  
   constructor(props, context) {
     super(props, context);
-    this.onSave = props.onSave;
+    this.onChange = props.onChange;
     this.state = {
       name: props.list.name ? props.list.name : "",
       fields: props.list.fields ? props.list.fields : []
@@ -12,7 +12,7 @@ class ListEdit extends React.Component {
   }
 
   componentWillUpdate(props,state) {
-    this.onSave(state);
+    this.onChange(state);
   }
 
   onTitleChange = (value) => {
@@ -59,7 +59,6 @@ class ListEdit extends React.Component {
       <div>
         <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.name}  />
         <ListHeaderEdit 
-          onSave={undefined}
           onAdd={() => this.onFieldChange()}
           onEdit={(id,name,value) => this.onFieldChange(id,name,value)} 
           onDelete={(id) => this.onFieldChange(id,'delete')}

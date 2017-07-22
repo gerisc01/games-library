@@ -5,9 +5,9 @@ import { Grid } from 'react-bootstrap'
 
 const List = (props) => {
   let itemEditingOnClicks = {
-    onSetEditingItem: props.onSetEditingItem,
-    onAcceptEditingItem: props.onAcceptEditingItem,
-    onCancelEditingItem: props.onCancelEditingItem,
+    setEditingItem: props.onSetEditingItem,
+    acceptEditingItem: props.onAcceptEditingItem,
+    cancelEditingItem: props.onCancelEditingItem,
   }
   
   return (
@@ -20,7 +20,11 @@ const List = (props) => {
             key={item.id} item={item} fields={props.fields} isEditing={props.editingId === item.id} onClicks={itemEditingOnClicks} />
         })}
         {props.isAddItem 
-          ? <ItemEdit fields={props.fields} />
+          ? <ItemEdit
+              fields={props.fields}
+              item={props.fields.reduce((item,field) => { item[field["id"]] = ""; return item; },{})}
+              acceptClick={(id,item) => props.onAddItemAccept(item)}
+              cancelClick={props.onCancelEditingItem}/>
           : <ItemAddButton onClick={props.onAddItem}/>}
       </Grid>
     </div>
