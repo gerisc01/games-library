@@ -8,12 +8,13 @@ import { actions } from '../actions'
 const Content = (props) => {
   return (
     <div>
-      <ListsEdit {...props} />
-      {/* {
-        props.isAddList
-          ? <ListCreate {...props}/>
-          : <List {...props}/> 
-      } */}
+       {
+        props.isEditLists
+          ? <ListsEdit {...props} />
+          : props.isAddList
+            ? <ListCreate {...props}/>
+            : <List {...props}/> 
+      } 
     </div>
   )
 }
@@ -29,7 +30,8 @@ const mapStateToProps = state => {
     lists: state.lists.items.slice(),
     editingId: state.items.editing,
     isAddList: state.lists.isAdding,
-    isAddItem: state.items.isAdding
+    isEditLists: state.lists.isEditing,
+    isAddItem: state.items.isAdding,
   }
 }
 

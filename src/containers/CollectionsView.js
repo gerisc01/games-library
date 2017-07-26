@@ -9,12 +9,14 @@ const mapStateToProps = state => {
   }
 }
 
+const mapDispatchToProps = {
+  setActiveCollection: actions.setActiveCollection,
+  onEditLists: actions.editLists,
+}
+
 const CollectionsView = connect(
   mapStateToProps,
-  // Dispatch to Props
-  {
-    setActiveCollection: actions.setActiveCollection
-  }
+  mapDispatchToProps
 )(Collections)
 
 export default CollectionsView

@@ -11,7 +11,9 @@ const lists = (state = {items: [], isAdding: false}, action) => {
       return {
         ...state,
         items,
-        active
+        active,
+        isEditing: false,
+        isAdding: false,
       }
     case types.SET_ACTIVE_LIST:
       return {
@@ -19,11 +21,18 @@ const lists = (state = {items: [], isAdding: false}, action) => {
         items: state.items,
         active: action.id,
         isAdding: false,
+        isEditing: false,
+      }
+    case types.EDIT_LISTS:
+      return {
+        ...state,
+        isEditing: true,
       }
     case types.ADD_LIST:
       return {
         ...state,
-        isAdding: true
+        isAdding: true,
+        isEditing: false,
       }
     case types.ADD_LIST_ACCEPT:
       let list = action.list

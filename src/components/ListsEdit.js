@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid,Row } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import ListEdit from './ListEdit'
 
 let listItems = []
@@ -8,7 +8,7 @@ const ListsEdit = ({ lists }) => (
     {lists.map(list => {
       listItems.push(list)
       return (
-        <div style={{border: 'dotted', marginBottom: '10px'}}>
+        <div key={list.id} style={{border: 'dotted', marginBottom: '10px'}}>
           <ListEdit list={Object.assign({},list)} onChange={onChange}/>
         </div>
       )
