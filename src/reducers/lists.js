@@ -28,6 +28,11 @@ const lists = (state = {items: [], isAdding: false}, action) => {
         ...state,
         isEditing: true,
       }
+    case types.EDIT_LISTS_CANCEL:
+      return {
+        ...state,
+        isEditing: false
+      }
     case types.ADD_LIST:
       return {
         ...state,

@@ -13,6 +13,8 @@ export const types = {
 
   // EDIT LIST ACTIONS
   EDIT_LISTS: 'EDIT_LISTS',
+  EDIT_LISTS_CANCEL: 'EDIT_LISTS_CANCEL',
+  EDIT_LISTS_ACCEPT: 'EDIT_LISTS_ACCEPT',
 
   // EDIT ITEM ACTIONS
   EDIT_ITEM: 'EDIT_ITEM',
@@ -75,6 +77,11 @@ export const actions = {
   editLists: () => {
     return {
       type: types.EDIT_LISTS
+    }
+  },
+  editListsCancel: () => {
+    return {
+      type: types.EDIT_LISTS_CANCEL
     }
   },
   editItem: id => {
