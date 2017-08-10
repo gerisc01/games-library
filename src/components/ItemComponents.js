@@ -1,19 +1,47 @@
 import React from 'react'
+import { DragSource } from 'react-dnd'
 import { Button,Col,Row } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
-export function ItemRow({ item,fields,isEditing,onClicks }) {
-  return isEditing
-    ? <ItemEdit
-        fields={fields}
-        item={item}
-        acceptClick={() => onClicks.acceptEditingItem(item.id,item)}
-        cancelClick={() => onClicks.cancelEditingItem(item.id)} />
-    : <Item
-        fields={fields}
-        item={item}
-        editClick={() => onClicks.setEditingItem(item.id)} />
+/**
+ * Implements the drag source contract.
+ */
+const cardSource = {
+  beginDrag(props) {
+    return {
+      text: props.text
+    };
+  }
+};
+
+/**
+ * Specifies the props to inject into your component.
+ */
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  };
 }
+
+
+export function ItemRowSource({ item,fields,isEditing,onClicks,isDragging,connectDragSource }) {
+  return connectDragSource(
+  <div>
+    {isEditing
+      ? <ItemEdit
+          fields={fields}
+          item={item}
+          acceptClick={() => onClicks.acceptEditingItem(item.id,item)}
+          cancelClick={() => onClicks.cancelEditingItem(item.id)} />
+      : <Item
+          fields={fields}
+          item={item}
+          editClick={() => onClicks.setEditingItem(item.id)} />}
+    </div>
+  )
+}
+export const ItemRow = DragSource('card',cardSource,collect)(ItemRowSource);
 
 export const Item = ({ fields,item,editClick }) => (
   <Row>

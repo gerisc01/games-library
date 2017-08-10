@@ -3,6 +3,9 @@ import CollectionsView from '../containers/CollectionsView'
 import ListSelectorView from '../containers/ListSelectorView'
 import ContentView from '../containers/ContentView'
 
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
 const App = () => (
   <div>
     <CollectionsView />
@@ -11,4 +14,4 @@ const App = () => (
   </div>
 )
 
-export default App
+export default DragDropContext(HTML5Backend)(App);

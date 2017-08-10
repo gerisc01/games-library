@@ -14,3 +14,6 @@ A rewrite of the games-library app in react
   - npm i --save react react-dom
 - Installed UUID
   - npm i --save uuid
+- Installed React DnD
+  - npm i --save react-dnd
+  - npm i --save react-dnd-html5-backend
