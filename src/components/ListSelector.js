@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListAddButton,ListButton } from './ListComponents'
+import { ListAddButton,ListButton } from './ListSelectorComponents'
 
 const ListSelector = ({ lists,activeListId,setActiveList,addList }) => (
   <div style={listSelectorStyle}>

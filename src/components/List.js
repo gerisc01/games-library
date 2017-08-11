@@ -1,24 +1,14 @@
 import React from 'react'
-import { ListTitle,ListHeader } from './ListComponents'
-import { ItemRow,ItemAddButton,ItemEdit } from './ItemComponents'
+import { ListTitle,ListHeader,ItemList,ItemAddButton,ItemEdit } from './ListComponents'
 import { Grid } from 'react-bootstrap'
 
 const List = (props) => {
-  let itemEditingOnClicks = {
-    setEditingItem: props.onSetEditingItem,
-    acceptEditingItem: props.onAcceptEditingItem,
-    cancelEditingItem: props.onCancelEditingItem,
-  }
-  
   return (
     <div style={listStyle}>
       <Grid>
         <ListTitle title={props.title} />
         <ListHeader fields={props.fields} />
-        {props.items.map(item => {
-          return <ItemRow 
-            key={item.id} item={item} fields={props.fields} isEditing={props.editingId === item.id} onClicks={itemEditingOnClicks} />
-        })}
+        <ItemList {...props}/>
         {props.isAddItem 
           ? <ItemEdit
               fields={props.fields}
