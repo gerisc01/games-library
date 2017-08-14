@@ -27,6 +27,7 @@ const mapStateToProps = state => {
     title: activeList ? activeList.name : "",
     fields: activeList ? activeList.fields : [],
     items: state.items.items.slice(),
+    listId: state.lists.active,
     lists: state.lists.items.slice(),
     editingId: state.items.editing,
     isAddList: state.lists.isAdding,

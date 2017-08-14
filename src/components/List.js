@@ -8,7 +8,7 @@ const List = (props) => {
       <Grid>
         <ListTitle title={props.title} />
         <ListHeader fields={props.fields} />
-        <ItemList {...props}/>
+        <ItemList fields={props.fields} items={props.items} key={props.listId} />
         {props.isAddItem 
           ? <ItemEdit
               fields={props.fields}

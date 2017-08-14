@@ -1,32 +1,46 @@
 import React from 'react'
-import { DragSource } from 'react-dnd'
+import { DragSource,DropTarget } from 'react-dnd'
 import { Button,Col,Row } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
-/**
- * Implements the drag source contract.
- */
 const cardSource = {
   beginDrag(props) {
     return {
-      text: props.text
-    };
-  }
+      item: props.item
+    }
+  },
+};
+
+const cardTarget = {
+  hover(props, monitor) {
+    const draggedId = monitor.getItem().item.id
+    const overId = props.item.id
+
+    if (draggedId !== overId) {
+      props.swapItems(draggedId, overId);
+    }
+  },
 };
 
 /**
  * Specifies the props to inject into your component.
  */
-function collect(connect, monitor) {
+function sourceCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
   };
 }
 
-const Item = ({ fields,item,editClick,isDragging,connectDragSource }) => (
-  connectDragSource(
-    <div>
+function targetCollect(connect) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  }
+}
+
+const Item = ({ fields,item,editClick,isDragging,connectDragSource,connectDropTarget,swapItems }) => (
+  connectDropTarget(connectDragSource(
+    <div style={{opacity: isDragging ? 0 : 1}}>
       <Row>
         <Col md={2} >
           <div style={{float: 'right'}}>
@@ -45,6 +59,6 @@ const Item = ({ fields,item,editClick,isDragging,connectDragSource }) => (
         })}
       </Row>
     </div>
-  )
+  ))
 )
-export default DragSource('card',cardSource,collect)(Item);
+export default DropTarget('item',cardTarget,targetCollect)(DragSource('item',cardSource,sourceCollect)(Item));

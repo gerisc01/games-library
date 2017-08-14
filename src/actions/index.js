@@ -11,15 +11,23 @@ export const types = {
   SET_ACTIVE_COLLECTION: 'SET_ACTIVE_COLLECTION',
   SET_ACTIVE_LIST: 'SET_ACTIVE_LIST',
 
+  // CREATE_ACTIONS
+  CREATE_ITEM: 'CREATE_ITEM',
+  CREATE_LIST: 'CREATE_LIST',
+
+  // UPDATE ACTIONS
+  UPDATE_ITEM: 'UPDATE_ITEM',
+  UPDATE_LISTS: 'UPDATE_LISTS',
+  MOVE_ITEM: 'MOVE_ITEM',
+
+  // DELETE ACTIONS
+  DELETE_ITEM: 'DELETE_ITEM',
+  DELETE_LIST: 'DELETE_LIST',
+
   // EDIT LIST ACTIONS
   EDIT_LISTS: 'EDIT_LISTS',
   EDIT_LISTS_CANCEL: 'EDIT_LISTS_CANCEL',
   EDIT_LISTS_ACCEPT: 'EDIT_LISTS_ACCEPT',
-
-  // EDIT ITEM ACTIONS
-  EDIT_ITEM: 'EDIT_ITEM',
-  EDIT_ACCEPT: 'EDIT_ACCEPT',
-  EDIT_CANCEL: 'EDIT_CANCEL',
 
   // ADD LIST ACTIONS
   ADD_LIST: 'ADD_LIST',
@@ -32,6 +40,7 @@ export const types = {
 }
 
 export const actions = {
+  // Fetch Action Methods
   fetchCollections: () => {
     return (dispatch, getState) => {
       dispatch({
@@ -56,6 +65,7 @@ export const actions = {
       data: tempData.items[collectionId][listId],
     }
   },
+  // Set Active Action Methods
   setActiveCollection: collectionId => {
     return (dispatch, getState) => {
       dispatch({
@@ -74,6 +84,46 @@ export const actions = {
       dispatch(actions.fetchItems(getState().collections.active,listId))
     }
   },
+  // Create Actions
+  createItem: (item) => {
+    return {
+      type: types.CREATE_ITEM,
+      item
+    }
+  },
+  createList: (list) => {
+    return {
+      type: types.CREATE_LIST,
+      list
+    }
+  },
+  // Update Actions
+  updateItem: (item) => {
+    return {
+      type: types.UPDATE_ITEM,
+      item
+    }
+  },
+  updateLists: (lists) => {
+    return {
+      type: types.UPDATE_LISTS,
+      lists
+    }
+  },
+  // Delete Actions
+  deleteItem: (itemId) => {
+    return {
+      type: types.DELETE_ITEM,
+      itemId
+    }
+  },
+  deleteList: (listId) => {
+    return {
+      type: types.DELETE_LIST,
+      listId
+    }
+  },
+  // Deprecated Actions
   editLists: () => {
     return {
       type: types.EDIT_LISTS
@@ -82,25 +132,6 @@ export const actions = {
   editListsCancel: () => {
     return {
       type: types.EDIT_LISTS_CANCEL
-    }
-  },
-  editItem: id => {
-    return {
-      type: types.EDIT_ITEM,
-      id
-    }
-  },
-  editItemAccept: (id,item) => {
-    return {
-      type: types.EDIT_ACCEPT,
-      id,
-      item
-    }
-  },
-  editItemCancel: (id) => {
-    return {
-      type: types.EDIT_CANCEL,
-      id
     }
   },
   addList: () => {

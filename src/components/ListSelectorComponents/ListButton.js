@@ -1,8 +1,23 @@
 import React from 'react'
-import { colorMap } from '../resources/js/utils'
+import { DropTarget } from 'react-dnd'
+import { colorMap } from '../../resources/js/utils'
 import FontAwesome from 'react-fontawesome'
 
-export function ListButton({ id,name,color,activeList,onClick }) {
+function targetCollect(connect) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  }
+}
+
+const cardTarget = {
+  hover(props, monitor) {
+    console.log(props);
+    console.log(monitor.getItem());
+  },
+};
+
+
+function ListButton({ id,name,color,activeList,onClick,connectDropTarget }) {
   // Create the style for the list flag container
   let listFlagContainerStyle = Object.assign({},listFlagContainerStyleBase);
   if (activeList) {
@@ -25,33 +40,17 @@ export function ListButton({ id,name,color,activeList,onClick }) {
 
   // Return the Component HTML
   return (
+    connectDropTarget(
     <div onClick={onClick} style={listFlagContainerStyle}>
       <div style={listFlagTextStyle}>
         {name}
       </div>
       <div style={coloredArrowRight} />
     </div>
+    )
   )
 }
-
-export function ListAddButton({ onClick }) {
-  // Create the style for the add list flag text
-  let addListFlagTextStyle = Object.assign({},listFlagTextStyleBase, {
-    cursor: "pointer",
-    width: "50px",
-    fontSize: "20px",
-    border: "dashed"
-  })
-
-  return (
-    <div style={listFlagContainerStyleBase}>
-      <div onClick={onClick} style={addListFlagTextStyle}>
-        <FontAwesome name='plus' style={{color: colorMap['pastel-green']}}/>
-      </div>
-      <div style={arrowRight} />
-    </div>
-  )
-}
+export default DropTarget('item',cardTarget,targetCollect)(ListButton)
 
 /************************************************
  * CSS CONSTANTS

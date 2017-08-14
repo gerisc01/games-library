@@ -29,12 +29,19 @@ class ItemList extends React.Component {
     this.setState({editingId: undefined})
   }
 
+  swapItems = (originId,destinationId) => {
+    this.setState({order: this.state.order.map(id => {
+      return id === originId ? destinationId : id === destinationId ? originId : id
+    })})
+  }
+
   render() {
   return (
     <div>
       {this.state.order.map(id => {
-        return <ItemRow key={id} item={this.state.items[id]} fields={this.props.fields} isEditing={this.state.editingId == id}
-          startEditItem={this.startEditItem} acceptEditItem={this.acceptEditItem} cancelEditItem={this.cancelEditItem} />
+        return <ItemRow key={id} item={this.state.items[id]} fields={this.props.fields} isEditing={this.state.editingId === id}
+          startEditItem={this.startEditItem} acceptEditItem={this.acceptEditItem} cancelEditItem={this.cancelEditItem} 
+          swapItems={this.swapItems}/>
       })}
     </div>)
   }
