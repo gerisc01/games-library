@@ -1,53 +1,29 @@
 import uuid from 'uuid'
 import { types } from '../actions'
 
-const lists = (state = {items: [], isAdding: false}, action) => {
+const lists = (state = {items: {}, fields: {}, order: []}, action) => {
   switch (action.type) {
     case types.FETCH_LISTS:
-      let items = action.data.map(list => {
-        return {...list, id: list["_id"]}
-      });
-      const active = items.length > 0 ? items[0].id : undefined;
       return {
-        ...state,
-        items,
-        active,
-        isEditing: false,
-        isAdding: false,
+        items: action.data.items,
+        fields: action.data.fields,
+        order: action.data.order,
+        active: action.data.order[0]
       }
     case types.SET_ACTIVE_LIST:
       return {
         ...state,
         items: state.items,
-        active: action.id,
-        isAdding: false,
-        isEditing: false,
+        active: action.id
       }
-    case types.EDIT_LISTS:
-      return {
-        ...state,
-        isEditing: true,
-      }
-    case types.EDIT_LISTS_CANCEL:
-      return {
-        ...state,
-        isEditing: false
-      }
-    case types.ADD_LIST:
-      return {
-        ...state,
-        isAdding: true,
-        isEditing: false,
-      }
-    case types.ADD_LIST_ACCEPT:
+    case types.CREATE_LIST:
       let list = action.list
       let listId = uuid()
       list["_id"] = listId
-      list["id"] = listId
       return {
         ...state,
-        isAdding: false,
-        items: state.items.concat(list),
+        items: {...items, [listId]: list},
+        order: order.concat(listId)
       }
     default:
       return state

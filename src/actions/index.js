@@ -1,4 +1,4 @@
-import { tempData } from '../tempData'
+import { tempData } from '../tempData/newData'
 
 // Defining a map of action types
 export const types = {
@@ -21,7 +21,7 @@ export const types = {
   MOVE_ITEM: 'MOVE_ITEM',
 
   // DELETE ACTIONS
-  DELETE_ITEM: 'DELETE_ITEM',
+  REMOVE_ITEM_FROM_LIST: 'REMOVE_ITEM_FROM_LIST',
   DELETE_LIST: 'DELETE_LIST',
 
   // EDIT LIST ACTIONS
@@ -85,10 +85,11 @@ export const actions = {
     }
   },
   // Create Actions
-  createItem: (item) => {
+  createItem: (listId,item) => {
     return {
       type: types.CREATE_ITEM,
-      item
+      item,
+      listId
     }
   },
   createList: (list) => {
@@ -111,7 +112,7 @@ export const actions = {
     }
   },
   // Delete Actions
-  deleteItem: (itemId) => {
+  removeItemFromList: (listId,itemId) => {
     return {
       type: types.DELETE_ITEM,
       itemId
