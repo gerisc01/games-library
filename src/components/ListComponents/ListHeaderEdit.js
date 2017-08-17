@@ -13,17 +13,17 @@ const ListHeaderEdit = ({ fields,onSave,onAdd,onEdit,onDelete }) => {
       {fields.map((header) => {
         const width = parseInt(header.width,10)
         return (
-        <Col key={header.id} md={width}>
+        <Col key={header._id} md={width}>
           <h4>
             <div>
-              <input value={header.name} style={editHeaderInputStyle} onChange={(e) => {onEdit(header.id,"name",e.target.value)}} />
+              <input value={header.name} style={editHeaderInputStyle} onChange={(e) => {onEdit(header._id,"name",e.target.value)}} />
               <FontAwesome name='caret-left' style={changeFieldWidthStyle} 
-                onClick={width > 1 ? () => onEdit(header.id,"width",width-1) : null}/>
+                onClick={width > 1 ? () => onEdit(header._id,"width",width-1) : null}/>
               <FontAwesome name='caret-right' style={changeFieldWidthStyle}
-                onClick={width <10 ? () => onEdit(header.id,"width",width+1) : null}/>
+                onClick={width <10 ? () => onEdit(header._id,"width",width+1) : null}/>
             </div>
             <div style={{marginTop: '5px'}}>
-              <Button onClick={() => {onDelete(header.id)}}><FontAwesome name='trash' /></Button>
+              <Button onClick={() => {onDelete(header._id)}}><FontAwesome name='trash' /></Button>
             </div>
           </h4>
         </Col>

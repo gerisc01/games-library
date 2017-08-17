@@ -7,19 +7,19 @@ const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
     <Col md={2} >
       <div style={{float: 'right'}}>
         <Button onClick={cancelClick}><FontAwesome name='remove' style={{color: 'red'}}/></Button>
-        <Button onClick={() => acceptClick(item.id,item)}><FontAwesome name='check' style={{color: 'green'}}/></Button>
+        <Button onClick={() => acceptClick(item._id,item)}><FontAwesome name='check' style={{color: 'green'}}/></Button>
       </div>
     </Col>
     {fields.map(field => {
       return (
         <Col 
-          key={field.id.toString()+"-"+('id' in item ? item.id.toString() : "new")}
+          key={field._id+"-"+(item._id || "new")}
           md={parseInt(field.width,10)}>
         <input 
           type="text"
-          defaultValue={item[field.id]}
+          defaultValue={item[field._id]}
           style={{width: '95%'}}
-          onBlur={(event) => { item[field.id] = event.target.value }} />
+          onBlur={(event) => { item[field._id] = event.target.value }} />
         </Col>
       )
     })}

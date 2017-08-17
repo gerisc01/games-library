@@ -6,12 +6,10 @@ class ItemList extends React.Component {
     super(props, context);
 
     // Populate items
-    this.items = {}
-    this.props.items.forEach(item => { this.items[item.id] = item })
     this.state = {
       editingId: undefined,
-      order: this.props.items.map(item => {return item.id}),
-      items: this.items,
+      order: this.props.order,
+      items: this.props.items,
     };
   }
 
@@ -21,7 +19,7 @@ class ItemList extends React.Component {
 
   acceptEditItem = (item) => {
     let items = Object.assign({},this.state.items)
-    items[item.id] = item
+    items[item._id] = item
     this.setState({items: items, editingId: undefined})
   }
 

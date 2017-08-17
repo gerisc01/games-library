@@ -13,8 +13,8 @@ const cardSource = {
 
 const cardTarget = {
   hover(props, monitor) {
-    const draggedId = monitor.getItem().item.id
-    const overId = props.item.id
+    const draggedId = monitor.getItem().item._id
+    const overId = props.item._id
 
     if (draggedId !== overId) {
       props.swapItems(draggedId, overId);
@@ -51,9 +51,9 @@ const Item = ({ fields,item,editClick,isDragging,connectDragSource,connectDropTa
         {fields.map(field => {
           return (
             <Col 
-              key={field.id.toString()+"-"+item.id.toString()}
+              key={field._id.toString()+"-"+item._id.toString()}
               md={parseInt(field.width,10)}>
-            {item[field.id]}
+            {item[field._id]}
             </Col>
           )
         })}

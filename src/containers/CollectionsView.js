@@ -5,15 +5,15 @@ import { actions } from '../actions'
 const mapStateToProps = state => {
   return {
     collections: state.collections.items,
-    activeCollection: state.collections.active,
-    isEditingLists: state.lists.isEditing,
+    order: state.collections.order,
+    activeCollection: state.collections.active
   }
 }
 
 const mapDispatchToProps = {
   setActiveCollection: actions.setActiveCollection,
-  onEditLists: actions.editLists,
-  onEditListsCancel: actions.editListsCancel,
+  // onEditLists: actions.editLists,
+  // onEditListsCancel: actions.editListsCancel,
 }
 
 const CollectionsView = connect(

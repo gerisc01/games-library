@@ -8,7 +8,7 @@ const lists = (state = {items: {}, fields: {}, order: []}, action) => {
         items: action.data.items,
         fields: action.data.fields,
         order: action.data.order,
-        active: action.data.order[0]
+        active: action.data.order[action.collectionId][0]
       }
     case types.SET_ACTIVE_LIST:
       return {
@@ -22,8 +22,8 @@ const lists = (state = {items: {}, fields: {}, order: []}, action) => {
       list["_id"] = listId
       return {
         ...state,
-        items: {...items, [listId]: list},
-        order: order.concat(listId)
+        items: {...state.items, [listId]: list},
+        order: state.order.concat(listId)
       }
     default:
       return state

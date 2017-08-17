@@ -54,15 +54,17 @@ export const actions = {
     return (dispatch, getState) => {
       dispatch({
         type: types.FETCH_LISTS,
-        data: tempData.lists[collectionId],
+        data: tempData.lists,
+        collectionId
       })
-      dispatch(actions.fetchItems(collectionId,getState().lists.active))
+      dispatch(actions.fetchItems(getState().lists.active))
     }
   },
-  fetchItems: (collectionId,listId) => {
+  fetchItems: (listId) => {
     return {
       type: types.FETCH_ITEMS,
-      data: tempData.items[collectionId][listId],
+      data: tempData.items,
+      listId
     }
   },
   // Set Active Action Methods

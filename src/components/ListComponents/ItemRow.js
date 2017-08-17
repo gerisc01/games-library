@@ -13,6 +13,6 @@ function ItemRow({ item,fields,isEditing,startEditItem,acceptEditItem,cancelEdit
         fields={fields}
         item={item}
         swapItems={swapItems}
-        editClick={() => startEditItem(item.id)} />
+        editClick={() => startEditItem(item._id)} />
 }
 export default ItemRow

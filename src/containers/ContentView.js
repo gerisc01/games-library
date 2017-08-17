@@ -20,19 +20,20 @@ const Content = (props) => {
 }
 
 const mapStateToProps = state => {
-  const activeList = state.lists.items.filter(list => {
-    return list.id === state.lists.active;
-  })[0]
+  let fields = state.lists.items[state.lists.active].fields.map(field => {
+    return {...field, name: state.lists.fields[field._id].name}
+  })
   return {
-    title: activeList ? activeList.name : "",
-    fields: activeList ? activeList.fields : [],
-    items: state.items.items.slice(),
+    title: state.lists.items[state.lists.active].name || "",
+    fields: fields || [],
+    items: state.items.items,
+    order: state.items.order[state.lists.active].slice(),
     listId: state.lists.active,
-    lists: state.lists.items.slice(),
-    editingId: state.items.editing,
-    isAddList: state.lists.isAdding,
-    isEditLists: state.lists.isEditing,
-    isAddItem: state.items.isAdding,
+    lists: state.lists.items,
+    // editingId: state.items.editing,
+    // isAddList: state.lists.isAdding,
+    // isEditLists: state.lists.isEditing,
+    // isAddItem: state.items.isAdding,
   }
 }
 

@@ -1,14 +1,14 @@
 import React from 'react'
 import { ListAddButton,ListButton } from './ListSelectorComponents'
 
-const ListSelector = ({ lists,activeListId,setActiveList,addList }) => (
+const ListSelector = ({ lists,order,collectionId,activeId,setActiveList,addList }) => (
   <div style={listSelectorStyle}>
-    {lists.map(list => (
+    {order[collectionId].map(id => (
       <ListButton
-        key={list.id}
-        activeList={list.id === activeListId}
-        onClick={() => setActiveList(list.id)}
-        {...list}
+        key={id}
+        activeList={id === activeId}
+        onClick={() => setActiveList(id)}
+        {...lists[id]}
       />
     ))}
     <ListAddButton onClick={addList}/>

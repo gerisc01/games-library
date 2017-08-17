@@ -13,8 +13,8 @@ const items = (state = {items: {}, order: {}}, action) => {
       item["_id"] = itemId
       return {
         ...state,
-        items: { ...items, [itemId]: item },
-        order: {...order, [listId]: order[listId].concat(itemId)}
+        items: { ...state.items, [itemId]: item },
+        order: {...state.order, [action.listId]: state.order[action.listId].concat(itemId)}
       }
     default:
       return state

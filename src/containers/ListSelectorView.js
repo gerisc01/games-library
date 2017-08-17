@@ -5,7 +5,9 @@ import { actions } from '../actions'
 const mapStateToProps = state => {
   return {
     lists: state.lists.items,
-    activeListId: state.lists.active
+    order: state.lists.order,
+    collectionId: state.collections.active,
+    activeId: state.lists.active
   }
 }
 

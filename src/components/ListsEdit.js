@@ -8,7 +8,7 @@ const ListsEdit = ({ lists }) => (
     {lists.map(list => {
       listItems.push(list)
       return (
-        <div key={list.id} style={{border: 'dotted', marginBottom: '10px'}}>
+        <div key={list._id} style={{border: 'dotted', marginBottom: '10px'}}>
           <ListEdit list={Object.assign({},list)} onChange={onChange}/>
         </div>
       )
@@ -18,7 +18,7 @@ const ListsEdit = ({ lists }) => (
 
 const onChange = (updatedList) => {
   listItems.map(list => {
-    return updatedList.id === list.id ? updatedList : list
+    return updatedList._id === list._id ? updatedList : list
   })
 }
 

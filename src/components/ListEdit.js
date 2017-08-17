@@ -23,7 +23,7 @@ class ListEdit extends React.Component {
     if (id && name === 'name') {
       this.setState({
         fields: this.state.fields.map(field => {
-          return field.id === id
+          return field._id === id
             ? {...field, name: value}
             : field
         })
@@ -31,7 +31,7 @@ class ListEdit extends React.Component {
     } else if (id && name === 'width') {
       this.setState({
         fields: this.state.fields.map(field => {
-          return field.id === id
+          return field._id === id
             ? {...field, width: value}
             : field
         })
@@ -39,7 +39,7 @@ class ListEdit extends React.Component {
     } else if (id && name === 'delete') {
       this.setState({
         fields: this.state.fields.filter(field => {
-          return field.id !== id;
+          return field._id !== id;
         })
       })
     } else if (!id) {
