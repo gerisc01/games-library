@@ -1,6 +1,5 @@
 export {default as Item} from './Item'
 export {default as ItemEdit} from './ItemEdit'
-export {default as ItemRow} from './ItemRow'
 export {default as ItemAddButton} from './ItemAddButton'
 export {default as ItemList} from './ItemList'
 

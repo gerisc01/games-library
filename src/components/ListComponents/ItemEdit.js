@@ -2,7 +2,11 @@ import React from 'react'
 import { Button,Col,Row } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
-const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
+const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => {
+  if (item === undefined || item === {}) {
+    item = fields.reduce((item,field) => { item[field._id] = ""; return item; },{})
+  }
+  return (
   <Row>
     <Col md={2} >
       <div style={{float: 'right'}}>
@@ -23,6 +27,6 @@ const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => (
         </Col>
       )
     })}
-  </Row>
-)
+  </Row>)
+}
 export default ItemEdit
