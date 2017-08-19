@@ -8,14 +8,7 @@ const List = (props) => {
       <Grid>
         <ListTitle title={props.title} />
         <ListHeader fields={props.fields} />
-        <ItemList key={props.listId} {...props} />
-         {/* {props.isAddItem 
-          ? <ItemEdit
-              fields={props.fields}
-              item={props.fields.reduce((item,field) => { item[field["id"]] = ""; return item; },{})}
-              acceptClick={(id,item) => props.onAddItemAccept(item)}
-              cancelClick={props.onCancelEditingItem}/>
-          : <ItemAddButton onClick={props.onAddItem}/>}  */}
+        <ItemList key={props.id} {...props} />
       </Grid>
     </div>
   )

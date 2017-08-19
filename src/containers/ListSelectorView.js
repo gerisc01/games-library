@@ -2,23 +2,28 @@ import { connect } from 'react-redux'
 import ListSelector from '../components/ListSelector'
 import { actions } from '../actions'
 
-const mapStateToProps = state => {
+const mapStateToProps = (state,ownProps) => {
   return {
     lists: state.lists.items,
     order: state.lists.order,
     collectionId: state.collections.active,
-    activeId: state.lists.active
+    activeId: state.lists.active,
+    isModifyingLists: ownProps.isAddingList || ownProps.isEditingLists,
+  }
+}
+
+const mapDispatchToProps = (dispatch,ownProps) => {
+  return {
+    setActiveList: (id) => dispatch(actions.setActiveList(id)),
+    startAddList: () => ownProps.startAddList(),
+    stopModifyingLists: () => ownProps.stopModifyingLists(),
   }
 }
 
 
 const ListSelectorView = connect(
   mapStateToProps,
-  // Dispatch to Props
-  {
-    setActiveList: actions.setActiveList,
-    addList: actions.addList,
-  }
+  mapDispatchToProps
 )(ListSelector)
 
 export default ListSelectorView

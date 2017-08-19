@@ -1,15 +1,17 @@
 import React from 'react'
 import { Grid } from 'react-bootstrap'
-import ListEdit from './ListEdit'
+import { ListEdit } from './ListComponents'
 
-let listItems = []
-const ListsEdit = ({ lists }) => (
+let updatedLists = {}
+const ListsEdit = ({ lists, listsOrder, fields }) => (
   <Grid style={{float: 'left'}}>
-    {lists.map(list => {
-      listItems.push(list)
+    {listsOrder.map(id => {
+      // Add a name into each of the fields before adding passing them to ListEdit
+      let list = lists[id]
+      list["fields"] = list.fields.map(f => { return { ...f, name: fields[f._id].name } })
       return (
-        <div key={list._id} style={{border: 'dotted', marginBottom: '10px'}}>
-          <ListEdit list={Object.assign({},list)} onChange={onChange}/>
+        <div key={id} style={{border: 'dotted', marginBottom: '10px'}}>
+          <ListEdit list={Object.assign({},list)} fields={fields} onChange={onChange}/>
         </div>
       )
     })}
@@ -17,9 +19,7 @@ const ListsEdit = ({ lists }) => (
 )
 
 const onChange = (updatedList) => {
-  listItems.map(list => {
-    return updatedList._id === list._id ? updatedList : list
-  })
+  updatedLists[updatedList._id] = updatedList
 }
 
 export default ListsEdit

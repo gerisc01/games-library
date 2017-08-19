@@ -3,6 +3,7 @@ export {default as ItemEdit} from './ItemEdit'
 export {default as ItemAddButton} from './ItemAddButton'
 export {default as ItemList} from './ItemList'
 
+export {default as ListEdit} from './ListEdit'
 export {default as ListHeader} from './ListHeader'
 export {default as ListHeaderEdit} from './ListHeaderEdit'
 export {default as ListTitle} from './ListTitle'

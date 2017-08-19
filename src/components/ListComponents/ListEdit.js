@@ -1,5 +1,6 @@
 import React from 'react'
-import { ListTitleEdit,ListHeaderEdit } from './ListComponents'
+import ListTitleEdit from './ListTitleEdit'
+import ListHeaderEdit from './ListHeaderEdit'
 
 class ListEdit extends React.Component {  
   constructor(props, context) {
@@ -12,7 +13,7 @@ class ListEdit extends React.Component {
   }
 
   componentWillUpdate(props,state) {
-    this.onChange(state);
+    if (this.onChange) this.onChange(state);
   }
 
   onTitleChange = (value) => {
@@ -63,7 +64,7 @@ class ListEdit extends React.Component {
           onEdit={(id,name,value) => this.onFieldChange(id,name,value)} 
           onDelete={(id) => this.onFieldChange(id,'delete')}
           fields={this.state.fields} />
-       </div> 
+      </div> 
     )
   }
 }

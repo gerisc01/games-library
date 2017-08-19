@@ -9,9 +9,9 @@ const Content = (props) => {
   return (
     <div>
        {
-        props.isEditLists
+        props.isEditingLists
           ? <ListsEdit {...props} />
-          : props.isAddList
+          : props.isAddingList
             ? <ListCreate {...props}/>
             : <List {...props}/> 
       } 
@@ -27,13 +27,10 @@ const mapStateToProps = state => {
     title: state.lists.items[state.lists.active].name || "",
     fields: fields || [],
     items: state.items.items,
-    order: state.items.order[state.lists.active].slice(),
+    itemsOrder: state.items.order[state.lists.active].slice(),
     listId: state.lists.active,
     lists: state.lists.items,
-    // editingId: state.items.editing,
-    // isAddList: state.lists.isAdding,
-    // isEditLists: state.lists.isEditing,
-    // isAddItem: state.items.isAdding,
+    listsOrder: state.lists.order[state.collections.active].slice(),
   }
 }
 

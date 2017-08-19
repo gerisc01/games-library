@@ -2,7 +2,6 @@ import React from 'react'
 import { Col,Row } from 'react-bootstrap'
 
 const ListHeader = ({ fields }) => {
-  console.log(fields);
   return (
     <Row>
       {fields.map((header,i) => {

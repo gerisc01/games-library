@@ -1,6 +1,6 @@
 import React from 'react'
-import ListEdit from './ListEdit'
 import { Grid,Row,Col,Button } from 'react-bootstrap'
+import { ListEdit } from './ListComponents'
 
 let newList;
 const ListCreate = ({ onAddListAccept }) => {
@@ -10,7 +10,7 @@ const ListCreate = ({ onAddListAccept }) => {
     name: 'New List Name',
     fields: [
       {
-        id: "column1",
+        _id: "column1",
         name: "Column 1",
         width: "3"
       }
