@@ -1,11 +1,11 @@
 import React from 'react'
 import ListView from '../containers/ListView'
 import ListCreateView from '../containers/ListCreateView'
-import ListsEdit from './ListsEdit'
+import ListsEditView from '../containers/ListsEditView'
 
 const ListContent = (props) => {
   if (props.isEditingLists) {
-    return <div><ListsEdit {...props} /></div>
+    return <div><ListsEditView {...props} /></div>
   } else if (props.isAddingList) {
     return <div><ListCreateView {...props} /></div>
   } else {

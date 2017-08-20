@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import ListCreate from '../components/ListCreate'
 import { actions } from '../actions'

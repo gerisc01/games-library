@@ -6,7 +6,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     collections: state.collections.items,
     order: state.collections.order,
-    activeCollection: state.collections.active
+    activeCollection: state.collections.active,
+    isModifyingLists: ownProps.isAddingList || ownProps.isEditingLists,
   }
 }
 

@@ -66,7 +66,7 @@ class ItemList extends React.Component {
         this.state.addingItem
           ? <ItemEdit key="newitem" fields={this.props.fields} item={newItem}
               acceptClick={() => this.createItem(newItem)} cancelClick={() => this.cancelEditItem()} />
-          : <ItemAddButton start={() => this.startAddItem()} />
+          : this.props.id ? <ItemAddButton start={() => this.startAddItem()} /> : undefined
       }
     </div>)
   }

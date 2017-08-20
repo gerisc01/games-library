@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListTitle,ListHeader,ItemList,ItemAddButton,ItemEdit } from './ListComponents'
+import { ListTitle,ListHeader,ItemList } from './ListComponents'
 import { Grid } from 'react-bootstrap'
 
 const List = (props) => {

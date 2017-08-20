@@ -2,7 +2,7 @@ import React from 'react'
 import { Collection } from './CollectionComponents'
 import { Nav,Navbar } from 'react-bootstrap'
 
-const Collections = ({ collections,order,activeCollection,setActiveCollection,startEditLists,stopEditLists }) => (
+const Collections = ({ collections,order,activeCollection,setActiveCollection,startEditLists,stopModifyingLists,isEditingLists,isModifyingLists }) => (
   <Navbar>
     <Nav bsStyle="tabs" activeKey={activeCollection}>
       {order.map(id => (
@@ -10,9 +10,15 @@ const Collections = ({ collections,order,activeCollection,setActiveCollection,st
           key={id}
           {...collections[id]}
           activeCollection={id === activeCollection}
-          onClick={() => setActiveCollection(id)}
+          onClick={
+            () => {
+              setActiveCollection(id)
+              if (isModifyingLists) stopModifyingLists(); 
+            }
+          }
+          isEditingLists={isEditingLists}
           startEditLists={startEditLists}
-          stopEditLists={stopEditLists}
+          stopModifyingLists={stopModifyingLists}
         />
       ))}
     </Nav>

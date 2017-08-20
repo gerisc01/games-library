@@ -4,11 +4,12 @@ import { types } from '../actions'
 const lists = (state = {items: {}, fields: {}, order: []}, action) => {
   switch (action.type) {
     case types.FETCH_LISTS:
+      const order = action.data.order && action.data.order[action.collectionId] ? action.data.order[action.collectionId] : []
       return {
         items: action.data.items,
         fields: action.data.fields,
-        order: action.data.order,
-        active: action.data.order[action.collectionId][0]
+        order: order,
+        active: order && order.length !== 0 ? order[0] : undefined
       }
     case types.SET_ACTIVE_LIST:
       return {

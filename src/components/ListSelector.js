@@ -1,9 +1,9 @@
 import React from 'react'
 import { ListAddButton,ListButton } from './ListSelectorComponents'
 
-const ListSelector = ({ lists,order,collectionId,activeId,setActiveList,startAddList,isModifyingLists,stopModifyingLists }) => (
+const ListSelector = ({ lists,order,activeId,setActiveList,startAddList,isModifyingLists,stopModifyingLists }) => (
   <div style={listSelectorStyle}>
-    {order[collectionId].map(id => (
+    {order.map(id => (
       <ListButton
         key={id}
         activeList={id === activeId && !isModifyingLists}

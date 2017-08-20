@@ -3,7 +3,7 @@ import { NavItem } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
 
-export const Collection = ({ dispatch, id, name, activeCollection, onClick, startEditLists, stopEditLists, isEditingLists }) => (
+export const Collection = ({ dispatch, id, name, activeCollection, onClick, startEditLists, stopModifyingLists, isEditingLists }) => (
   <NavItem
     eventKey={id}
     onClick={!activeCollection ? onClick : null}
@@ -20,7 +20,7 @@ export const Collection = ({ dispatch, id, name, activeCollection, onClick, star
       }
     }
   >
-  {activeCollection ? <ListEditButtons isEditingLists={isEditingLists} startEditLists={startEditLists} stopEditLists={stopEditLists} /> : null}
+  {activeCollection ? <ListEditButtons isEditingLists={isEditingLists} startEditLists={startEditLists} stopEditLists={stopModifyingLists} /> : null}
   {name}
   </NavItem>
 )

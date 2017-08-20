@@ -1,7 +1,6 @@
 import React from 'react'
 import { DropTarget } from 'react-dnd'
 import { colorMap } from '../../resources/js/utils'
-import FontAwesome from 'react-fontawesome'
 
 function targetCollect(connect) {
   return {

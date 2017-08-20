@@ -3,9 +3,9 @@ import { Grid } from 'react-bootstrap'
 import { ListEdit } from './ListComponents'
 
 let updatedLists = {}
-const ListsEdit = ({ lists, listsOrder, fields }) => (
+const ListsEdit = ({ lists, order, fields }) => (
   <Grid style={{float: 'left'}}>
-    {listsOrder.map(id => {
+    {order.map(id => {
       // Add a name into each of the fields before adding passing them to ListEdit
       let list = lists[id]
       list["fields"] = list.fields.map(f => { return { ...f, name: fields[f._id].name } })
