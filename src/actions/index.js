@@ -110,6 +110,16 @@ export const actions = {
       lists
     }
   },
+  moveItem: (listId,itemId) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: types.MOVE_ITEM,
+        oldListId: getState().lists.active,
+        newListId: listId,
+        itemId
+      })
+    }
+  },
   // Delete Actions
   removeItemFromList: (listId,itemId) => {
     return {
