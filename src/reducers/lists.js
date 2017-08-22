@@ -18,9 +18,8 @@ const lists = (state = {items: {}, fields: {}, order: []}, action) => {
         active: action.id
       }
     case types.CREATE_LIST:
-      let list = action.list
       let listId = uuid()
-      list["_id"] = listId
+      let list = {_id: listId, ...action.list}
       return {
         ...state,
         items: {...state.items, [listId]: list},

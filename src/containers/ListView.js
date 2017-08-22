@@ -14,12 +14,13 @@ const mapStateToProps = state => {
     fields: fields,
     items: state.items.items,
     order: state.lists.active ? state.items.order[state.lists.active].slice() : [],
+    activeList: state.lists.active,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    createItem: (item) => dispatch(actions.createItem(item))
+    createItem: (listId,item) => dispatch(actions.createItem(listId,item))
   }
 }
 

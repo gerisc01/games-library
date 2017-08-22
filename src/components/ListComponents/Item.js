@@ -9,6 +9,9 @@ const cardSource = {
       item: props.item
     }
   },
+  endDrag(props, monitor) {
+    if (!monitor.didDrop()) props.resetOrder()
+  }
 };
 
 const cardTarget = {
@@ -19,7 +22,7 @@ const cardTarget = {
     if (draggedId !== overId) {
       props.swapItems(draggedId, overId);
     }
-  },
+  }
 };
 
 /**
@@ -38,7 +41,7 @@ function targetCollect(connect) {
   }
 }
 
-const Item = ({ fields,item,editClick,isDragging,connectDragSource,connectDropTarget,swapItems }) => (
+const Item = ({ fields,item,editClick,isDragging,connectDragSource,connectDropTarget,swapItems,resetOrder }) => (
   connectDropTarget(connectDragSource(
     <div style={{opacity: isDragging ? 0 : 1}}>
       <Row>

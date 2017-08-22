@@ -9,6 +9,10 @@ class ItemList extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    // Save a start swap order so that if an item is not dropped in a valid drop target it can be
+    // reset to the pre-drag location
+    this.startSwapOrder = null
+
     // Populate items
     this.state = {
       editingId: undefined,
@@ -16,6 +20,17 @@ class ItemList extends React.Component {
       order: this.props.order,
       items: this.props.items,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (JSON.stringify(this.state.order) !== JSON.stringify(nextProps.order)) {
+      this.setState({order: nextProps.order, items: nextProps.items})
+    }
+  }
+
+  createItem = (item) => {
+    this.setState({addingItem: false})
+    this.props.createItem(this.props.activeList,item)
   }
 
   startEditItem = (id) => {
@@ -36,18 +51,16 @@ class ItemList extends React.Component {
     this.setState({editingId: undefined, addingItem: true})
   }
 
-  createItem = (item) => {
-    item["_id"] = "newitem"
-    // Either create a real ID or move to redux
-    let items = { ...this.state.items }
-    items["newitem"] = item
-    this.setState({items: items, order: this.state.order.concat("newitem"), addingItem: false})
-  }
-
   swapItems = (originId,destinationId) => {
+    if (this.startSwapOrder === null) this.startSwapOrder = this.state.order.slice(0)
     this.setState({order: this.state.order.map(id => {
       return id === originId ? destinationId : id === destinationId ? originId : id
     })})
+  }
+
+  resetOrder = () => {
+    this.setState({order: this.startSwapOrder.slice(0)})
+    this.startSwapOrder = null
   }
 
   render() {
@@ -59,8 +72,8 @@ class ItemList extends React.Component {
         return this.state.editingId === id
         ? <ItemEdit key={id} fields={this.props.fields} item={item}
             acceptClick={() => this.acceptEditItem(item)} cancelClick={() => this.cancelEditItem()} />
-        : <Item key={id} fields={this.props.fields} item={item} swapItems={this.swapItems}
-            editClick={() => this.startEditItem(item._id)} />
+        : <Item key={id} fields={this.props.fields} item={item} swapItems={this.swapItems} 
+            resetOrder={this.resetOrder} editClick={() => this.startEditItem(item._id)} />
       })}
       {
         this.state.addingItem

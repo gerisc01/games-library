@@ -3,8 +3,8 @@ import { Button,Col,Row } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
 const ItemEdit = ({ fields,item,acceptClick,cancelClick }) => {
-  if (item === undefined || item === {}) {
-    item = fields.reduce((item,field) => { item[field._id] = ""; return item; },{})
+  if (item === undefined || Object.keys(item).length < fields.length) {
+    fields.forEach(field => { item[field._id] = item[field._id] || ""; })
   }
   return (
   <Row>

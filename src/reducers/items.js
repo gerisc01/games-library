@@ -8,9 +8,8 @@ const items = (state = {items: {}, order: {}}, action) => {
         ...action.data
       }
     case types.CREATE_ITEM:
-      let item = action.item;
       let itemId = uuid()
-      item["_id"] = itemId
+      let item = {_id: itemId, ...action.item}
       return {
         ...state,
         items: { ...state.items, [itemId]: item },

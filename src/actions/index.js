@@ -78,12 +78,9 @@ export const actions = {
     }
   },
   setActiveList: listId => {
-    return (dispatch, getState) => {
-      dispatch({
-        type: types.SET_ACTIVE_LIST,
-        id: listId
-      })
-      dispatch(actions.fetchItems(getState().collections.active,listId))
+    return {
+      type: types.SET_ACTIVE_LIST,
+      id: listId
     }
   },
   // Create Actions
