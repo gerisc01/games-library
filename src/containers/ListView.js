@@ -20,7 +20,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createItem: (listId,item) => dispatch(actions.createItem(listId,item))
+    createItem: (listId,item) => dispatch(actions.createItem(listId,item)),
+    deleteItem: (listId,item) => dispatch(actions.deleteItem(listId,item)),
+    updateItem: (item) => dispatch(actions.updateItem(item)),
+    updateItemOrder: (listId,itemOrder) => dispatch(actions.updateItemOrder(listId,itemOrder)),
   }
 }
 

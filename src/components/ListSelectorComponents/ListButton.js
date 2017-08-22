@@ -9,9 +9,10 @@ function targetCollect(connect) {
 }
 
 const cardTarget = {
-  hover(props, monitor) {
-    console.log(props);
-    console.log(monitor.getItem());
+  drop(props, monitor) {
+    let newListId = props._id
+    let itemId = monitor.getItem().item._id
+    props.moveItem(newListId,itemId)
   },
 };
 

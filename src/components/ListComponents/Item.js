@@ -15,6 +15,9 @@ const cardSource = {
 };
 
 const cardTarget = {
+  drop(props, monitor) {
+    props.updateItemOrder()
+  },
   hover(props, monitor) {
     const draggedId = monitor.getItem().item._id
     const overId = props.item._id
@@ -41,14 +44,14 @@ function targetCollect(connect) {
   }
 }
 
-const Item = ({ fields,item,editClick,isDragging,connectDragSource,connectDropTarget,swapItems,resetOrder }) => (
+const Item = ({ fields,item,editClick,deleteItem,isDragging,connectDragSource,connectDropTarget,swapItems }) => (
   connectDropTarget(connectDragSource(
     <div style={{opacity: isDragging ? 0 : 1}}>
       <Row>
         <Col md={2} >
           <div style={{float: 'right'}}>
             <Button onClick={editClick}><FontAwesome name='pencil'/></Button>
-            <Button><FontAwesome name='trash'/></Button>
+            <Button onClick={deleteItem}><FontAwesome name='trash'/></Button>
           </div>
         </Col>
         {fields.map(field => {

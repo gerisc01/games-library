@@ -18,10 +18,11 @@ export const types = {
   // UPDATE ACTIONS
   UPDATE_ITEM: 'UPDATE_ITEM',
   UPDATE_LISTS: 'UPDATE_LISTS',
+  UPDATE_ITEM_ORDER: 'CHANGE_LIST_ORDER',
   MOVE_ITEM: 'MOVE_ITEM',
 
   // DELETE ACTIONS
-  REMOVE_ITEM_FROM_LIST: 'REMOVE_ITEM_FROM_LIST',
+  DELETE_ITEM: 'DELETE_ITEM',
   DELETE_LIST: 'DELETE_LIST',
 
   // EDIT LIST ACTIONS
@@ -110,6 +111,13 @@ export const actions = {
       lists
     }
   },
+  updateItemOrder: (listId,itemOrder) => {
+    return {
+      type: types.UPDATE_ITEM_ORDER,
+      listId,
+      itemOrder
+    }
+  },
   moveItem: (listId,itemId) => {
     return (dispatch, getState) => {
       dispatch({
@@ -121,9 +129,10 @@ export const actions = {
     }
   },
   // Delete Actions
-  removeItemFromList: (listId,itemId) => {
+  deleteItem: (listId,itemId) => {
     return {
       type: types.DELETE_ITEM,
+      listId,
       itemId
     }
   },

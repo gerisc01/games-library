@@ -15,7 +15,7 @@ const mapStateToProps = (state,ownProps) => {
 const mapDispatchToProps = (dispatch,ownProps) => {
   return {
     setActiveList: (id) => dispatch(actions.setActiveList(id)),
-    moveItem: (newListId,itemId) => dispatch(actions.moveItem()),
+    moveItem: (newListId,itemId) => dispatch(actions.moveItem(newListId,itemId)),
     startAddList: () => ownProps.startAddList(),
     stopModifyingLists: () => ownProps.stopModifyingLists(),
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ListAddButton,ListButton } from './ListSelectorComponents'
 
-const ListSelector = ({ lists,order,activeId,setActiveList,startAddList,isModifyingLists,stopModifyingLists }) => (
+const ListSelector = ({ lists,order,activeId,setActiveList,startAddList,isModifyingLists,stopModifyingLists,moveItem }) => (
   <div style={listSelectorStyle}>
     {order.map(id => (
       <ListButton
@@ -13,6 +13,7 @@ const ListSelector = ({ lists,order,activeId,setActiveList,startAddList,isModify
             if (isModifyingLists) stopModifyingLists(); 
           }
         }
+        moveItem={moveItem}
         {...lists[id]}
       />
     ))}
