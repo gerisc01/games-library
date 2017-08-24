@@ -4,7 +4,7 @@ import ListsEdit from '../components/ListsEdit'
 const mapStateToProps = state => {
   return {
     lists: state.lists.items,
-    order: state.lists.order[state.collections.active].slice(),
+    order: state.lists.order.slice(0),
     fields: state.lists.fields,
   }
 }
