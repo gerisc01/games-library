@@ -8,6 +8,7 @@ const mapStateToProps = (state, ownProps) => {
     order: state.collections.order,
     activeCollection: state.collections.active,
     isModifyingLists: ownProps.isAddingList || ownProps.isEditingLists,
+    listsOrder: state.lists.order
   }
 }
 

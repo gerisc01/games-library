@@ -13,7 +13,8 @@ class App extends React.Component {
       // Setting application variables that shouldn't be stored in the redux store but are
       // used across multiple different views (generally temporary toggalable state variables)
       addingList: false,
-      editingLists: false
+      editingLists: false,
+      editListsOrder: undefined
     };
   }
 
@@ -29,6 +30,10 @@ class App extends React.Component {
     this.setState({ editingLists: false, addingList: false })
   }
 
+  setEditListsOrder = (order) => {
+    this.setState({editListsOrder: order})
+  }
+
   render() {
     // Props to pass to containers
     const props = {
@@ -36,9 +41,11 @@ class App extends React.Component {
       startEditLists: this.startEditLists,
       startAddList: this.startAddList,
       stopModifyingLists: this.stopModifyingLists,
+      setEditListsOrder: this.setEditListsOrder,
       // State variables to pass
       isAddingList: this.state.addingList,
       isEditingLists: this.state.editingLists,
+      editListsOrder: this.state.editListsOrder
     }
     return (
     <div>
