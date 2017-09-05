@@ -2,28 +2,16 @@ import React from 'react'
 import { Collection } from './CollectionComponents'
 import { Nav,Navbar } from 'react-bootstrap'
 
-const Collections = ({ collections,order,activeCollection,setActiveCollection,startEditLists,stopModifyingLists,isEditingLists,isModifyingLists,listsOrder,setEditListsOrder }) => (
+const Collections = (props) => (
   <Navbar>
-    <Nav bsStyle="tabs" activeKey={activeCollection}>
-      {order.map(id => (
-        <Collection 
+    <Nav bsStyle="tabs" activeKey={props.activeCollection}>
+      {props.order.map(id => (
+        <Collection
           key={id}
-          {...collections[id]}
-          activeCollection={id === activeCollection}
-          onClick={
-            () => {
-              setActiveCollection(id)
-              if (isModifyingLists) stopModifyingLists(); 
-            }
-          }
-          isEditingLists={isEditingLists}
-          startEditLists={
-            () => {
-              startEditLists()
-              setEditListsOrder(listsOrder)
-            }
-          }
-          stopModifyingLists={stopModifyingLists}
+          {...props}
+          {...props.collections[id]}
+          activeCollection={id === props.activeCollection}
+          onClick={!props.isEditingLists ? () => props.setActiveCollection(id) : undefined}
         />
       ))}
     </Nav>

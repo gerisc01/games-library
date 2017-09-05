@@ -3,13 +3,13 @@ import { NavItem } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
 
-export const Collection = ({ dispatch, id, name, activeCollection, onClick, startEditLists, stopModifyingLists, isEditingLists }) => (
+export const Collection = (props) => (
   <NavItem
-    eventKey={id}
-    onClick={!activeCollection ? onClick : null}
-    active={activeCollection}
+    eventKey={props.id}
+    onClick={!props.activeCollection ? props.onClick : null}
+    active={props.activeCollection}
     style={
-      activeCollection
+      props.activeCollection
       // Style if the collection is currently active
       ? {
         fontWeight: 'bold'
@@ -20,8 +20,8 @@ export const Collection = ({ dispatch, id, name, activeCollection, onClick, star
       }
     }
   >
-  {activeCollection ? <ListEditButtons isEditingLists={isEditingLists} startEditLists={startEditLists} stopEditLists={stopModifyingLists} /> : null}
-  {name}
+  {props.activeCollection ? <ListEditButtons {...props} /> : null}
+  {props.name}
   </NavItem>
 )
 
@@ -29,14 +29,10 @@ export const Collection = ({ dispatch, id, name, activeCollection, onClick, star
  * HELPER COMPONENTS
  ***********************************************/
 
-const ListEditButtons = ({ isEditingLists,startEditLists,stopEditLists,onEditListsAccept }) => {
+const ListEditButtons = (props) => {
   {
-    return isEditingLists
-      ? (<span>
-          <span onClick={stopEditLists} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='remove' style={{color: 'red'}}/></span>
-          <span onClick={onEditListsAccept} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='check' style={{color: 'green'}}/></span>
-          </span>
-        )
-      : <span onClick={startEditLists} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='pencil'/></span>
+    return props.isEditingLists
+      ? <span onClick={props.stopEditMode} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='remove'/></span>
+      : <span onClick={props.startEditMode} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='pencil'/></span>
   }
 }

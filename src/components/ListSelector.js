@@ -15,13 +15,8 @@ const ListSelectorNormal = ({ lists,order,activeId,setActiveList,startAddList,is
     {order.map(id => (
       <ListButton
         key={id}
-        activeList={id === activeId && !isModifyingLists}
-        onClick={
-          () => {
-            setActiveList(id);
-            if (isModifyingLists) stopModifyingLists(); 
-          }
-        }
+        activeList={id === activeId}
+        onClick={() => setActiveList(id)}
         moveItem={moveItem}
         {...lists[id]}
       />
@@ -48,14 +43,15 @@ class ListSelectorEdit extends React.Component {
 
     // Populate items
     this.state = {
-      order: this.props.editListsOrder,
+      order: this.props.order,
       items: this.props.lists,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (JSON.stringify(this.state.editListOrder) !== JSON.stringify(nextProps.editListOrder)) {
-      this.setState({order: nextProps.editListOrder, items: nextProps.lists})
+    this.startSwapOrder = null
+    if (JSON.stringify(this.state.order) !== JSON.stringify(nextProps.order)) {
+      this.setState({order: nextProps.order, items: nextProps.lists})
     }
   }
 
@@ -77,8 +73,9 @@ class ListSelectorEdit extends React.Component {
     <div style={listSelectorStyle}>
       {this.state.order.map(id => (
         <SortableItem key={id} swapItems={this.swapItems} resetOrder={this.resetOrder}
-          setEditListsOrder={() => this.props.setEditListsOrder(this.state.order)}>
-          <ListButton {...this.state.items[id]} />
+          setEditListsOrder={() => this.props.setEditListsOrder(this.state.order)}
+          updateOrder={() => this.props.updateListOrder(this.state.order)}>
+          <ListButton {...this.state.items[id]} onClick={() => this.props.setActiveList(id)} activeList={id === this.props.activeId} />
         </SortableItem>
       ))}
     </div>)
@@ -92,14 +89,13 @@ const cardSource = {
     }
   },
   endDrag(props, monitor) {
-    console.log(monitor.didDrop());
-    // if (!monitor.didDrop()) props.resetOrder()
+    if (!monitor.didDrop()) props.resetOrder()
   }
 }
 
 const cardTarget = {
   drop(props, monitor) {
-    props.setEditListsOrder()
+    props.updateOrder()
   },
   hover(props, monitor) {
     const draggedId = monitor.getItem().list._id

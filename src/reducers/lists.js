@@ -25,6 +25,11 @@ const lists = (state = {items: {}, fields: {}, order: []}, action) => {
         items: {...state.items, [listId]: list},
         order: state.order.concat(listId)
       }
+    case types.UPDATE_LIST_ORDER:
+      return {
+        ...state,
+        order: action.order
+      }
     default:
       return state
   }

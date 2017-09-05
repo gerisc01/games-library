@@ -15,8 +15,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch,ownProps) => {
   return {
     setActiveCollection: (id) => dispatch(actions.setActiveCollection(id)),
-    startEditLists: () => ownProps.startEditLists(),
-    stopModifyingLists: () => ownProps.stopModifyingLists(),
+    startEditMode: () => ownProps.startEditMode(),
+    stopEditMode: () => ownProps.stopEditMode(),
   }
 }
 
