@@ -40,7 +40,7 @@ export default ListHeaderEdit
  ***********************************************/
 const SaveListButton = ({ onSave }) => (
   <h4>
-    <Button bsStyle='primary' style={{float: 'right'}} onClick={() => onSave}>Save</Button>
+    <Button bsStyle='primary' style={{float: 'right'}} onClick={onSave}>Save</Button>
   </h4>
 )
 

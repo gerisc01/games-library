@@ -1,9 +1,11 @@
 import React from 'react'
-import { Grid,Row,Col,Button } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import { ListEdit } from './ListComponents'
 
 let listDetails;
+let updateList;
 const ListsEdit = (props) => {
+  updateList = props.updateList;
   listDetails = {
     _id: props.id,
     name: props.title,
@@ -13,13 +15,12 @@ const ListsEdit = (props) => {
   return (
     <Grid style={{float: 'left'}}>
       <ListEdit key={props.id} onSave={onSave} list={listDetails}/>
-      <Row><Col mdOffset={1}><Button onClick={() => props.onAddListAccept(listDetails)}>Create List</Button></Col></Row>
     </Grid>
   )
 }
 
 const onSave = state => {
-  listDetails = Object.assign(listDetails,state);
+  updateList(Object.assign({_id: listDetails._id},state))
 }
 
 export default ListsEdit

@@ -25,6 +25,12 @@ const lists = (state = {items: {}, fields: {}, order: []}, action) => {
         items: {...state.items, [listId]: list},
         order: state.order.concat(listId)
       }
+    case types.UPDATE_LIST:
+      let updatedItem = Object.assign({},state.items[action.list._id],action.list)
+      return {
+        ...state,
+        items: {...state.items, [action.list._id]: updatedItem}
+      }
     case types.UPDATE_LIST_ORDER:
       return {
         ...state,

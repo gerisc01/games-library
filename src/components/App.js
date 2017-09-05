@@ -1,7 +1,7 @@
 import React from 'react'
 import CollectionsView from '../containers/CollectionsView'
 import ListSelectorView from '../containers/ListSelectorView'
-import ListContent from './ListContent'
+import Content from './Content'
 
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -44,7 +44,7 @@ class App extends React.Component {
     <div>
       <CollectionsView {...props}/>
       <ListSelectorView {...props}/>
-      <ListContent {...props} />
+      <Content {...props} />
     </div>)
   }
 }

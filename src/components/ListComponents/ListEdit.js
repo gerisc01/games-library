@@ -63,6 +63,7 @@ class ListEdit extends React.Component {
           onAdd={() => this.onFieldChange()}
           onEdit={(id,name,value) => this.onFieldChange(id,name,value)} 
           onDelete={(id) => this.onFieldChange(id,'delete')}
+          onSave={() => this.props.onSave(this.state)}
           fields={this.state.fields} />
       </div> 
     )

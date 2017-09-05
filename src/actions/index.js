@@ -17,7 +17,7 @@ export const types = {
 
   // UPDATE ACTIONS
   UPDATE_ITEM: 'UPDATE_ITEM',
-  UPDATE_LISTS: 'UPDATE_LISTS',
+  UPDATE_LIST: 'UPDATE_LIST',
   UPDATE_ITEM_ORDER: 'UPDATE_ITEM_ORDER',
   UPDATE_LIST_ORDER: 'UPDATE_LIST_ORDER',
   MOVE_ITEM: 'MOVE_ITEM',
@@ -106,10 +106,10 @@ export const actions = {
       item
     }
   },
-  updateLists: (lists) => {
+  updateList: (list) => {
     return {
-      type: types.UPDATE_LISTS,
-      lists
+      type: types.UPDATE_LIST,
+      list
     }
   },
   updateItemOrder: (listId,itemOrder) => {
