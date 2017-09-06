@@ -1,7 +1,7 @@
 import uuid from 'uuid'
 import { types } from '../actions'
 
-const lists = (state = {items: {}, fields: {}, order: []}, action) => {
+const lists = (state = {items: {}, fields: {}, order: [], active: null}, action) => {
   switch (action.type) {
     case types.FETCH_LISTS:
       const order = action.data.order && action.data.order[action.collectionId] ? action.data.order[action.collectionId] : []
@@ -19,11 +19,27 @@ const lists = (state = {items: {}, fields: {}, order: []}, action) => {
       }
     case types.CREATE_LIST:
       let listId = uuid()
-      let list = {_id: listId, ...action.list}
+      let newFields = {}
+      let listFields = []
+
+      action.list.fields.forEach(field => {
+        let fieldId = getFieldId(field.name,state.fields)
+        if (!fieldId) {
+          fieldId = uuid()
+          newFields[fieldId] = {_id: fieldId, name: field.name}
+        }
+        listFields.push({
+          _id: fieldId,
+          width: field.width
+        })
+      })
+      let list = {_id: listId, ...action.list, fields: listFields}
       return {
         ...state,
         items: {...state.items, [listId]: list},
-        order: state.order.concat(listId)
+        fields: Object.assign(newFields,state.fields),
+        order: state.order.concat(listId),
+        active: listId
       }
     case types.UPDATE_LIST:
       let updatedItem = Object.assign({},state.items[action.list._id],action.list)
@@ -39,6 +55,12 @@ const lists = (state = {items: {}, fields: {}, order: []}, action) => {
     default:
       return state
   }
+}
+
+const getFieldId = (fieldName,fields) => {
+  return Object.keys(fields).find(key => {
+    return fields[key].name === fieldName
+  })
 }
 
 export default lists;

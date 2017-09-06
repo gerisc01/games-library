@@ -1,9 +1,15 @@
 import React from 'react'
-import { Grid,Row,Col,Button } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import { ListEdit } from './ListComponents'
+import { colorMap } from '../resources/js/utils'
 
 let newList;
-const ListCreate = ({ onAddListAccept }) => {
+let createList;
+let stopEditMode;
+let colors = Object.keys(colorMap).filter(color => color.startsWith("pastel"))
+const ListCreate = (props) => {
+  createList = props.createList;
+  stopEditMode = props.stopEditMode;
   // Set the default list properties
   newList = {
     color: 'pastel-blue',
@@ -20,13 +26,15 @@ const ListCreate = ({ onAddListAccept }) => {
   return (
     <Grid style={{float: 'left'}}>
       <ListEdit onSave={onSave} list={newList}/>
-      <Row><Col mdOffset={1}><Button onClick={() => onAddListAccept(newList)}>Create List</Button></Col></Row>
     </Grid>
   )
 }
 
 const onSave = state => {
-  newList = Object.assign(newList,state);
+  // Generate a random color for now
+  let listColor = colors[Math.floor(Math.random()*10%6)]
+  createList(Object.assign({color: listColor},state))
+  stopEditMode()
 }
 
 export default ListCreate

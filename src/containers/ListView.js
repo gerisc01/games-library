@@ -10,10 +10,10 @@ const mapStateToProps = state => {
   : []
   return {
     id: state.lists.active,
-    title: state.lists.active ? state.lists.items[state.lists.active].name : "",
+    title: state.lists.items[state.lists.active] ? state.lists.items[state.lists.active].name : "",
     fields: fields,
     items: state.items.items,
-    order: state.lists.active ? state.items.order[state.lists.active].slice() : [],
+    order: state.items.order[state.lists.active] ? state.items.order[state.lists.active].slice() : [],
     activeList: state.lists.active,
   }
 }
