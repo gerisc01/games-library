@@ -19,33 +19,49 @@ const lists = (state = {items: {}, fields: {}, order: [], active: null}, action)
       }
     case types.CREATE_LIST:
       let listId = uuid()
-      let newFields = {}
-      let listFields = []
+      let newCreateFields = {}
+      let listCreateFields = []
 
       action.list.fields.forEach(field => {
         let fieldId = getFieldId(field.name,state.fields)
         if (!fieldId) {
           fieldId = uuid()
-          newFields[fieldId] = {_id: fieldId, name: field.name}
+          newCreateFields[fieldId] = {_id: fieldId, name: field.name}
         }
-        listFields.push({
+        listCreateFields.push({
           _id: fieldId,
           width: field.width
         })
       })
-      let list = {_id: listId, ...action.list, fields: listFields}
+      let list = {_id: listId, ...action.list, fields: listCreateFields}
       return {
         ...state,
         items: {...state.items, [listId]: list},
-        fields: Object.assign(newFields,state.fields),
+        fields: Object.assign(newCreateFields,state.fields),
         order: state.order.concat(listId),
         active: listId
       }
     case types.UPDATE_LIST:
-      let updatedItem = Object.assign({},state.items[action.list._id],action.list)
+      let newEditFields = {}
+      let listEditFields = []
+
+      action.list.fields.forEach(field => {
+        let fieldId = getFieldId(field.name,state.fields)
+        if (!fieldId) {
+          fieldId = uuid()
+          newEditFields[fieldId] = {_id: fieldId, name: field.name}
+        }
+        listEditFields.push({
+          _id: fieldId,
+          width: field.width
+        })
+      })
+
+      let updatedItem = Object.assign({},state.items[action.list._id],{...action.list, fields: listEditFields})
       return {
         ...state,
-        items: {...state.items, [action.list._id]: updatedItem}
+        items: {...state.items, [action.list._id]: updatedItem},
+        fields: Object.assign(newEditFields,state.fields),
       }
     case types.UPDATE_LIST_ORDER:
       return {

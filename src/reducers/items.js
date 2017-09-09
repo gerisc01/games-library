@@ -10,10 +10,11 @@ const items = (state = {items: {}, order: {}}, action) => {
     case types.CREATE_ITEM:
       let itemId = uuid()
       let item = {_id: itemId, ...action.item}
+      let previousOrder = state.order[action.listId] ? state.order[action.listId] : []
       return {
         ...state,
         items: { ...state.items, [itemId]: item },
-        order: {...state.order, [action.listId]: state.order[action.listId].concat(itemId)}
+        order: {...state.order, [action.listId]: previousOrder.concat(itemId)}
       }
     case types.UPDATE_ITEM:
       return {

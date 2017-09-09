@@ -47,7 +47,7 @@ class ListEdit extends React.Component {
       const rowWidth = this.state.fields.reduce((sum,field) => { return sum + parseInt(field.width,10)},0);
       this.setState({
         fields: this.state.fields.concat([{
-          id: "column"+(this.state.fields.length+1),
+          _id: "column"+(this.state.fields.length+1),
           name: "",
           width: rowWidth < 9 ? "2" : "1",
         }])
