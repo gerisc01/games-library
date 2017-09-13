@@ -2,7 +2,7 @@ import React from 'react'
 import { Button,Col,Row } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
-const ListHeaderEdit = ({ fields,onSave,onAdd,onEdit,onDelete }) => {
+const ListHeaderEdit = ({ collectionFields,fields,onSave,onAdd,onEdit,onDelete }) => {
   // If the fields widths sum up to less than 10, add a 'add field' button
   const rowWidth = fields.reduce((sum,field) => { return sum + parseInt(field.width,10)},0);
   return (
@@ -16,7 +16,12 @@ const ListHeaderEdit = ({ fields,onSave,onAdd,onEdit,onDelete }) => {
         <Col key={header._id} md={width}>
           <h4>
             <div>
-              <input value={header.name} style={editHeaderInputStyle} onChange={(e) => {onEdit(header._id,"name",e.target.value)}} />
+              <select style={editHeaderInputStyle} onChange={(e) => {onEdit(header._id,"name",e.target.value)}}>
+                {Object.values(collectionFields).map(cf => {
+                  return <option value={cf._id} selected={cf._id === header._id}>{cf.name}</option>
+                })}
+              </select>
+              {/* <input value={header.name} style={editHeaderInputStyle} onChange={(e) => {onEdit(header._id,"name",e.target.value)}} /> */}
               <FontAwesome name='caret-left' style={changeFieldWidthStyle} 
                 onClick={width > 1 ? () => onEdit(header._id,"width",width-1) : null}/>
               <FontAwesome name='caret-right' style={changeFieldWidthStyle}

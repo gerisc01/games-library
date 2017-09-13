@@ -14,7 +14,7 @@ const ListsEdit = (props) => {
 
   return (
     <Grid style={{float: 'left'}}>
-      <ListEdit key={props.id} onSave={onSave} list={listDetails}/>
+      <ListEdit {...props} key={props.id} onSave={onSave} list={listDetails}/>
     </Grid>
   )
 }

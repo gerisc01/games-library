@@ -3,15 +3,47 @@ export const tempData = {
     "items": {
       "514f82de-2c54-48ac-8db1-60c4b9c1ec3f": {
         "_id": "514f82de-2c54-48ac-8db1-60c4b9c1ec3f",
-        "name": "Games"
+        "name": "Games",
+        "fields": {
+          "f55715db-93e8-4c35-b8b8-26a07c186612": {
+            "_id": "f55715db-93e8-4c35-b8b8-26a07c186612",
+            "name": "Name"
+          },
+          "1525370d-7fef-4048-b24a-d6313bbf19ad": {
+            "_id": "1525370d-7fef-4048-b24a-d6313bbf19ad",
+            "name": "Length"
+          },
+          "798d7af7-a38f-4fcc-87f0-4b7ae9763cd8": {
+            "_id": "798d7af7-a38f-4fcc-87f0-4b7ae9763cd8",
+            "name": "Genre"
+          },
+          "ad73591e-c85d-4154-9abc-5df5ceee42f8": {
+            "_id": "ad73591e-c85d-4154-9abc-5df5ceee42f8",
+            "name": "Platform"
+          },
+          "2e8899bb-9f23-464c-bf46-8083ea3f46cd": {
+            "_id": "2e8899bb-9f23-464c-bf46-8083ea3f46cd",
+            "name": "Finish Date"
+          },
+          "cf3b94c6-825e-4c5b-8989-2d63595d4b55": {
+            "_id": "cf3b94c6-825e-4c5b-8989-2d63595d4b55",
+            "name": "100% Date"
+          }
+        },
       },
       "e15c5d48-bcd0-4314-8f3b-85c2e0c9c83d": {
         "_id": "e15c5d48-bcd0-4314-8f3b-85c2e0c9c83d",
-        "name": "Movies"
+        "name": "Movies",
+        "fields": {
+
+        }
       },
       "2293c618-b80a-0a4e-65d3-81e2b58743ec": {
         "_id": "2293c618-b80a-0a4e-65d3-81e2b58743ec",
-        "name": "Books"
+        "name": "Books",
+        "fields": {
+          
+        }
       }
     },
     "order": [
@@ -159,32 +191,6 @@ export const tempData = {
             "width": "2"
           }
         ]
-      }
-    },
-    "fields": {
-      "f55715db-93e8-4c35-b8b8-26a07c186612": {
-        "_id": "f55715db-93e8-4c35-b8b8-26a07c186612",
-        "name": "Name"
-      },
-      "1525370d-7fef-4048-b24a-d6313bbf19ad": {
-        "_id": "1525370d-7fef-4048-b24a-d6313bbf19ad",
-        "name": "Length"
-      },
-      "798d7af7-a38f-4fcc-87f0-4b7ae9763cd8": {
-        "_id": "798d7af7-a38f-4fcc-87f0-4b7ae9763cd8",
-        "name": "Genre"
-      },
-      "ad73591e-c85d-4154-9abc-5df5ceee42f8": {
-        "_id": "ad73591e-c85d-4154-9abc-5df5ceee42f8",
-        "name": "Platform"
-      },
-      "2e8899bb-9f23-464c-bf46-8083ea3f46cd": {
-        "_id": "2e8899bb-9f23-464c-bf46-8083ea3f46cd",
-        "name": "Finish Date"
-      },
-      "cf3b94c6-825e-4c5b-8989-2d63595d4b55": {
-        "_id": "cf3b94c6-825e-4c5b-8989-2d63595d4b55",
-        "name": "100% Date"
       }
     },
     "order": {

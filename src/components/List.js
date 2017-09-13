@@ -7,7 +7,7 @@ const List = (props) => {
     <div style={listStyle}>
       <Grid>
         <ListTitle title={props.title} />
-        <ListHeader fields={props.fields} />
+        <ListHeader {...props} />
         <ItemList key={props.id} {...props} />
       </Grid>
     </div>

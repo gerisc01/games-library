@@ -59,12 +59,13 @@ class ListEdit extends React.Component {
     return (
       <div>
         <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.name}  />
-        <ListHeaderEdit 
+        <ListHeaderEdit
           onAdd={() => this.onFieldChange()}
           onEdit={(id,name,value) => this.onFieldChange(id,name,value)} 
           onDelete={(id) => this.onFieldChange(id,'delete')}
           onSave={() => this.props.onSave(this.state)}
-          fields={this.state.fields} />
+          fields={this.state.fields}
+          collectionFields={this.props.collectionFields}/>
       </div> 
     )
   }
