@@ -16,8 +16,7 @@ const ListCreate = (props) => {
     name: 'New List Name',
     fields: [
       {
-        _id: "column1",
-        name: "Column 1",
+        _id: Object.keys(props.collectionFields)[0],
         width: "3"
       }
     ]
@@ -25,7 +24,7 @@ const ListCreate = (props) => {
 
   return (
     <Grid style={{float: 'left'}}>
-      <ListEdit onSave={onSave} list={newList}/>
+      <ListEdit {...props} onSave={onSave} list={newList}/>
     </Grid>
   )
 }

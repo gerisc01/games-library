@@ -20,37 +20,36 @@ class ListEdit extends React.Component {
     this.setState({ name: value })
   }
 
-  onFieldChange = (id,name,value) => {
-    if (id && name === 'name') {
+  onFieldChange = (index,name,value) => {
+    if (index === undefined) {
+      const rowWidth = this.state.fields.reduce((sum,field) => { return sum + parseInt(field.width,10)},0);
       this.setState({
-        fields: this.state.fields.map(field => {
-          return field._id === id
-            ? {...field, name: value}
+        fields: this.state.fields.concat([{
+          _id: value,
+          width: rowWidth < 9 ? "2" : "1",
+        }])
+      })
+    } else if (name === 'name') {
+      this.setState({
+        fields: this.state.fields.map((field,i) => {
+          return index === i
+            ? {...field, _id: value}
             : field
         })
       })
-    } else if (id && name === 'width') {
+    } else if (name === 'width') {
       this.setState({
-        fields: this.state.fields.map(field => {
-          return field._id === id
+        fields: this.state.fields.map((field,i) => {
+          return index === i
             ? {...field, width: value}
             : field
         })
       })
-    } else if (id && name === 'delete') {
+    } else if (name === 'delete') {
       this.setState({
-        fields: this.state.fields.filter(field => {
-          return field._id !== id;
+        fields: this.state.fields.filter((field,i) => {
+          return index !== i;
         })
-      })
-    } else if (!id) {
-      const rowWidth = this.state.fields.reduce((sum,field) => { return sum + parseInt(field.width,10)},0);
-      this.setState({
-        fields: this.state.fields.concat([{
-          _id: "column"+(this.state.fields.length+1),
-          name: "",
-          width: rowWidth < 9 ? "2" : "1",
-        }])
       })
     }
   }
@@ -61,10 +60,12 @@ class ListEdit extends React.Component {
         <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.name}  />
         <ListHeaderEdit
           onAdd={() => this.onFieldChange()}
-          onEdit={(id,name,value) => this.onFieldChange(id,name,value)} 
-          onDelete={(id) => this.onFieldChange(id,'delete')}
+          onEdit={(index,name,value) => this.onFieldChange(index,name,value)} 
+          onDelete={(index) => this.onFieldChange(index,'delete')}
           onSave={() => this.props.onSave(this.state)}
           fields={this.state.fields}
+          hasChanged={JSON.stringify(this.props.fields) !== JSON.stringify(this.state.fields) || 
+            this.props.title !== this.state.name}
           collectionFields={this.props.collectionFields}/>
       </div> 
     )

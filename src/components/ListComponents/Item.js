@@ -54,10 +54,10 @@ const Item = ({ fields,item,editClick,deleteItem,isDragging,connectDragSource,co
             <Button onClick={deleteItem}><FontAwesome name='trash'/></Button>
           </div>
         </Col>
-        {fields.map(field => {
+        {fields.map((field,i) => {
           return (
             <Col 
-              key={field._id.toString()+"-"+item._id.toString()}
+              key={i+"-"+item._id.toString()}
               md={parseInt(field.width,10)}>
             {item[field._id]}
             </Col>

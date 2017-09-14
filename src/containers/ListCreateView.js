@@ -4,6 +4,7 @@ import { actions } from '../actions'
 
 const mapStateToProps = state => {
   return {
+    collectionFields: state.collections.items[state.collections.active].fields,
   }
 }
 
