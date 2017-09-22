@@ -8,7 +8,10 @@ const mapStateToProps = (state, ownProps) => {
     order: state.collections.order,
     activeCollection: state.collections.active,
     isModifyingLists: ownProps.isAddingList || ownProps.isEditingLists,
-    listsOrder: state.lists.order
+    isModified: state.lists.modified || state.items.modified,
+    isSaving: state.collections.isSaving,
+    listsOrder: state.lists.order,
+    state: state
   }
 }
 
@@ -17,6 +20,7 @@ const mapDispatchToProps = (dispatch,ownProps) => {
     setActiveCollection: (id) => dispatch(actions.setActiveCollection(id)),
     startEditMode: () => ownProps.startEditMode(),
     stopEditMode: () => ownProps.stopEditMode(),
+    saveChanges: (state) => dispatch(actions.saveChanges(state)),
   }
 }
 

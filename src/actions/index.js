@@ -7,6 +7,10 @@ export const types = {
   FETCH_LISTS: 'FETCH_LISTS',
   FETCH_ITEMS: 'FETCH_ITEMS',
 
+  // SAVE ACTIONS
+  SAVE_CHANGES: 'SAVE_CHANGES',
+  SAVE_SUCCESSFUL: 'SAVE_SUCCESSFUL',
+
   // ACTIVE ITEMS ACTIONS
   SET_ACTIVE_COLLECTION: 'SET_ACTIVE_COLLECTION',
   SET_ACTIVE_LIST: 'SET_ACTIVE_LIST',
@@ -25,20 +29,6 @@ export const types = {
   // DELETE ACTIONS
   DELETE_ITEM: 'DELETE_ITEM',
   DELETE_LIST: 'DELETE_LIST',
-
-  // EDIT LIST ACTIONS
-  EDIT_LISTS: 'EDIT_LISTS',
-  EDIT_LISTS_CANCEL: 'EDIT_LISTS_CANCEL',
-  EDIT_LISTS_ACCEPT: 'EDIT_LISTS_ACCEPT',
-
-  // ADD LIST ACTIONS
-  ADD_LIST: 'ADD_LIST',
-  ADD_LIST_ACCEPT: 'ADD_LIST_ACCEPT',
-
-  // ADD ITEM ACTIONS
-  ADD_ITEM: 'ADD_ITEM',
-  ADD_ITEM_ACCEPT: 'ADD_ITEM_ACCEPT',
-
 }
 
 export const actions = {
@@ -149,37 +139,18 @@ export const actions = {
       listId
     }
   },
-  // Deprecated Actions
-  editLists: () => {
-    return {
-      type: types.EDIT_LISTS
+  saveChanges: (state) => {
+    return (dispatch, getState) => {
+      setTimeout(function() { dispatch(actions.saveSuccessful()) }, 5000)
+      dispatch({
+        type: types.SAVE_CHANGES,
+        state
+      })
     }
   },
-  editListsCancel: () => {
+  saveSuccessful: () => {
     return {
-      type: types.EDIT_LISTS_CANCEL
-    }
-  },
-  addList: () => {
-    return {
-      type: types.ADD_LIST
-    }
-  },
-  addListAccept: (list) => {
-    return {
-      type: types.ADD_LIST_ACCEPT,
-      list
-    }
-  },
-  addItem: () => {
-    return {
-      type: types.ADD_ITEM
-    }
-  },
-  addItemAccept: (item) => {
-    return {
-      type: types.ADD_ITEM_ACCEPT,
-      item
+      type: types.SAVE_SUCCESSFUL
     }
   }
 }

@@ -1,6 +1,6 @@
 import { types } from '../actions'
 
-const collections = (state = {items: {}, order: []}, action) => {
+const collections = (state = {items: {}, order: [], isSaving: false}, action) => {
   switch (action.type) {
     case types.FETCH_COLLECTIONS:
       return {
@@ -12,6 +12,16 @@ const collections = (state = {items: {}, order: []}, action) => {
       return {
         ...state,
         active: action.id
+      }
+    case types.SAVE_CHANGES:
+      return {
+        ...state,
+        isSaving: true
+      }
+    case types.SAVE_SUCCESSFUL:
+      return {
+        ...state,
+        isSaving: false
       }
     default:
       return state

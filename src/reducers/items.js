@@ -1,7 +1,7 @@
 import { types } from '../actions'
 import uuid from 'uuid'
 
-const items = (state = {items: {}, order: {}}, action) => {
+const items = (state = {items: {}, order: {}, modified: false}, action) => {
   switch (action.type) {
     case types.FETCH_ITEMS:
       return {
@@ -14,7 +14,8 @@ const items = (state = {items: {}, order: {}}, action) => {
       return {
         ...state,
         items: { ...state.items, [itemId]: item },
-        order: {...state.order, [action.listId]: previousOrder.concat(itemId)}
+        order: {...state.order, [action.listId]: previousOrder.concat(itemId)},
+        modified: true,
       }
     case types.UPDATE_ITEM:
       return {
@@ -22,7 +23,8 @@ const items = (state = {items: {}, order: {}}, action) => {
         items: {
           ...state.items,
           [action.item._id]: action.item
-        }
+        },
+        modified: true,
       }
     case types.UPDATE_ITEM_ORDER:
       return {
@@ -30,7 +32,8 @@ const items = (state = {items: {}, order: {}}, action) => {
         order: {
           ...state.order,
           [action.listId]: action.itemOrder.slice(0)
-        }
+        },
+        modified: true
       }
     case types.MOVE_ITEM:
       return {
@@ -41,7 +44,8 @@ const items = (state = {items: {}, order: {}}, action) => {
             return id !== action.itemId
           }),
           [action.newListId]: state.order[action.newListId].concat(action.itemId)
-        }
+        },
+        modified: true
       }
     case types.DELETE_ITEM:
       // Selected listId item index
@@ -66,7 +70,13 @@ const items = (state = {items: {}, order: {}}, action) => {
           ...state.order,
           [action.listId]: currentList.slice(0,itemIndex).concat(currentList.slice(itemIndex+1,currentList.length))
         },
-        items: items
+        items: items,
+        modified: true
+      }
+    case types.SAVE_SUCCESSFUL:
+      return {
+        ...state,
+        modified: false
       }
     default:
       return state
