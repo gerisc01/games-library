@@ -16,7 +16,7 @@ import 'font-awesome/css/font-awesome.min.css';
 
 let store = createStore(gamesLibraryApp, devToolsEnhancer(), applyMiddleware(thunk));
 
-store.dispatch(actions.fetchCollections())
+store.dispatch(actions.fetchListData())
 
 render(
   <Provider store={store}>

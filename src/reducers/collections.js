@@ -1,12 +1,13 @@
 import { types } from '../actions'
 
-const collections = (state = {items: {}, order: [], isSaving: false}, action) => {
+const collections = (state = {items: {}, order: [], isSaving: false, isFetching: true}, action) => {
   switch (action.type) {
-    case types.FETCH_COLLECTIONS:
+    case types.RECIEVED_DATA:
       return {
-        items: action.data.items,
-        order: action.data.order,
-        active: action.data.order[0]
+        items: action.collections.items,
+        order: action.collections.order,
+        active: action.collections.order[0],
+        isFetching: false
       }
     case types.SET_ACTIVE_COLLECTION:
       return {

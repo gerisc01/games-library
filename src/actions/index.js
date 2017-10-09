@@ -1,11 +1,11 @@
 import { tempData } from '../tempData/newData'
+import fetch from 'isomorphic-fetch'
 
 // Defining a map of action types
 export const types = {
   // FETCH ACTIONS
-  FETCH_COLLECTIONS: 'FETCH_COLLECTIONS',
-  FETCH_LISTS: 'FETCH_LISTS',
-  FETCH_ITEMS: 'FETCH_ITEMS',
+  FETCH_DATA: 'FETCH_DATA',
+  RECIEVED_DATA: 'RECIEVED_DATA',
 
   // SAVE ACTIONS
   SAVE_CHANGES: 'SAVE_CHANGES',
@@ -33,30 +33,19 @@ export const types = {
 
 export const actions = {
   // Fetch Action Methods
-  fetchCollections: () => {
-    return (dispatch, getState) => {
-      dispatch({
-        type: types.FETCH_COLLECTIONS,
-        data: tempData.collections
-      })
-      dispatch(actions.fetchLists(getState().collections.active))
+  fetchListData: () => {
+    return dispatch => {
+      return fetch("https://gist.githubusercontent.com/gerisc01/6f6097e90c5d7e05a67fbe20068d2340/raw/0e1b0202ce1f8713fe4415bea34850954ec421a6/new-games-library.db")
+        .then(response => response.json())
+        .then(json => dispatch(actions.recievedListData(json)))
     }
   },
-  fetchLists: collectionId => {
-    return (dispatch, getState) => {
-      dispatch({
-        type: types.FETCH_LISTS,
-        data: tempData.lists,
-        collectionId
-      })
-      dispatch(actions.fetchItems(getState().lists.active))
-    }
-  },
-  fetchItems: (listId) => {
+  recievedListData: (data) => {
     return {
-      type: types.FETCH_ITEMS,
-      data: tempData.items,
-      listId
+      type: types.RECIEVED_DATA,
+      collections: data.collections,
+      lists: data.lists,
+      items: data.items
     }
   },
   // Set Active Action Methods

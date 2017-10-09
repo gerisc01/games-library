@@ -3,14 +3,22 @@ import List from '../components/List'
 import { actions } from '../actions'
 
 const mapStateToProps = state => {
-  return {
-    id: state.lists.active,
-    title: state.lists.items[state.lists.active] ? state.lists.items[state.lists.active].name : "",
-    fields: state.lists.items[state.lists.active].fields,
-    collectionFields: state.collections.items[state.collections.active].fields,
-    items: state.items.items,
-    order: state.items.order[state.lists.active] ? state.items.order[state.lists.active].slice() : [],
-    activeList: state.lists.active,
+  if (state.lists.isFetching) {
+    // return a default state
+    return {
+      fields: [],
+      order: []
+    }
+  } else {
+    return {
+      id: state.lists.active,
+      title: state.lists.items[state.lists.active] ? state.lists.items[state.lists.active].name : "",
+      fields: state.lists.items[state.lists.active].fields,
+      collectionFields: state.collections.items[state.collections.active].fields,
+      items: state.items.items,
+      order: state.items.order[state.lists.active] ? state.items.order[state.lists.active].slice() : [],
+      activeList: state.lists.active,
+    }
   }
 }
 

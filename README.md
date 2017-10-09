@@ -17,3 +17,5 @@ A rewrite of the games-library app in react
 - Installed React DnD
   - npm i --save react-dnd
   - npm i --save react-dnd-html5-backend
+- Installed Isomorphic Fetch and ES6 Promise
+  - npm i --save isomorphic-fetch es6-promise
