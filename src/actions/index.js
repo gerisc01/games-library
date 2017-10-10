@@ -1,5 +1,7 @@
-import { tempData } from '../tempData/newData'
 import fetch from 'isomorphic-fetch'
+
+const gistId = "6f6097e90c5d7e05a67fbe20068d2340"
+const filename = "new-games-library.db"
 
 // Defining a map of action types
 export const types = {
@@ -35,9 +37,13 @@ export const actions = {
   // Fetch Action Methods
   fetchListData: () => {
     return dispatch => {
-      return fetch("https://gist.githubusercontent.com/gerisc01/6f6097e90c5d7e05a67fbe20068d2340/raw/0e1b0202ce1f8713fe4415bea34850954ec421a6/new-games-library.db")
+      return fetch(`https://api.github.com/gists/${gistId}`)
         .then(response => response.json())
-        .then(json => dispatch(actions.recievedListData(json)))
+        .then(json => json.files[filename].raw_url)
+        .then(raw_url => fetch(raw_url)
+          .then(response => response.json())
+          .then(json => dispatch(actions.recievedListData(json)))
+        )
     }
   },
   recievedListData: (data) => {
