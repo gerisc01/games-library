@@ -4,13 +4,14 @@ import { actions } from '../actions'
 
 const mapStateToProps = state => {
   return {
+    collectionId: state.collections.active,
     collectionFields: state.collections.items[state.collections.active].fields,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    createList: (list) => dispatch(actions.createList(list)),
+    createList: (collectionId,list) => dispatch(actions.createList(collectionId,list)),
   }
 }
 

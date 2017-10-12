@@ -6,8 +6,10 @@ import { colorMap } from '../resources/js/utils'
 let newList;
 let createList;
 let stopEditMode;
+let collectionId;
 let colors = Object.keys(colorMap).filter(color => color.startsWith("pastel"))
 const ListCreate = (props) => {
+  collectionId = props.collectionId;
   createList = props.createList;
   stopEditMode = props.stopEditMode;
   // Set the default list properties
@@ -32,7 +34,7 @@ const ListCreate = (props) => {
 const onSave = state => {
   // Generate a random color for now
   let listColor = colors[Math.floor(Math.random()*10%6)]
-  createList(Object.assign({color: listColor},state))
+  createList(collectionId,Object.assign({color: listColor},state))
   stopEditMode()
 }
 

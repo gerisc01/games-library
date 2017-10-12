@@ -10,6 +10,7 @@ const mapStateToProps = (state, ownProps) => {
     isModifyingLists: ownProps.isAddingList || ownProps.isEditingLists,
     isModified: state.lists.modified || state.items.modified,
     isSaving: state.collections.isSaving,
+    saveFailed: state.collections.saveFailed,
     listsOrder: state.lists.order,
     state: state
   }

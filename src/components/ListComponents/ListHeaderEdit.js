@@ -18,7 +18,7 @@ const ListHeaderEdit = ({ collectionFields,fields,onSave,onAdd,onEdit,onDelete,h
             <div>
               <select style={editHeaderInputStyle} value={header._id} onChange={(e) => {onEdit(i,"name",e.target.value)}}>
                 {Object.values(collectionFields).map(cf => {
-                  return <option value={cf._id}>{cf.name}</option>
+                  return <option key={cf._id} value={cf._id}>{cf.name}</option>
                 })}
               </select>
               <FontAwesome name='caret-left' style={changeFieldWidthStyle} 

@@ -74,7 +74,7 @@ class ListSelectorEdit extends React.Component {
       {this.state.order.map(id => (
         <SortableItem key={id} swapItems={this.swapItems} resetOrder={this.resetOrder}
           setEditListsOrder={() => this.props.setEditListsOrder(this.state.order)}
-          updateOrder={() => this.props.updateListOrder(this.state.order)}>
+          updateOrder={() => this.props.updateListOrder(this.props.collectionId,this.state.order)}>
           <ListButton {...this.state.items[id]} onClick={() => this.props.setActiveList(id)} activeList={id === this.props.activeId} />
         </SortableItem>
       ))}

@@ -1,15 +1,15 @@
 import uuid from 'uuid'
 import { types } from '../actions'
 
-const lists = (state = {items: {}, order: [], active: null, modified: false, isFetching: true}, action) => {
+const lists = (state = {items: {}, order: {}, active: null, modified: false, isFetching: true}, action) => {
   switch (action.type) {
     case types.RECIEVED_DATA:
       const defaultCollectionId = action.collections.order[0]
-      const order = action.lists.order && action.lists.order[defaultCollectionId] ? action.lists.order[defaultCollectionId] : []
+      const currentOrder = action.lists.order && action.lists.order[defaultCollectionId] ? action.lists.order[defaultCollectionId] : []
       return {
         items: action.lists.items,
-        order: order,
-        active: order && order.length !== 0 ? order[0] : undefined,
+        order: action.lists.order,
+        active: currentOrder && currentOrder.length !== 0 ? currentOrder[0] : undefined,
         isFetching: false
       }
     case types.SET_ACTIVE_LIST:
@@ -24,7 +24,10 @@ const lists = (state = {items: {}, order: [], active: null, modified: false, isF
       return {
         ...state,
         items: {...state.items, [listId]: list},
-        order: state.order.concat(listId),
+        order: {
+          ...state.order,
+          [action.collectionId]: state.order[action.collectionId].concat(listId)
+        },
         active: listId,
         modified: true
       }
@@ -38,7 +41,10 @@ const lists = (state = {items: {}, order: [], active: null, modified: false, isF
     case types.UPDATE_LIST_ORDER:
       return {
         ...state,
-        order: action.order,
+        order: {
+          ...state.order,
+          [action.collectionId]: action.order
+        },
         modified: true
       }
     case types.SAVE_SUCCESSFUL:

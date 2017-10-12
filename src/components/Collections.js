@@ -18,7 +18,16 @@ const Collections = (props) => (
     </Nav>
     <Nav pullRight>
       <NavItem>
-        <span style={{fontSize: '125%', fontWeight: 'bold', color: props.isModified ? 'blue' : 'grey'}} onClick={() => props.saveChanges(props.state)}>
+        <span 
+          style={
+            {
+              fontSize: '125%',
+              fontWeight: 'bold',
+              color: props.saveFailed ? 'red' : props.isModified ? 'blue' : 'grey'
+            } 
+          }
+          onClick={() => props.saveChanges(props.state)}
+        >
           {props.isSaving ? <FontAwesome name="spinner" spin /> :  <FontAwesome name='floppy-o' />} Save
         </span>
       </NavItem>

@@ -12,6 +12,7 @@ export const types = {
   // SAVE ACTIONS
   SAVE_CHANGES: 'SAVE_CHANGES',
   SAVE_SUCCESSFUL: 'SAVE_SUCCESSFUL',
+  SAVE_FAILED: 'SAVE_FAILED',
 
   // ACTIVE ITEMS ACTIONS
   SET_ACTIVE_COLLECTION: 'SET_ACTIVE_COLLECTION',
@@ -104,9 +105,10 @@ export const actions = {
       itemOrder
     }
   },
-  updateListOrder: (order) => {
+  updateListOrder: (collectionId,order) => {
     return {
       type: types.UPDATE_LIST_ORDER,
+      collectionId,
       order
     }
   },
@@ -136,10 +138,48 @@ export const actions = {
   },
   saveChanges: (state) => {
     return (dispatch, getState) => {
-      setTimeout(function() { dispatch(actions.saveSuccessful()) }, 5000)
+      // Dispatch the action that signifies the save process starting
       dispatch({
-        type: types.SAVE_CHANGES,
-        state
+        type: types.SAVE_CHANGES
+      })
+      // Build the new post object
+      const state = getState();
+      const postObject = {
+        collections: {
+          items: state.collections.items,
+          order: state.collections.order
+        },
+        lists: {
+          items: state.lists.items,
+          order: state.lists.order
+        },
+        items: {
+          items: state.items.items,
+          order: state.items.order
+        }
+      }
+
+      fetch(`http://localhost:3001/api/v1/gistdb/${gistId}/${filename}`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postObject),
+      }).then(response => {
+        if (response.status >= 400) {
+          Promise.resolve(response.json()).then(json => {
+            console.log(json)
+            dispatch({
+              type: types.SAVE_FAILED,
+              message: json
+            })
+          })
+        } else {
+          dispatch({
+            type: types.SAVE_SUCCESSFUL
+          })
+        }
       })
     }
   },
