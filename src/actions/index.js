@@ -159,7 +159,7 @@ export const actions = {
         }
       }
 
-      fetch(`http://localhost:3001/api/v1/gistdb/${gistId}/${filename}`, {
+      fetch(`https://db-updater-api.herokuapp.com/api/v1/gistdb/${gistId}/${filename}`, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
