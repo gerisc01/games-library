@@ -3,7 +3,7 @@ import List from '../components/List'
 import { actions } from '../actions'
 
 const mapStateToProps = state => {
-  if (state.lists.isFetching) {
+  if (state.lists.isFetching || !state.lists.active) {
     // return a default state
     return {
       fields: [],

@@ -57,12 +57,9 @@ export const actions = {
   },
   // Set Active Action Methods
   setActiveCollection: collectionId => {
-    return (dispatch, getState) => {
-      dispatch({
-        type: types.SET_ACTIVE_COLLECTION,
-        id: collectionId
-      })
-      dispatch(actions.fetchLists(collectionId))
+    return {
+      type: types.SET_ACTIVE_COLLECTION,
+      id: collectionId
     }
   },
   setActiveList: listId => {
@@ -79,9 +76,10 @@ export const actions = {
       listId
     }
   },
-  createList: (list) => {
+  createList: (collectionId,list) => {
     return {
       type: types.CREATE_LIST,
+      collectionId,
       list
     }
   },

@@ -5,12 +5,20 @@ const lists = (state = {items: {}, order: {}, active: null, modified: false, isF
   switch (action.type) {
     case types.RECIEVED_DATA:
       const defaultCollectionId = action.collections.order[0]
-      const currentOrder = action.lists.order && action.lists.order[defaultCollectionId] ? action.lists.order[defaultCollectionId] : []
+      // Create an empty order list for any collection that doesn't have a list order yet
+      action.collections.order.forEach(key => {
+        if (!action.lists.order[key]) action.lists.order[key] = []
+      })
       return {
         items: action.lists.items,
         order: action.lists.order,
-        active: currentOrder && currentOrder.length !== 0 ? currentOrder[0] : undefined,
+        active: action.lists.order[defaultCollectionId][0],
         isFetching: false
+      }
+    case types.SET_ACTIVE_COLLECTION:
+      return {
+        ...state,
+        active: state.order[action.id][0]
       }
     case types.SET_ACTIVE_LIST:
       return {
