@@ -15,6 +15,7 @@ const mapStateToProps = state => {
       id: state.lists.active,
       title: activeList.name,
       fields: activeList.fields,
+      addToTop: activeList.addToTop || false,
       collectionFields: state.collections.items[state.collections.active].fields,
       items: state.items.items,
       order: state.items.order[state.lists.active] ? state.items.order[state.lists.active].slice() : [],

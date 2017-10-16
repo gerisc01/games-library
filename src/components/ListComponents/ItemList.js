@@ -75,10 +75,21 @@ class ItemList extends React.Component {
     this.startSwapOrder = null
   }
 
+  renderItemAddRow = (newItem,addToTop) => {
+    if (addToTop !== this.props.addToTop) return undefined
+    if (this.state.addingItem) {
+      return (<ItemEdit key="newitem" fields={this.props.fields} item={newItem}
+      acceptClick={() => this.createItem(newItem)} cancelClick={() => this.cancelEditItem()} />)
+    } else {
+      return this.props.id ? <ItemAddButton start={() => this.startAddItem()} /> : undefined
+    }
+  }
+
   render() {
   let newItem = {}
   return (
     <div>
+      {this.renderItemAddRow(newItem,true)}
       {this.state.order.map(id => {
         let item = { ...this.state.items[id] }
         return this.state.editingId === id
@@ -89,12 +100,7 @@ class ItemList extends React.Component {
             deleteItem={() => this.props.deleteItem(this.props.activeList,item._id)}
             updateItemOrder={() => this.props.updateItemOrder(this.props.activeList,this.state.order)} />
       })}
-      {
-        this.state.addingItem
-          ? <ItemEdit key="newitem" fields={this.props.fields} item={newItem}
-              acceptClick={() => this.createItem(newItem)} cancelClick={() => this.cancelEditItem()} />
-          : this.props.id ? <ItemAddButton start={() => this.startAddItem()} /> : undefined
-      }
+      {this.renderItemAddRow(newItem,false)}
     </div>)
   }
 }
