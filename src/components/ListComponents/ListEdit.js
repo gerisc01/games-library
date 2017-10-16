@@ -1,6 +1,7 @@
 import React from 'react'
 import ListTitleEdit from './ListTitleEdit'
 import ListHeaderEdit from './ListHeaderEdit'
+import ListOption from './ListOption'
 
 class ListEdit extends React.Component {  
   constructor(props, context) {
@@ -8,7 +9,8 @@ class ListEdit extends React.Component {
     this.onChange = props.onChange;
     this.state = {
       name: props.list.name ? props.list.name : "",
-      fields: props.list.fields ? props.list.fields : []
+      fields: props.list.fields ? props.list.fields : [],
+      addToTop: props.list.addToTop ? props.list.addToTop : false
     };
   }
 
@@ -18,6 +20,10 @@ class ListEdit extends React.Component {
 
   onTitleChange = (value) => {
     this.setState({ name: value })
+  }
+
+  onAddToTopChange = (value) => {
+    this.setState({ addToTop: !this.state.addToTop })
   }
 
   onFieldChange = (index,name,value) => {
@@ -67,6 +73,8 @@ class ListEdit extends React.Component {
           hasChanged={JSON.stringify(this.props.fields) !== JSON.stringify(this.state.fields) || 
             this.props.title !== this.state.name}
           collectionFields={this.props.collectionFields}/>
+          <ListOption active={this.state.addToTop} onChange={this.onAddToTopChange}
+            label="Add new items to top of the list" />
       </div> 
     )
   }

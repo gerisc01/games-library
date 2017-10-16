@@ -9,7 +9,8 @@ const ListsEdit = (props) => {
   listDetails = {
     _id: props.id,
     name: props.title,
-    fields: props.fields
+    fields: props.fields,
+    addToTop: props.addToTop
   }
 
   return (

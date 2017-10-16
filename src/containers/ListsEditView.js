@@ -3,10 +3,12 @@ import ListsEdit from '../components/ListsEdit'
 import { actions } from '../actions'
 
 const mapStateToProps = state => {
+  let activeList = state.lists.items[state.lists.active]
   return {
     id: state.lists.active,
-    title: state.lists.active ? state.lists.items[state.lists.active].name : "",
-    fields: state.lists.items[state.lists.active].fields,
+    title: activeList.name,
+    fields: activeList.fields,
+    addToTop: activeList.addToTop || false,
     collectionFields: state.collections.items[state.collections.active].fields,
     activeList: state.lists.active,
   }
