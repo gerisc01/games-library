@@ -10,18 +10,13 @@ const ListSelector = (props) => {
   }
 }
 
-const ListSelectorNormal = ({ lists,order,activeId,setActiveList,startAddList,isModifyingLists,stopModifyingLists,moveItem }) => (
+const ListSelectorNormal = (props) => (
   <div style={listSelectorStyle}>
-    {order.map(id => (
-      <ListButton
-        key={id}
-        activeList={id === activeId}
-        onClick={() => setActiveList(id)}
-        moveItem={moveItem}
-        {...lists[id]}
-      />
+    {props.order.map(id => (
+      <ListButton key={id} {...props} activeList={id === props.activeId} {...props.lists[id]}
+        onClick={() => { props.setActiveList(id); if (props.isAddingList) props.stopEditMode();}} />
     ))}
-    <ListAddButton onClick={startAddList}/>
+    <ListAddButton onClick={props.startAddList}/>
   </div>
 )
 
