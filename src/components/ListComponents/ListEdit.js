@@ -2,6 +2,9 @@ import React from 'react'
 import ListTitleEdit from './ListTitleEdit'
 import ListHeaderEdit from './ListHeaderEdit'
 import ListOption from './ListOption'
+import { Row,Col } from 'react-bootstrap'
+import { CirclePicker } from 'react-color'
+import { colorMap as cm} from '../../resources/js/utils'
 
 class ListEdit extends React.Component {  
   constructor(props, context) {
@@ -10,8 +13,11 @@ class ListEdit extends React.Component {
     this.state = {
       name: props.list.name ? props.list.name : "",
       fields: props.list.fields ? props.list.fields : [],
+      color: props.list.color,
       addToTop: props.list.addToTop ? props.list.addToTop : false
     };
+    this.tabColors = [cm["pastel-green"],cm["pastel-purple"],cm["pastel-orange"],cm["pastel-red"],
+    cm["pastel-yellow"],cm["pastel-blue"],cm["grey"]]
   }
 
   componentWillUpdate(props,state) {
@@ -20,6 +26,15 @@ class ListEdit extends React.Component {
 
   onTitleChange = (value) => {
     this.setState({ name: value })
+  }
+
+  onColorChange = (colorInfo) => {
+    const hexValue = colorInfo.hex
+    Object.keys(cm).forEach(color => {
+      if (cm[color].toLowerCase() === hexValue.toLowerCase()) {
+        this.setState({ color: color })
+      }
+    })
   }
 
   onAddToTopChange = (value) => {
@@ -63,6 +78,11 @@ class ListEdit extends React.Component {
   render() {
     return (
       <div>
+        <Row>
+          <Col mdOffset={1}>
+            <CirclePicker color={cm[this.state.color]} colors={this.tabColors} onChangeComplete={this.onColorChange} width='auto'/>
+          </Col>
+        </Row>
         <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.name}  />
         <ListHeaderEdit
           onAdd={() => this.onFieldChange()}
@@ -75,7 +95,7 @@ class ListEdit extends React.Component {
           collectionFields={this.props.collectionFields}/>
           <ListOption active={this.state.addToTop} onChange={this.onAddToTopChange}
             label="Add new items to top of the list" />
-      </div> 
+      </div>
     )
   }
 }

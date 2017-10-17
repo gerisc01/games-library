@@ -5,12 +5,11 @@ import { actions } from '../actions'
 const mapStateToProps = state => {
   let activeList = state.lists.items[state.lists.active]
   return {
+    ...activeList,
     id: state.lists.active,
     title: activeList.name,
-    fields: activeList.fields,
     addToTop: activeList.addToTop || false,
-    collectionFields: state.collections.items[state.collections.active].fields,
-    activeList: state.lists.active,
+    collectionFields: state.collections.items[state.collections.active].fields
   }
 }
 

@@ -10,7 +10,8 @@ const ListsEdit = (props) => {
     _id: props.id,
     name: props.title,
     fields: props.fields,
-    addToTop: props.addToTop
+    addToTop: props.addToTop,
+    color: props.color
   }
 
   return (
