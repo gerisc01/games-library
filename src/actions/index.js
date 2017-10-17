@@ -70,10 +70,13 @@ export const actions = {
   },
   // Create Actions
   createItem: (listId,item) => {
-    return {
-      type: types.CREATE_ITEM,
-      item,
-      listId
+    return (dispatch, getState) => {
+      dispatch({
+        type: types.CREATE_ITEM,
+        item,
+        listId,
+        addToTop: getState().lists.items[listId].addToTop || false
+      })
     }
   },
   createList: (collectionId,list) => {
@@ -112,11 +115,13 @@ export const actions = {
   },
   moveItem: (listId,itemId) => {
     return (dispatch, getState) => {
+      const listsState = getState().lists
       dispatch({
         type: types.MOVE_ITEM,
-        oldListId: getState().lists.active,
+        oldListId: listsState.active,
         newListId: listId,
-        itemId
+        itemId,
+        addToTop: listsState.items[listId].addToTop || false
       })
     }
   },

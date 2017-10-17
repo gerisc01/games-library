@@ -2,6 +2,7 @@ import { types } from '../actions'
 import uuid from 'uuid'
 
 const items = (state = {items: {}, order: {}, modified: false, isFetching: true}, action) => {
+  let previousOrder,newOrder;
   switch (action.type) {
     case types.RECIEVED_DATA:
       return {
@@ -11,11 +12,12 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
     case types.CREATE_ITEM:
       let itemId = uuid()
       let item = {_id: itemId, ...action.item}
-      let previousOrder = state.order[action.listId] ? state.order[action.listId] : []
+      previousOrder = state.order[action.listId] ? state.order[action.listId] : []
+      newOrder = action.addToTop ? [itemId].concat(previousOrder) : previousOrder.concat(itemId)
       return {
         ...state,
         items: { ...state.items, [itemId]: item },
-        order: {...state.order, [action.listId]: previousOrder.concat(itemId)},
+        order: {...state.order, [action.listId]: newOrder},
         modified: true,
       }
     case types.UPDATE_ITEM:
@@ -37,6 +39,9 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
         modified: true
       }
     case types.MOVE_ITEM:
+      newOrder = action.addToTop
+        ? [action.itemId].concat(state.order[action.newListId])
+        : state.order[action.newListId].concat(action.itemId)
       return {
         ...state,
         order: {
@@ -44,7 +49,7 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
           [action.oldListId]: state.order[action.oldListId].filter(id => {
             return id !== action.itemId
           }),
-          [action.newListId]: state.order[action.newListId].concat(action.itemId)
+          [action.newListId]: newOrder
         },
         modified: true
       }
