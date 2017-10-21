@@ -1,10 +1,11 @@
 import React from 'react'
 import ItemEdit from './ItemEdit'
 import Item from './Item'
-import { Button,Col,Row } from 'react-bootstrap'
+import { Button,Col,Row,Alert } from 'react-bootstrap'
+import { StickyContainer, Sticky } from 'react-sticky';
 import FontAwesome from 'react-fontawesome'
 
-
+const alertLink = {cursor: 'pointer'}
 class ItemList extends React.Component {  
   constructor(props, context) {
     super(props, context);
@@ -19,6 +20,7 @@ class ItemList extends React.Component {
       addingItem: false,
       order: this.props.order,
       items: this.props.items,
+      deletedIds: []
     };
   }
 
@@ -61,6 +63,21 @@ class ItemList extends React.Component {
     this.setState({editingId: undefined, addingItem: true})
   }
 
+  deleteItem = id => {
+    this.setState({deletedIds: this.state.deletedIds.concat(id)})
+    setTimeout(() => this.deleteConfirm(id,true),5000)
+  }
+
+  deleteConfirm = (id,confirm) => {
+    if (confirm && this.state.deletedIds.indexOf(id) !== -1) {
+      this.props.deleteItem(this.props.activeList,id)
+    }
+
+    this.setState({deletedIds: this.state.deletedIds.filter(d_id => {
+      return d_id !== id
+    })})
+  }
+
   swapItems = (originId,destinationId) => {
     if (this.state.editingId !== undefined) return;
     if (this.startSwapOrder === null) this.startSwapOrder = this.state.order.slice(0)
@@ -88,23 +105,44 @@ class ItemList extends React.Component {
   render() {
   let newItem = {}
   return (
-    <div>
-      {this.renderItemAddRow(newItem,true)}
-      {this.state.order.map(id => {
-        let item = { ...this.state.items[id] }
-        return this.state.editingId === id
-        ? <ItemEdit key={id} fields={this.props.fields} item={item}
-            acceptClick={() => this.acceptEditItem(item)} cancelClick={() => this.cancelEditItem()} />
-        : <Item key={id} fields={this.props.fields} item={item} swapItems={this.swapItems}
-            resetOrder={this.resetOrder} editClick={() => this.startEditItem(item._id)}
-            deleteItem={() => this.props.deleteItem(this.props.activeList,item._id)}
-            updateItemOrder={() => this.props.updateItemOrder(this.props.activeList,this.state.order)} />
-      })}
-      {this.renderItemAddRow(newItem,false)}
-    </div>)
+    <StickyContainer>
+      <Sticky>
+        { ({style}) => (
+            <div style={{position: 'absolute', zIndex: '2', top: '20px', width: '50%', left: '25%', ...style}}>
+              {this.state.deletedIds.map(id => (
+                <DeletedItemAlert id={id} key={id} name={this.state.items[id][this.props.fields[0]._id]}
+                  dismiss={() => this.deleteConfirm(id,true)} undo={() => this.deleteConfirm(id,false)}/>
+              ))}
+            </div>
+          )}
+      </Sticky>
+      <div style={{position: 'relative', zIndex: '1'}}>
+        {this.renderItemAddRow(newItem,true)}
+        {this.state.order.map(id => {
+          let item = { ...this.state.items[id] }
+          return this.state.editingId === id
+          ? <ItemEdit key={id} fields={this.props.fields} item={item}
+              acceptClick={() => this.acceptEditItem(item)} cancelClick={() => this.cancelEditItem()} />
+          : <Item key={id} fields={this.props.fields} item={item} swapItems={this.swapItems}
+              resetOrder={this.resetOrder} editClick={() => this.startEditItem(item._id)}
+              deleteItem={() => this.deleteItem(id)}
+              hidden={this.state.deletedIds.indexOf(id) !== -1}
+              updateItemOrder={() => this.props.updateItemOrder(this.props.activeList,this.state.order)} />
+        })}
+        {this.renderItemAddRow(newItem,false)}
+      </div>
+    </StickyContainer>)
   }
 }
 export default ItemList
+
+const DeletedItemAlert = ({id,name,dismiss,undo}) => (
+  <Alert bsStyle="danger" style={{padding: '8px', margin: '3px'}}>
+    {name} has been deleted. <span style={{float: 'right'}}>
+      <a onClick={dismiss} style={alertLink}>Dismiss</a> -- <a onClick={undo} style={alertLink}>Undo</a>
+    </span>
+  </Alert>
+)
 
 const ItemAddButton = ({ start }) => (
   <Row>

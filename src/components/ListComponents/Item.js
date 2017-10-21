@@ -44,9 +44,9 @@ function targetCollect(connect) {
   }
 }
 
-const Item = ({ fields,item,editClick,deleteItem,isDragging,connectDragSource,connectDropTarget,swapItems }) => (
+const Item = ({ fields,item,editClick,deleteItem,hidden,isDragging,connectDragSource,connectDropTarget,swapItems }) => (
   connectDropTarget(connectDragSource(
-    <div style={{opacity: isDragging ? 0 : 1}}>
+    <div style={{opacity: isDragging ? 0 : 1, display: hidden ? 'none' : 'block'}}>
       <Row>
         <Col md={2} >
           <div style={{float: 'right'}}>
