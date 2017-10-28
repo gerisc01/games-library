@@ -5,11 +5,11 @@ export const colorMap = {
   "pastel-red": "#FF6961",
   "pastel-yellow": "#FDFD96",
   "pastel-blue": "#37FDFC",
-  black: "black",
-  gray: "gray",
-  grey: "gray",
-  green: "green",
-  red: "red"
+  black: "#000000",
+  gray: "#808080",
+  grey: "#808080",
+  green: "#008000",
+  red: "#FF0000"
 }
 
 // Local DB helper methods
