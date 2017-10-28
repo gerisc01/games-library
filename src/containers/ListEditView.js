@@ -1,27 +1,29 @@
 import { connect } from 'react-redux'
-import ListsEdit from '../components/ListsEdit'
 import { actions } from '../actions'
+import ListEdit from '../components/ListEdit'
 
 const mapStateToProps = state => {
   let activeList = state.lists.items[state.lists.active]
   return {
     ...activeList,
-    id: state.lists.active,
-    title: activeList.name,
     addToTop: activeList.addToTop || false,
     collectionFields: state.collections.items[state.collections.active].fields
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
-    updateList: (list) => dispatch(actions.updateList(list)),
+    ...stateProps,
+    onSave: (list) => { console.log(list); dispatchProps.updateList({_id: stateProps._id, ...list}) }
   }
 }
 
-const ListsEditView = connect(
+const ListEditView = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(ListsEdit)
+  {
+    updateList: actions.updateList
+  },
+  mergeProps
+)(ListEdit)
 
-export default ListsEditView
+export default ListEditView

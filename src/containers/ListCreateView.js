@@ -1,23 +1,39 @@
 import { connect } from 'react-redux'
-import ListCreate from '../components/ListCreate'
 import { actions } from '../actions'
+import ListEdit from '../components/ListEdit'
 
 const mapStateToProps = state => {
+  const collectionFields = state.collections.items[state.collections.active].fields
   return {
     collectionId: state.collections.active,
-    collectionFields: state.collections.items[state.collections.active].fields,
+    collectionFields: collectionFields,
+    // deafult list props on create screen
+    color: 'pastel-blue',
+    name: 'New List Name',
+    fields: [
+      {
+        _id: Object.keys(collectionFields)[0],
+        width: "3"
+      }
+    ],
+    addToTop: false
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mergeProps = (stateProps,dispatchProps,ownProps) => {
+  console.log(stateProps)
   return {
-    createList: (collectionId,list) => dispatch(actions.createList(collectionId,list)),
+    ...stateProps,
+    onSave: (list) => { dispatchProps.createList(stateProps.collectionId,list); ownProps.stopEditMode(); }
   }
 }
 
 const ListCreateView = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(ListCreate)
+  {
+    createList: actions.createList
+  },
+  mergeProps
+)(ListEdit)
 
 export default ListCreateView

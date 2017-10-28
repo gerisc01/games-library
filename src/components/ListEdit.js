@@ -1,20 +1,18 @@
 import React from 'react'
-import ListTitleEdit from './ListTitleEdit'
-import ListHeaderEdit from './ListHeaderEdit'
-import ListOption from './ListOption'
-import { Row,Col } from 'react-bootstrap'
+import { Header,Title} from './ListComponents'
+import { Grid,Row,Col } from 'react-bootstrap'
 import { CirclePicker } from 'react-color'
-import { colorMap as cm} from '../../resources/js/utils'
+import { colorMap as cm} from '../resources/js/utils'
 
 class ListEdit extends React.Component {  
   constructor(props, context) {
     super(props, context);
     this.onChange = props.onChange;
     this.state = {
-      name: props.list.name ? props.list.name : "",
-      fields: props.list.fields ? props.list.fields : [],
-      color: props.list.color,
-      addToTop: props.list.addToTop ? props.list.addToTop : false
+      name: props.name || "",
+      fields: props.fields || [],
+      color: props.color || "grey",
+      addToTop: props.addToTop || false
     };
     this.tabColors = [cm["pastel-green"],cm["pastel-purple"],cm["pastel-orange"],cm["pastel-red"],
     cm["pastel-yellow"],cm["pastel-blue"],cm["grey"]]
@@ -76,28 +74,40 @@ class ListEdit extends React.Component {
   }
 
   render() {
+    const headerProps = {
+      editing:          true,
+      fields:           this.state.fields,
+      collectionFields: this.props.collectionFields,
+      onEdit:           (index,name,value) => this.onFieldChange(index,name,value),
+      onAdd:            () => this.onFieldChange(),
+      onSave:           () => this.props.onSave(this.state),
+      onDelete:         (index) => this.onFieldChange(index,'delete'),
+      hasChanged:       JSON.stringify(this.props.fields) !== JSON.stringify(this.state.fields) || 
+                        this.props.name !== this.state.name || this.props.color !== this.state.color
+    }
     return (
-      <div>
+      <Grid style={{float: 'left'}}>
         <Row>
           <Col mdOffset={1}>
             <CirclePicker color={cm[this.state.color]} colors={this.tabColors} onChangeComplete={this.onColorChange} width='auto'/>
           </Col>
         </Row>
-        <ListTitleEdit onEdit={(value) => this.onTitleChange(value)} title={this.state.name}  />
-        <ListHeaderEdit
-          onAdd={() => this.onFieldChange()}
-          onEdit={(index,name,value) => this.onFieldChange(index,name,value)} 
-          onDelete={(index) => this.onFieldChange(index,'delete')}
-          onSave={() => this.props.onSave(this.state)}
-          fields={this.state.fields}
-          hasChanged={JSON.stringify(this.props.fields) !== JSON.stringify(this.state.fields) || 
-            this.props.title !== this.state.name}
-          collectionFields={this.props.collectionFields}/>
-          <ListOption active={this.state.addToTop} onChange={this.onAddToTopChange}
-            label="Add new items to top of the list" />
-      </div>
+        <Title editing={true} onEdit={(value) => this.onTitleChange(value)} title={this.state.name}  />
+        <Header {...headerProps} />
+        <ListOption active={this.state.addToTop} label="Add new items to top of the list"
+          onChange={this.onAddToTopChange} />
+      </Grid>
     )
   }
 }
-
 export default ListEdit
+
+const ListOption = ({ active,label,onChange }) => {
+  return (
+    <Row>
+      <Col mdOffset={1}>
+        <h4><input type="checkbox" checked={active} onChange={onChange} /> {label}</h4>
+      </Col>
+    </Row>
+  )
+}

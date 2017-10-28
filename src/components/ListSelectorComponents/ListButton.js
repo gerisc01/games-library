@@ -11,7 +11,7 @@ function targetCollect(connect) {
 const cardTarget = {
   drop(props, monitor) {
     let newListId = props._id
-    let itemId = monitor.getItem().item._id
+    let itemId = monitor.getItem().id
     props.moveItem(newListId,itemId)
   },
 };
