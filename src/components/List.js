@@ -17,6 +17,7 @@ class List extends React.Component {
       editingId: undefined,
       addingItem: false,
       sort: {},
+      sortOrder: undefined,
       order: this.props.order,
       items: this.props.items,
       deletedIds: []
@@ -30,6 +31,12 @@ class List extends React.Component {
       resetOrder: this.resetOrder,
       updateItemOrder: () => this.props.updateItemOrder(this.props.activeList,this.state.order)
     }
+    // Put ordering the list and setting it to the list state into a variable function that will
+    // be passed to the header so the lists can be ordered by clicking a button from there
+    let orderAndSetItems = (fieldId,order) => this.setState({
+      sort: {id: fieldId, order: order},
+      sortOrder: this.orderItems(this.state.items,this.state.order,fieldId,order)
+    })
     return (
     <Grid style={{float: 'left'}}>
       <StickyContainer>
@@ -44,19 +51,20 @@ class List extends React.Component {
             )}
         </Sticky>
         <Title {...this.props} />
-        <Header {...this.props} />
-        <div style={{position: 'relative', zIndex: '1'}}>
+        <Header {...this.props} orderItems={orderAndSetItems} />
+        <div style={{position: 'relative', zIndex: '3'}}>
           {this.renderItemAddRow(newItem,true)}
-          {this.state.order.map(id => {
+          {(this.state.sortOrder || this.state.order).map(id => {
             let item = { ...this.state.items[id] }
             let itemProps = {
-              fields:      this.props.fields,
-              item:        item,
-              editClick:   () => this.startEditItem(item._id),
-              deleteItem:  () => this.deleteItem(id),
-              acceptClick: () => this.acceptEditItem(item),
-              cancelClick: () => this.cancelEditItem(),
-              hidden:      this.state.deletedIds.indexOf(id) !== -1
+              fields:          this.props.fields,
+              item:            item,
+              emphasizedField: this.state.sort.id,
+              editClick:       () => this.startEditItem(item._id),
+              deleteItem:      () => this.deleteItem(id),
+              acceptClick:     () => this.acceptEditItem(item),
+              cancelClick:     () => this.cancelEditItem(),
+              hidden:          this.state.deletedIds.indexOf(id) !== -1
             }
             return (<MoveableItem key={id} id={id} {...moveProps} sortable={Object.keys(this.state.sort).length === 0} >
               <Item editing={this.state.editingId === id} {...itemProps} />
@@ -69,12 +77,8 @@ class List extends React.Component {
   )}
 
   componentWillReceiveProps(nextProps) {
-    if (JSON.stringify(this.state.order) !== JSON.stringify(nextProps.order)) {
-      this.setState({order: nextProps.order, items: nextProps.items})
-    }
-
-    // If a editingId is defined, update that item and then reset the editingId
     if (this.state.editingId !== undefined) {
+      // If a editingId is defined, update that item and then reset the editingId
       this.setState({
         items: {
           ...this.state.items,
@@ -82,6 +86,20 @@ class List extends React.Component {
         },
         editingId: undefined
       })
+    } else if (this.props.id !== nextProps.id) {
+      // If a new list has been selected, reset the sort to null and use the new items/order
+      this.setState({order: nextProps.order, items: nextProps.items, sort: {}, sortOrder: undefined})
+    } else if (this.state.sort.id) {
+      // If the same list is used and has a sort order defined, use the new items/order but re-order
+      // the new list while including any new items
+      this.setState({
+        items: nextProps.items,
+        order: nextProps.order,
+        sortOrder: this.orderItems(nextProps.items,nextProps.order,this.state.sort.id,this.state.sort.order),
+      })
+    } else {
+      // If the same list is being used, use the new items but don't reset sort order
+      this.setState({order: nextProps.order, items: nextProps.items})
     }
   }
 
@@ -122,6 +140,22 @@ class List extends React.Component {
     })})
   }
 
+  orderItems = (listItems, listOrder, fieldId, order) => {
+    // Order the items passed in and return a sorted list of the items
+    let sortOrder = listOrder.slice().sort((a,b) => {
+      let columnA = listItems[a][fieldId].toLowerCase()
+      let columnB = listItems[b][fieldId].toLowerCase()
+      if (columnA < columnB) {
+        return order === "asc" ? -1 : 1
+      }
+      if (columnA > columnB) {
+        return order === "asc" ? 1 : -1
+      }
+      return 0
+    })
+    return sortOrder;
+  }
+
   swapItems = (originId,destinationId) => {
     if (this.state.editingId !== undefined) return;
     if (this.startSwapOrder === null) this.startSwapOrder = this.state.order.slice(0)
@@ -131,7 +165,8 @@ class List extends React.Component {
   }
 
   resetOrder = () => {
-    if (this.state.editingId !== undefined) return;
+    // Don't reset order when editing or sorted because re-ordering shouldn't be allowed in the first place
+    if (this.state.editingId !== undefined || this.state.sort.id) return;
     this.setState({order: this.startSwapOrder.slice(0)})
     this.startSwapOrder = null
   }

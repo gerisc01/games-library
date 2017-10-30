@@ -3,10 +3,10 @@ import { Button,Col,Row } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 
 const Item = (props) => {
-  let {fields, item, editing, hidden, style} = props
+  let {fields, item, editing, hidden, style, emphasizedField} = props
   return (
     <div style={{...style, display: hidden ? 'none' : 'block'}}>
-      <Row>
+      <Row style={{display: 'flex', height: '100%'}}>
         <Col md={2} >
           {!editing ?
             <StandardButtons {...props} style={{float: 'right'}}/> :
@@ -14,8 +14,10 @@ const Item = (props) => {
           }
         </Col>
         {fields.map((field,i) => {
+          let style = emphasizedField === field._id ? 
+            {backgroundColor: '#f9f9f9', display: 'flex', flexDirection: 'row'} : {}
           return (
-            <Col key={i+"-"+(item._id || "new").toString()} md={parseInt(field.width,10)}>
+            <Col key={i+"-"+(item._id || "new").toString()} md={parseInt(field.width,10)} style={style}>
               {!editing 
                 ? item[field._id]
                 : <input type="text" defaultValue={item[field._id]} style={{width: '95%'}}
