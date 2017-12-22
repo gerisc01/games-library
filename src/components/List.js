@@ -15,6 +15,7 @@ class List extends React.Component {
     // Populate items
     this.state = {
       editingId: undefined,
+      showDetailId: undefined,
       addingItem: false,
       sort: {},
       order: this.props.order,
@@ -50,16 +51,20 @@ class List extends React.Component {
           {this.state.order.map(id => {
             let item = { ...this.state.items[id] }
             let itemProps = {
-              fields:      this.props.fields,
-              item:        item,
-              editClick:   () => this.startEditItem(item._id),
-              deleteItem:  () => this.deleteItem(id),
-              acceptClick: () => this.acceptEditItem(item),
-              cancelClick: () => this.cancelEditItem(),
-              hidden:      this.state.deletedIds.indexOf(id) !== -1
+              fields:           this.props.fields,
+              collectionFields: this.props.collectionFields,
+              item:             item,
+              editClick:        () => this.startEditItem(item._id),
+              deleteItem:       () => this.deleteItem(id),
+              acceptClick:      () => this.acceptEditItem(item),
+              cancelClick:      () => this.cancelEditItem(),
+              toggleDetails:    () => {
+                this.setState({showDetailId: !this.state.showDetailId || this.state.showDetailId !== id
+                  ? id : undefined})},
+              hidden:           this.state.deletedIds.indexOf(id) !== -1
             }
             return (<MoveableItem key={id} id={id} {...moveProps} sortable={Object.keys(this.state.sort).length === 0} >
-              <Item editing={this.state.editingId === id} {...itemProps} />
+              <Item editing={this.state.editingId === id} details={this.state.showDetailId === id} {...itemProps} />
             </MoveableItem>)
           })}
           {this.renderItemAddRow(newItem,false)}
