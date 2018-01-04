@@ -6,27 +6,29 @@ import ItemDetails from './ItemDetails'
 const Item = (props) => {
   let {fields, details, item, editing, hidden, style} = props
   let toggleDetails = props.toggleDetails;
-  if (details) console.log("Showing details for: "+item._id);
   return (
     <div style={{...style, display: hidden ? 'none' : 'block'}}>
-      <Row onClick={toggleDetails}>
+      <Row>
         <Col md={2} >
           {!editing ?
             <StandardButtons {...props} style={{float: 'right'}}/> :
             <EditButtons     {...props} style={{float: 'right'}}/>
           }
         </Col>
-        {fields.map((field,i) => {
-          return (
-            <Col key={i+"-"+(item._id || "new").toString()} md={parseInt(field.width,10)}>
-              {!editing 
-                ? item[field._id]
-                : <input type="text" defaultValue={item[field._id]} style={{width: '95%'}}
-                    onBlur={(event) => { item[field._id] = event.target.value }} />
-              }
-            </Col>
-          )
-        })}
+        {/* Div to be the click container for toggling details so the details don't show on a button click */}
+        <div onClick={toggleDetails}>
+          {fields.map((field,i) => {
+            return (
+              <Col key={i+"-"+(item._id || "new").toString()} md={parseInt(field.width,10)}>
+                {!editing 
+                  ? item[field._id]
+                  : <input type="text" defaultValue={item[field._id]} style={{width: '95%'}}
+                      onBlur={(event) => { item[field._id] = event.target.value }} />
+                }
+              </Col>
+            )
+          })}
+        </div>
       </Row>
       {details ? <ItemDetails {...props}/> : undefined}
       </div>

@@ -132,12 +132,12 @@ class List extends React.Component {
     if (this.startSwapOrder === null) this.startSwapOrder = this.state.order.slice(0)
     this.setState({order: this.state.order.map(id => {
       return id === originId ? destinationId : id === destinationId ? originId : id
-    })})
+    }),showDetailId: undefined})
   }
 
   resetOrder = () => {
     if (this.state.editingId !== undefined) return;
-    this.setState({order: this.startSwapOrder.slice(0)})
+    this.setState({order: this.startSwapOrder.slice(0), showDetailId: undefined})
     this.startSwapOrder = null
   }
 

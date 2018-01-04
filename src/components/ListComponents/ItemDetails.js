@@ -1,6 +1,6 @@
 import React from 'react'
 import { Col,Row } from 'react-bootstrap'
-import Session from './Session'
+import FontAwesome from 'react-fontawesome'
 
 class ItemDetails extends React.Component {
   constructor(props, context) {
@@ -20,7 +20,7 @@ class ItemDetails extends React.Component {
         "Status": "Retired",
         "Status Changes": [
           "Currently Playing on 2016-10-12",
-          "Retired on 2017-01-94"
+          "Retired on 2017-01-14"
         ]
       },
       {
@@ -76,14 +76,21 @@ class ItemDetails extends React.Component {
       <Col md={4} style={colStyle}>
         <span style={{fontWeight: 'bold', textDecoration: 'underline'}}>Playthroughs</span>
         {sessions.map((session,i) => {
-          return <Session key={"session-"+i}
-            start={session["Start"]}
-            end={session["End"]}
-            completed={session["Completed"]}
-            platform={session["Platform"]}
-            statuses={session["Status Changes"]}
-            active={this.state.expandedSession === i}
-            expand={() => this.setState({expandedSession: this.state.expandedSession === i ? null : i})} />
+          let active = this.state.expandedSession === i
+          let expand = () => this.setState({expandedSession: this.state.expandedSession === i ? null : i})
+          return (<div key={"session-"+i}>
+            {/* Session Expander and Start/End Dates */}
+            <FontAwesome name={(active ? 'minus' : 'plus')+'-square-o'} style={{paddingRight: '5px'}} onClick={expand}/>
+            <span style={fieldStyle}>
+              {session["Start"]} -> {session["End"] !== "" ? session["End"] : "--"} ({session["Platform"]})
+            </span><br/>
+            {/* Session details -- visibility depends on active flag */}
+            {active ? (<div>
+              {session["Status Changes"].map(status => {
+                return <span>- {status}<br/></span>
+              })}
+            </div>) : null}
+          </div>)
         })}
       </Col>
     </Row>)
