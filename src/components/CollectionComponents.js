@@ -30,9 +30,7 @@ export const Collection = (props) => (
  ***********************************************/
 
 const ListEditButtons = (props) => {
-  {
-    return props.isEditingLists
-      ? <span onClick={props.stopEditMode} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='remove'/></span>
-      : <span onClick={props.startEditMode} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='pencil'/></span>
-  }
+  return props.isEditingLists
+    ? <span onClick={props.stopEditMode} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='remove'/></span>
+    : <span onClick={props.startEditMode} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='pencil'/></span>
 }
