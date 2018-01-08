@@ -21,7 +21,6 @@ const mapStateToProps = state => {
 }
 
 const mergeProps = (stateProps,dispatchProps,ownProps) => {
-  console.log(stateProps)
   return {
     ...stateProps,
     onSave: (list) => { dispatchProps.createList(stateProps.collectionId,list); ownProps.stopEditMode(); }

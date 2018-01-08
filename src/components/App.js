@@ -13,7 +13,8 @@ class App extends React.Component {
       // Setting application variables that shouldn't be stored in the redux store but are
       // used across multiple different views (generally temporary toggalable state variables)
       addingList: false,
-      editMode: false
+      editMode: false,
+      search: false
     };
   }
 
@@ -26,7 +27,11 @@ class App extends React.Component {
   }
 
   stopEditMode = () => {
-    this.setState({ editMode: false, addingList: false })
+    this.setState({ editMode: false, addingList: false, search: false })
+  }
+
+  startSearch = () => {
+    this.setState({search: true})
   }
 
   render() {
@@ -36,9 +41,11 @@ class App extends React.Component {
       startAddList: this.startAddList,
       startEditMode: this.startEditMode,
       stopEditMode: this.stopEditMode,
+      startSearch: this.startSearch,
       // State variables to pass
       isAddingList: this.state.addingList,
       isEditingLists: this.state.editMode,
+      isSearching: this.state.search
     }
     return (
     <div>
