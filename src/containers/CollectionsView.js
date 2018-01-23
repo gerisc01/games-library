@@ -2,25 +2,26 @@ import { connect } from 'react-redux'
 import Collections from '../components/Collections'
 import { actions } from '../actions'
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
-    collections: state.collections.items,
-    order: state.collections.order,
-    activeCollection: state.collections.active,
-    isModifyingLists: ownProps.isAddingList || ownProps.isEditingLists,
-    isModified: state.lists.modified || state.items.modified,
-    isSaving: state.collections.isSaving,
-    saveFailed: state.collections.saveFailed,
-    listsOrder: state.lists.order,
+    collections: state.data.collections.items,
+    order: state.data.collections.order,
+    activeCollection: state.data.collections.active,
+    isModifyingLists: state.app.isAddingList || state.app.isEditingLists,
+    isEditingLists: state.app.isEditingLists,
+    isModified: state.data.lists.modified || state.data.items.modified,
+    isSaving: state.data.collections.isSaving,
+    saveFailed: state.data.collections.saveFailed,
+    listsOrder: state.data.lists.order,
     state: state
   }
 }
 
-const mapDispatchToProps = (dispatch,ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     setActiveCollection: (id) => dispatch(actions.setActiveCollection(id)),
-    startEditMode: () => ownProps.startEditMode(),
-    stopEditMode: () => ownProps.stopEditMode(),
+    startEditMode: () => dispatch(actions.startEditMode()),
+    stopEditMode: () => dispatch(actions.stopEditMode()),
     saveChanges: (state) => dispatch(actions.saveChanges(state)),
   }
 }
