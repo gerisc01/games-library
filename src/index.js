@@ -7,14 +7,14 @@ import { createStore, applyMiddleware } from 'redux'
 import devToolsEnhancer from 'remote-redux-devtools';
 import thunk from 'redux-thunk'
 // Application imports
-import gamesLibraryApp from './reducers'
+import mediaLibraryApp from './reducers'
 import App from './components/App';
 import { actions } from './actions'
 // Import bootstrap and font awesome css files
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-let store = createStore(gamesLibraryApp, devToolsEnhancer(), applyMiddleware(thunk));
+let store = createStore(mediaLibraryApp, devToolsEnhancer(), applyMiddleware(thunk));
 
 store.dispatch(actions.fetchListData())
 

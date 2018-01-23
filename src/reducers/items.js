@@ -1,7 +1,7 @@
 import { types } from '../actions'
 import uuid from 'uuid'
 
-const items = (state = {items: {}, order: {}, modified: false, isFetching: true}, action) => {
+const items = (state = {items: {}, order: {}, modified: false, isFetching: true}, action = {type: "INIT_STATE"}) => {
   let previousOrder,newOrder;
   switch (action.type) {
     case types.RECIEVED_DATA:

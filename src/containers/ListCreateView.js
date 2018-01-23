@@ -3,9 +3,9 @@ import { actions } from '../actions'
 import ListEdit from '../components/ListEdit'
 
 const mapStateToProps = state => {
-  const collectionFields = state.collections.items[state.collections.active].fields
+  const collectionFields = state.data.collections.items[state.data.collections.active].fields
   return {
-    collectionId: state.collections.active,
+    collectionId: state.data.collections.active,
     collectionFields: collectionFields,
     // deafult list props on create screen
     color: 'pastel-blue',
@@ -20,18 +20,18 @@ const mapStateToProps = state => {
   }
 }
 
-const mergeProps = (stateProps,dispatchProps,ownProps) => {
-  console.log(stateProps)
+const mergeProps = (stateProps,dispatchProps) => {
   return {
     ...stateProps,
-    onSave: (list) => { dispatchProps.createList(stateProps.collectionId,list); ownProps.stopEditMode(); }
+    onSave: (list) => { dispatchProps.createList(stateProps.collectionId,list); dispatchProps.stopEditMode(); }
   }
 }
 
 const ListCreateView = connect(
   mapStateToProps,
   {
-    createList: actions.createList
+    createList: actions.createList,
+    stopEditMode: actions.stopEditMode
   },
   mergeProps
 )(ListEdit)

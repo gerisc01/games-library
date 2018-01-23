@@ -3,11 +3,11 @@ import { actions } from '../actions'
 import ListEdit from '../components/ListEdit'
 
 const mapStateToProps = state => {
-  let activeList = state.lists.items[state.lists.active]
+  let activeList = state.data.lists.items[state.data.lists.active]
   return {
     ...activeList,
     addToTop: activeList.addToTop || false,
-    collectionFields: state.collections.items[state.collections.active].fields
+    collectionFields: state.data.collections.items[state.data.collections.active].fields
   }
 }
 

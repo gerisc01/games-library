@@ -1,7 +1,7 @@
 import uuid from 'uuid'
 import { types } from '../actions'
 
-const lists = (state = {items: {}, order: {}, active: null, modified: false, isFetching: true}, action) => {
+const lists = (state = {items: {}, order: {}, active: null, modified: false, isFetching: true}, action = {type: "INIT_STATE"}) => {
   switch (action.type) {
     case types.RECIEVED_DATA:
       const defaultCollectionId = action.collections.order[0]

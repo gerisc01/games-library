@@ -9,6 +9,11 @@ export const types = {
   FETCH_DATA: 'FETCH_DATA',
   RECIEVED_DATA: 'RECIEVED_DATA',
 
+  // APPLCATION ACTIONS
+  START_ADD_LIST: 'START_ADD_LIST',
+  START_EDIT_MODE: 'START_EDIT_MODE',
+  STOP_EDIT_MODE: 'STOP_EDIT_MODE',
+
   // SAVE ACTIONS
   SAVE_CHANGES: 'SAVE_CHANGES',
   SAVE_SUCCESSFUL: 'SAVE_SUCCESSFUL',
@@ -55,6 +60,22 @@ export const actions = {
       items: data.items
     }
   },
+  // Application Action Methods
+  startAddList: () => {
+    return {
+      type: types.START_ADD_LIST
+    }
+  },
+  startEditMode: () => {
+    return {
+      type: types.START_EDIT_MODE
+    }
+  },
+  stopEditMode: () => {
+    return {
+      type: types.STOP_EDIT_MODE
+    }
+  },
   // Set Active Action Methods
   setActiveCollection: collectionId => {
     return {
@@ -75,7 +96,7 @@ export const actions = {
         type: types.CREATE_ITEM,
         item,
         listId,
-        addToTop: getState().lists.items[listId].addToTop || false
+        addToTop: getState().data.lists.items[listId].addToTop || false
       })
     }
   },
@@ -115,7 +136,7 @@ export const actions = {
   },
   moveItem: (listId,itemId) => {
     return (dispatch, getState) => {
-      const listsState = getState().lists
+      const listsState = getState().data.lists
       dispatch({
         type: types.MOVE_ITEM,
         oldListId: listsState.active,
@@ -146,7 +167,7 @@ export const actions = {
         type: types.SAVE_CHANGES
       })
       // Build the new post object
-      const state = getState();
+      const state = getState().data;
       const postObject = {
         collections: {
           items: state.collections.items,
