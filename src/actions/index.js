@@ -13,6 +13,7 @@ export const types = {
   START_ADD_LIST: 'START_ADD_LIST',
   START_EDIT_MODE: 'START_EDIT_MODE',
   STOP_EDIT_MODE: 'STOP_EDIT_MODE',
+  SEARCH_ITEMS: 'SEARCH_ITEMS',
 
   // SAVE ACTIONS
   SAVE_CHANGES: 'SAVE_CHANGES',
@@ -76,28 +77,31 @@ export const actions = {
       type: types.STOP_EDIT_MODE
     }
   },
-  // Set Active Action Methods
-  setActiveCollection: collectionId => {
+  searchItems: () => {
     return {
-      type: types.SET_ACTIVE_COLLECTION,
-      id: collectionId
+      type: types.SEARCH_ITEMS
     }
   },
-  setActiveList: listId => {
+  // Set Active Action Methods
+  setActiveCollection: index => {
+    return {
+      type: types.SET_ACTIVE_COLLECTION,
+      index
+    }
+  },
+  setActiveList: index => {
     return {
       type: types.SET_ACTIVE_LIST,
-      id: listId
+      index
     }
   },
   // Create Actions
-  createItem: (listId,item) => {
-    return (dispatch, getState) => {
-      dispatch({
-        type: types.CREATE_ITEM,
-        item,
-        listId,
-        addToTop: getState().data.lists.items[listId].addToTop || false
-      })
+  createItem: (listId,item,addToTop = false) => {
+    return {
+      type: types.CREATE_ITEM,
+      item,
+      listId,
+      addToTop
     }
   },
   createList: (collectionId,list) => {
@@ -134,15 +138,18 @@ export const actions = {
       order
     }
   },
-  moveItem: (listId,itemId) => {
+  moveItem: (itemId,listId,newListId) => {
     return (dispatch, getState) => {
+      // Use thunk to dispatch the action so that is can load data about the new list from state,
+      // because an item reducer doesn't have access to that info but the new list isn't going to
+      // be loading when the action is fired either
       const listsState = getState().data.lists
       dispatch({
         type: types.MOVE_ITEM,
-        oldListId: listsState.active,
-        newListId: listId,
         itemId,
-        addToTop: listsState.items[listId].addToTop || false
+        listId,
+        newListId,
+        addToTop: listsState.items[newListId].addToTop || false
       })
     }
   },
@@ -167,21 +174,7 @@ export const actions = {
         type: types.SAVE_CHANGES
       })
       // Build the new post object
-      const state = getState().data;
-      const postObject = {
-        collections: {
-          items: state.collections.items,
-          order: state.collections.order
-        },
-        lists: {
-          items: state.lists.items,
-          order: state.lists.order
-        },
-        items: {
-          items: state.items.items,
-          order: state.items.order
-        }
-      }
+      const data = getState().data;
 
       fetch(`https://db-updater-api.herokuapp.com/api/v1/gistdb/${gistId}/${filename}`, {
         method: 'PUT',
@@ -189,11 +182,10 @@ export const actions = {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(postObject),
+        body: JSON.stringify(data),
       }).then(response => {
         if (response.status >= 400) {
           Promise.resolve(response.json()).then(json => {
-            console.log(json)
             dispatch({
               type: types.SAVE_FAILED,
               message: json

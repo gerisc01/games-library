@@ -6,13 +6,10 @@ import FontAwesome from 'react-fontawesome'
 const Collections = (props) => (
   <Navbar>
     <Nav bsStyle="tabs" activeKey={props.activeCollection}>
-      {props.order.map(id => (
-        <Collection
-          key={id}
-          {...props}
-          {...props.collections[id]}
-          activeCollection={id === props.activeCollection}
-          onClick={!props.isEditingLists ? () => props.setActiveCollection(id) : undefined}
+      {props.order.map((id,index) => (
+        <Collection key={id} {...props} {...props.collections[id]}
+          activeCollection={index === props.activeIndex}
+          onClick={!props.isEditingLists ? () => props.setActiveCollection(index) : undefined}
         />
       ))}
     </Nav>

@@ -12,9 +12,9 @@ const ListSelector = (props) => {
 
 const ListSelectorNormal = (props) => (
   <div style={listSelectorStyle}>
-    {props.order.map(id => (
-      <ListButton key={id} {...props} activeList={id === props.activeId} {...props.lists[id]}
-        onClick={() => { props.setActiveList(id); if (props.isAddingList) props.stopEditMode();}} />
+    {props.order.map((id,index) => (
+      <ListButton key={id} {...props} activeList={id === props.id} {...props.lists[id]}
+        onClick={() => { props.setActiveList(index) }} />
     ))}
     <ListAddButton onClick={props.startAddList}/>
   </div>
@@ -66,11 +66,11 @@ class ListSelectorEdit extends React.Component {
   render() {
   return (
     <div style={listSelectorStyle}>
-      {this.state.order.map(id => (
+      {this.state.order.map((id,index) => (
         <SortableItem key={id} swapItems={this.swapItems} resetOrder={this.resetOrder}
           setEditListsOrder={() => this.props.setEditListsOrder(this.state.order)}
-          updateOrder={() => this.props.updateListOrder(this.props.collectionId,this.state.order)}>
-          <ListButton {...this.state.items[id]} onClick={() => this.props.setActiveList(id)} activeList={id === this.props.activeId} />
+          updateOrder={() => this.props.updateListOrder(this.state.order)}>
+          <ListButton {...this.state.items[id]} onClick={() => this.props.setActiveList(index)} activeList={id === this.props.id} />
         </SortableItem>
       ))}
     </div>)

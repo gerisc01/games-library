@@ -3,21 +3,25 @@ import { connect } from 'react-redux'
 import ListView from '../containers/ListView'
 import ListCreateView from '../containers/ListCreateView'
 import ListEditView from '../containers/ListEditView'
+import SearchView from '../containers/SearchView'
 
-const Content = ({isEditingLists, isAddingList}) => {
+const Content = ({isEditingLists, isAddingList, isSearching}) => {
   if (isEditingLists) {
-    return <div><ListEditView /></div>
+    return <ListEditView />
   } else if (isAddingList) {
-    return <div><ListCreateView /></div>
+    return <ListCreateView />
+  } else if (isSearching) {
+    return <SearchView />
   } else {
-    return <div><ListView /></div>
+    return <ListView />
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     isAddingList: state.app.isAddingList,
-    isEditingLists: state.app.isEditingLists
+    isEditingLists: state.app.isEditingLists,
+    isSearching: state.app.isSearching
   }
 }
 

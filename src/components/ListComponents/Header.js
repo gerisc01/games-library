@@ -5,7 +5,9 @@ import FontAwesome from 'react-fontawesome'
 
 const Header = (props) => {
   // Every render inputs
-  const { collectionFields, fields } = props
+  const { collectionFields } = props
+  // explicity default fields to an empty list if they aren't present instead of leaving undefined
+  const fields = props.fields || []
   // Standard inputs
   const { orderItems } = props
   // Editing inputs

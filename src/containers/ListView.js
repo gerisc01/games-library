@@ -2,40 +2,55 @@ import { connect } from 'react-redux'
 import List from '../components/List'
 import { actions } from '../actions'
 
+const defaultState = {
+  order: []
+}
+
 const mapStateToProps = state => {
-  if (state.data.lists.isFetching || !state.data.lists.active) {
-    // return a default state
-    return {
-      fields: [],
-      order: []
-    }
-  } else {
-    const activeList = state.data.lists.items[state.data.lists.active]
-    return {
-      id: state.data.lists.active,
-      title: activeList.name,
-      fields: activeList.fields,
-      addToTop: activeList.addToTop || false,
-      collectionFields: state.data.collections.items[state.data.collections.active].fields,
-      items: state.data.items.items,
-      order: state.data.items.order[state.data.lists.active] ? state.data.items.order[state.data.lists.active].slice() : [],
-      activeList: state.data.lists.active,
-    }
+  if (state.app.isFetching) return defaultState;
+  const collectionId = state.data.collections.order[state.app.activeIndex.collection]
+  const id = state.data.lists.order[collectionId][state.app.activeIndex.list]
+  const listItem = state.data.lists.items[id] || {}
+  return {
+    // Collection data
+    collectionFields: state.data.collections.items[collectionId].fields,
+    // List data
+    id: id,
+    title: listItem.name,
+    fields: listItem.fields,
+    addToTop: listItem.addToTop || false,
+    // Item data
+    // return all items for now - can filter later if needed for perf.
+    items: state.data.items.items,
+    // slice the list order so modifications made to list order don't affect the state copy
+    order: (state.data.items.order[id] || []).slice()
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    createItem: (listId,item) => dispatch(actions.createItem(listId,item)),
-    deleteItem: (listId,item) => dispatch(actions.deleteItem(listId,item)),
+    createItem: (listId,item,addToTop) => dispatch(actions.createItem(listId,item,addToTop)),
+    deleteItem: (listId,id) => dispatch(actions.deleteItem(listId,id)),
     updateItem: (item) => dispatch(actions.updateItem(item)),
     updateItemOrder: (listId,itemOrder) => dispatch(actions.updateItemOrder(listId,itemOrder)),
   }
 }
 
+const mergeProps = (stateProps, dispatchProps) => {
+  return  {
+    ...stateProps,
+    ...dispatchProps,
+    // overwrite actions with defaulted params based on the currently loaded data
+    createItem: (item) => dispatchProps.createItem(stateProps.id,item,stateProps.addToTop),
+    deleteItem: (id) => dispatchProps.deleteItem(stateProps.id,id),
+    updateItemOrder: (itemOrder) => dispatchProps.updateItemOrder(stateProps.id,itemOrder),
+  }
+}
+
 const ListView = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(List)
 
 export default ListView

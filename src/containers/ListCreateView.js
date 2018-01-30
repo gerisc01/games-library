@@ -3,11 +3,13 @@ import { actions } from '../actions'
 import ListEdit from '../components/ListEdit'
 
 const mapStateToProps = state => {
-  const collectionFields = state.data.collections.items[state.data.collections.active].fields
+  const collectionId = state.data.collections.order[state.app.activeIndex.collection]
+  const collectionFields = state.data.collections.items[collectionId].fields
   return {
-    collectionId: state.data.collections.active,
-    collectionFields: collectionFields,
-    // deafult list props on create screen
+    // Collection data
+    collectionId,
+    collectionFields,
+    // List data (deafult list props on create screen)
     color: 'pastel-blue',
     name: 'New List Name',
     fields: [
@@ -20,20 +22,24 @@ const mapStateToProps = state => {
   }
 }
 
-const mergeProps = (stateProps,dispatchProps) => {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createList: (collectionId,list) => dispatch(actions.createList(collectionId,list))
+  }
+}
+
+const mergeProps = (stateProps, dispatchProps) => {
   return {
     ...stateProps,
-    onSave: (list) => { dispatchProps.createList(stateProps.collectionId,list); dispatchProps.stopEditMode(); }
+    ...dispatchProps,
+    // overwrite actions with defaulted params based on the currently loaded data
+    confirmListChanges: (list) => dispatchProps.createList(stateProps.collectionId,list),
   }
 }
 
 const ListCreateView = connect(
   mapStateToProps,
-  {
-    createList: actions.createList,
-    stopEditMode: actions.stopEditMode
-  },
+  mapDispatchToProps,
   mergeProps
 )(ListEdit)
-
 export default ListCreateView

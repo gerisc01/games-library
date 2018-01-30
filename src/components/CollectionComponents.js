@@ -36,7 +36,7 @@ const ListEditButtons = (props) => {
     return (
       <span>
         <span onClick={props.startEditMode} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='pencil'/></span>
-        <span onClick={props.startSearch} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='search'/></span>
+        <span onClick={props.searchItems} style={{marginRight: '5px',cursor: 'pointer'}}><FontAwesome name='search'/></span>
       </span>
     )
   }

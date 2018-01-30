@@ -1,13 +1,12 @@
 import { types } from '../actions'
 import uuid from 'uuid'
 
-const items = (state = {items: {}, order: {}, modified: false, isFetching: true}, action = {type: "INIT_STATE"}) => {
+const items = (state = {items: {}, order: {}}, action = {type: "INIT_STATE"}) => {
   let previousOrder,newOrder;
   switch (action.type) {
     case types.RECIEVED_DATA:
       return {
-        ...action.items,
-        isFetching: false
+        ...action.items
       }
     case types.CREATE_ITEM:
       let itemId = uuid()
@@ -17,8 +16,7 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
       return {
         ...state,
         items: { ...state.items, [itemId]: item },
-        order: {...state.order, [action.listId]: newOrder},
-        modified: true,
+        order: {...state.order, [action.listId]: newOrder}
       }
     case types.UPDATE_ITEM:
       return {
@@ -26,8 +24,7 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
         items: {
           ...state.items,
           [action.item._id]: action.item
-        },
-        modified: true,
+        }
       }
     case types.UPDATE_ITEM_ORDER:
       return {
@@ -35,8 +32,7 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
         order: {
           ...state.order,
           [action.listId]: action.itemOrder.slice(0)
-        },
-        modified: true
+        }
       }
     case types.MOVE_ITEM:
       newOrder = action.addToTop
@@ -46,12 +42,11 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
         ...state,
         order: {
           ...state.order,
-          [action.oldListId]: state.order[action.oldListId].filter(id => {
+          [action.listId]: state.order[action.listId].filter(id => {
             return id !== action.itemId
           }),
           [action.newListId]: newOrder
-        },
-        modified: true
+        }
       }
     case types.DELETE_ITEM:
       // Selected listId item index
@@ -76,13 +71,7 @@ const items = (state = {items: {}, order: {}, modified: false, isFetching: true}
           ...state.order,
           [action.listId]: currentList.slice(0,itemIndex).concat(currentList.slice(itemIndex+1,currentList.length))
         },
-        items: items,
-        modified: true
-      }
-    case types.SAVE_SUCCESSFUL:
-      return {
-        ...state,
-        modified: false
+        items: items
       }
     default:
       return state

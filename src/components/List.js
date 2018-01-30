@@ -29,7 +29,7 @@ class List extends React.Component {
     let moveProps = {
       swapItems: this.swapItems,
       resetOrder: this.resetOrder,
-      updateItemOrder: () => this.props.updateItemOrder(this.props.activeList,this.state.order)
+      updateItemOrder: () => this.props.updateItemOrder(this.state.order)
     }
     // Put ordering the list and setting it to the list state into a variable function that will
     // be passed to the header so the lists can be ordered by clicking a button from there
@@ -105,7 +105,7 @@ class List extends React.Component {
 
   createItem = (item) => {
     this.setState({addingItem: false})
-    this.props.createItem(this.props.activeList,item)
+    this.props.createItem(item)
   }
 
   startEditItem = (id) => {
@@ -132,7 +132,7 @@ class List extends React.Component {
 
   deleteConfirm = (id,confirm) => {
     if (confirm && this.state.deletedIds.indexOf(id) !== -1) {
-      this.props.deleteItem(this.props.activeList,id)
+      this.props.deleteItem(id)
     }
 
     this.setState({deletedIds: this.state.deletedIds.filter(d_id => {

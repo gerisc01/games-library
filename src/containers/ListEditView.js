@@ -3,27 +3,36 @@ import { actions } from '../actions'
 import ListEdit from '../components/ListEdit'
 
 const mapStateToProps = state => {
-  let activeList = state.data.lists.items[state.data.lists.active]
+  const collectionId = state.data.collections.order[state.app.activeIndex.collection]
+  const id = state.data.lists.order[collectionId][state.app.activeIndex.list]
+  const listItem = state.data.lists.items[id] || {}
   return {
-    ...activeList,
-    addToTop: activeList.addToTop || false,
-    collectionFields: state.data.collections.items[state.data.collections.active].fields
+    // Collection data
+    collectionFields: state.data.collections.items[collectionId].fields,
+    // List data
+    ...listItem,
+    addToTop: listItem.addToTop || false
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateList: (list) => dispatch(actions.updateList(list))
   }
 }
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   return {
     ...stateProps,
-    onSave: (list) => { console.log(list); dispatchProps.updateList({_id: stateProps._id, ...list}) }
+    ...dispatchProps,
+    // overwrite actions with defaulted params based on the currently loaded data
+    confirmListChanges: (list) => { dispatchProps.updateList({_id: stateProps._id, ...list}) }
   }
 }
 
 const ListEditView = connect(
   mapStateToProps,
-  {
-    updateList: actions.updateList
-  },
+  mapDispatchToProps,
   mergeProps
 )(ListEdit)
-
 export default ListEditView

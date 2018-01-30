@@ -80,7 +80,7 @@ class ListEdit extends React.Component {
       collectionFields: this.props.collectionFields,
       onEdit:           (index,name,value) => this.onFieldChange(index,name,value),
       onAdd:            () => this.onFieldChange(),
-      onSave:           () => this.props.onSave(this.state),
+      onSave:           () => this.props.confirmListChanges(this.state),
       onDelete:         (index) => this.onFieldChange(index,'delete'),
       hasChanged:       JSON.stringify(this.props.fields) !== JSON.stringify(this.state.fields) || 
                         this.props.name !== this.state.name || this.props.color !== this.state.color
