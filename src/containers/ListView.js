@@ -13,6 +13,7 @@ const mapStateToProps = state => {
   const listItem = state.data.lists.items[id] || {}
   return {
     // Collection data
+    collectionId,
     collectionFields: state.data.collections.items[collectionId].fields,
     // List data
     id: id,
@@ -29,7 +30,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createItem: (listId,item,addToTop) => dispatch(actions.createItem(listId,item,addToTop)),
+    createItem: (collectionId,listId,item,addToTop) => dispatch(actions.createItem(collectionId,listId,item,addToTop)),
     deleteItem: (listId,id) => dispatch(actions.deleteItem(listId,id)),
     updateItem: (item) => dispatch(actions.updateItem(item)),
     updateItemOrder: (listId,itemOrder) => dispatch(actions.updateItemOrder(listId,itemOrder)),
@@ -41,7 +42,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     ...stateProps,
     ...dispatchProps,
     // overwrite actions with defaulted params based on the currently loaded data
-    createItem: (item) => dispatchProps.createItem(stateProps.id,item,stateProps.addToTop),
+    createItem: (item) => dispatchProps.createItem(stateProps.collectionId,stateProps.id,item,stateProps.addToTop),
     deleteItem: (id) => dispatchProps.deleteItem(stateProps.id,id),
     updateItemOrder: (itemOrder) => dispatchProps.updateItemOrder(stateProps.id,itemOrder),
   }

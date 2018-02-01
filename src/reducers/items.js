@@ -2,7 +2,7 @@ import { types } from '../actions'
 import uuid from 'uuid'
 
 const items = (state = {items: {}, order: {}}, action = {type: "INIT_STATE"}) => {
-  let previousOrder,newOrder;
+  let item,previousOrder,newOrder;
   switch (action.type) {
     case types.RECIEVED_DATA:
       return {
@@ -10,7 +10,12 @@ const items = (state = {items: {}, order: {}}, action = {type: "INIT_STATE"}) =>
       }
     case types.CREATE_ITEM:
       let itemId = uuid()
-      let item = {_id: itemId, ...action.item}
+      item = {
+        _id: itemId,
+        collection: action.collectionId,
+        lists: [action.listId],
+        ...action.item
+      }
       previousOrder = state.order[action.listId] ? state.order[action.listId] : []
       newOrder = action.addToTop ? [itemId].concat(previousOrder) : previousOrder.concat(itemId)
       return {
@@ -38,8 +43,12 @@ const items = (state = {items: {}, order: {}}, action = {type: "INIT_STATE"}) =>
       newOrder = action.addToTop
         ? [action.itemId].concat(state.order[action.newListId])
         : state.order[action.newListId].concat(action.itemId)
+      // Replace the current listId with the new listId in the items list array
+      item = Object.assign({}, state.items[action.itemId])
+      item.lists.splice(item.lists.indexOf(action.listId),1,action.newListId)
       return {
         ...state,
+        items: { ...state.items, [action.itemId]: item },
         order: {
           ...state.order,
           [action.listId]: state.order[action.listId].filter(id => {
@@ -49,27 +58,19 @@ const items = (state = {items: {}, order: {}}, action = {type: "INIT_STATE"}) =>
         }
       }
     case types.DELETE_ITEM:
-      // Selected listId item index
-      let itemIndex = -1
-      const currentList = state.order[action.listId]
-      // Check to see if the item is in more than one list
-      let numOfLists = 0
-      Object.keys(state.order).forEach(id => {
-        if (id === action.listId) {
-          itemIndex = state.order[id].indexOf(action.itemId)
-          numOfLists += 1
-        } else if (state.order[id].indexOf(action.itemId) !== -1) {
-          numOfLists += 1
-        }
-      })
-      // If the item is in only one list, make a copy of the list and delete the item from the item list
+      item = Object.assign({},state.items[action.itemId])
+      item.lists.splice(item.lists.indexOf(action.listId),1)
+      // If the item was only in one list, delete the item from the items state
       let items = {...state.items}
-      if (numOfLists === 1) delete items[itemId]
-      return itemIndex === -1 ? state : {
+      if (item.lists.length === 0) delete items[action.itemId]
+      // Make the modifications to the order for the passed listId
+      let list = state.order[action.listId]
+      let itemIndex = list.indexOf(action.itemId)
+      return {
         ...state,
         order: {
           ...state.order,
-          [action.listId]: currentList.slice(0,itemIndex).concat(currentList.slice(itemIndex+1,currentList.length))
+          [action.listId]: list.slice(0,itemIndex).concat(list.slice(itemIndex+1,list.length))
         },
         items: items
       }

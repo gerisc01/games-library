@@ -96,10 +96,11 @@ export const actions = {
     }
   },
   // Create Actions
-  createItem: (listId,item,addToTop = false) => {
+  createItem: (collectionId,listId,item,addToTop = false) => {
     return {
       type: types.CREATE_ITEM,
       item,
+      collectionId,
       listId,
       addToTop
     }

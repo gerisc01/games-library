@@ -131,13 +131,11 @@ class List extends React.Component {
   }
 
   deleteConfirm = (id,confirm) => {
-    if (confirm && this.state.deletedIds.indexOf(id) !== -1) {
-      this.props.deleteItem(id)
-    }
-
     this.setState({deletedIds: this.state.deletedIds.filter(d_id => {
       return d_id !== id
     })})
+
+    if (confirm) this.props.deleteItem(id)
   }
 
   orderItems = (listItems, listOrder, fieldId, order) => {
