@@ -1,5 +1,6 @@
 import React from 'react'
 import { Title,Header,Item,MoveableItem } from './ListComponents'
+import { ContextMenu,SubMenu,MenuItem,ContextMenuTrigger } from "react-contextmenu";
 import { Grid,Button,Col,Row,Alert } from 'react-bootstrap'
 import { StickyContainer, Sticky } from 'react-sticky';
 import FontAwesome from 'react-fontawesome'
@@ -22,6 +23,7 @@ class List extends React.Component {
       items: this.props.items,
       deletedIds: []
     };
+    this.itemActionsMenus = [];
   }
 
   render() {
@@ -42,7 +44,7 @@ class List extends React.Component {
       <StickyContainer>
         <Sticky>
           { ({style}) => (
-              <div style={{position: 'absolute', zIndex: '2', top: '20px', width: '50%', left: '25%', ...style}}>
+              <div style={{position: 'absolute', zIndex: '4', top: '20px', width: '50%', left: '25%', ...style}}>
                 {this.state.deletedIds.map(id => (
                   <DeletedItemAlert id={id} key={id} name={this.state.items[id][this.props.fields[0]._id]}
                     dismiss={() => this.deleteConfirm(id,true)} undo={() => this.deleteConfirm(id,false)}/>
@@ -54,23 +56,31 @@ class List extends React.Component {
         <Header {...this.props} orderItems={orderAndSetItems} />
         <div style={{position: 'relative', zIndex: '3'}}>
           {this.renderItemAddRow(newItem,true)}
-          {(this.state.sortOrder || this.state.order).map(id => {
+          {(this.state.sortOrder || this.state.order).map((id,i) => {
             let item = { ...this.state.items[id] }
             let itemProps = {
-              fields:          this.props.fields,
-              item:            item,
-              emphasizedField: this.state.sort.id,
-              editClick:       () => this.startEditItem(item._id),
-              deleteItem:      () => this.deleteItem(id),
-              acceptClick:     () => this.acceptEditItem(item),
-              cancelClick:     () => this.cancelEditItem(),
-              hidden:          this.state.deletedIds.indexOf(id) !== -1
+              fields:               this.props.fields,
+              item:                 item,
+              emphasizedField:      this.state.sort.id,
+              editClick:            () => this.startEditItem(item._id),
+              acceptClick:          () => this.acceptEditItem(item),
+              cancelClick:          () => this.cancelEditItem(),
+              hidden:               this.state.deletedIds.indexOf(id) !== -1
             }
+            console.log(id)
+            // Add the itemActionsMenu to a variable so it can be added at the bottom of the page (done
+            // so that dragging opacity isn't messed up by having it be a part of the movable item)
+            if (i === 0) this.itemActionsMenus = []; // Reset the menu list on a new render
+            this.itemActionsMenus.push(<ItemActionsMenu item={item} deleteItem={(id) => this.deleteItem(id)} {...this.props}/>)
+            // Return an item and associate it with a drag and drop action and a right-click menu
             return (<MoveableItem key={id} id={id} {...moveProps} sortable={Object.keys(this.state.sort).length === 0} >
-              <Item editing={this.state.editingId === id} {...itemProps} />
+              <ContextMenuTrigger id={"item_menu_"+item._id} holdToDisplay={-1}>
+                <Item editing={this.state.editingId === id} {...itemProps} />
+              </ContextMenuTrigger>
             </MoveableItem>)
           })}
           {this.renderItemAddRow(newItem,false)}
+          {this.itemActionsMenus.map(menu => { return menu })}
         </div>
       </StickyContainer>
     </Grid>
@@ -200,4 +210,17 @@ const ItemAddButton = ({ start }) => (
       </Button>
     </Col>
   </Row>
+)
+
+const ItemActionsMenu = ({ item, moveItem, deleteItem, collectionLists, collectionListsOrder }) => (
+  <ContextMenu id={"item_menu_"+item._id} style={{position: 'relative', zIndex: '5'}}>
+    <SubMenu title="Move Item" hoverDelay={50}>
+    {collectionListsOrder.map((id,i) => {
+        return (<MenuItem key={i} onClick={() => moveItem(item._id,id)}>
+          {collectionLists[id].name}
+        </MenuItem>)
+      })}
+    </SubMenu>
+    <MenuItem onClick={() => deleteItem(item._id)}>Delete Item</MenuItem>
+  </ContextMenu>
 )

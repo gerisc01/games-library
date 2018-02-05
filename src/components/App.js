@@ -5,6 +5,7 @@ import ContentView from '../containers/ContentView'
 
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import '../resources/css/react-contextmenu.css';
 
 const App = (props) => (
   <div>

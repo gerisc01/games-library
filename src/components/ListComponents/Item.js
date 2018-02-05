@@ -35,10 +35,9 @@ export default Item
 /************************************************
  * HELPER COMPONENTS
  ***********************************************/
-const StandardButtons = ({style, editClick, deleteItem }) => (
+const StandardButtons = ({ style,item,editClick }) => (
   <div style={style}>
     <Button onClick={editClick}><FontAwesome name='pencil'/></Button>
-    <Button onClick={deleteItem}><FontAwesome name='trash'/></Button>
   </div>
 )
 

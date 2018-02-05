@@ -15,6 +15,10 @@ const mapStateToProps = state => {
     // Collection data
     collectionId,
     collectionFields: state.data.collections.items[collectionId].fields,
+    // Collection Lists data
+    // return all items for now - can filter later if needed for perf.
+    collectionLists: state.data.lists.items,
+    collectionListsOrder: state.data.lists.order[collectionId],
     // List data
     id: id,
     title: listItem.name,
@@ -34,6 +38,7 @@ const mapDispatchToProps = dispatch => {
     deleteItem: (listId,id) => dispatch(actions.deleteItem(listId,id)),
     updateItem: (item) => dispatch(actions.updateItem(item)),
     updateItemOrder: (listId,itemOrder) => dispatch(actions.updateItemOrder(listId,itemOrder)),
+    moveItem: (itemId,listId,newListId) => { dispatch(actions.moveItem(itemId,listId,newListId)) },
   }
 }
 
@@ -45,6 +50,7 @@ const mergeProps = (stateProps, dispatchProps) => {
     createItem: (item) => dispatchProps.createItem(stateProps.collectionId,stateProps.id,item,stateProps.addToTop),
     deleteItem: (id) => dispatchProps.deleteItem(stateProps.id,id),
     updateItemOrder: (itemOrder) => dispatchProps.updateItemOrder(stateProps.id,itemOrder),
+    moveItem: (itemId,newListId) => dispatchProps.moveItem(itemId,stateProps.id,newListId),
   }
 }
 
