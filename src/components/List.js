@@ -45,10 +45,11 @@ class List extends React.Component {
         <Sticky>
           { ({style}) => (
               <div style={{position: 'absolute', zIndex: '4', top: '20px', width: '50%', left: '25%', ...style}}>
-                {this.state.deletedIds.map(id => (
-                  <DeletedItemAlert id={id} key={id} name={this.state.items[id][this.props.fields[0]._id]}
-                    dismiss={() => this.deleteConfirm(id,true)} undo={() => this.deleteConfirm(id,false)}/>
-                ))}
+                {this.state.deletedIds.map(id => {
+                  return this.state.items[id] ? <DeletedItemAlert id={id} key={id} undo={() => this.deleteConfirm(id,false)}
+                    name={this.state.items[id][this.props.fields[0]._id]} dismiss={() => this.deleteConfirm(id,true)} />
+                  : undefined
+                })}
               </div>
             )}
         </Sticky>
@@ -67,11 +68,10 @@ class List extends React.Component {
               cancelClick:          () => this.cancelEditItem(),
               hidden:               this.state.deletedIds.indexOf(id) !== -1
             }
-            console.log(id)
             // Add the itemActionsMenu to a variable so it can be added at the bottom of the page (done
             // so that dragging opacity isn't messed up by having it be a part of the movable item)
             if (i === 0) this.itemActionsMenus = []; // Reset the menu list on a new render
-            this.itemActionsMenus.push(<ItemActionsMenu item={item} deleteItem={(id) => this.deleteItem(id)} {...this.props}/>)
+            this.itemActionsMenus.push(<ItemActionsMenu {...this.props} item={item} key={"menu"+id} deleteItem={this.deleteItem}/>)
             // Return an item and associate it with a drag and drop action and a right-click menu
             return (<MoveableItem key={id} id={id} {...moveProps} sortable={Object.keys(this.state.sort).length === 0} >
               <ContextMenuTrigger id={"item_menu_"+item._id} holdToDisplay={-1}>
@@ -141,11 +141,11 @@ class List extends React.Component {
   }
 
   deleteConfirm = (id,confirm) => {
+    if (confirm && this.state.deletedIds.includes(id)) this.props.deleteItem(id)
+
     this.setState({deletedIds: this.state.deletedIds.filter(d_id => {
       return d_id !== id
     })})
-
-    if (confirm) this.props.deleteItem(id)
   }
 
   orderItems = (listItems, listOrder, fieldId, order) => {
@@ -216,7 +216,7 @@ const ItemActionsMenu = ({ item, moveItem, deleteItem, collectionLists, collecti
   <ContextMenu id={"item_menu_"+item._id} style={{position: 'relative', zIndex: '5'}}>
     <SubMenu title="Move Item" hoverDelay={50}>
     {collectionListsOrder.map((id,i) => {
-        return (<MenuItem key={i} onClick={() => moveItem(item._id,id)}>
+        return (<MenuItem key={i} onClick={() => moveItem(item._id,id)} disabled={(item.lists || []).includes(id) ? true : false}>
           {collectionLists[id].name}
         </MenuItem>)
       })}
