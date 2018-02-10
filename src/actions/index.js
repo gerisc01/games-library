@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-fetch'
+import data from '../tempData'
 
 const gistId = "6f6097e90c5d7e05a67fbe20068d2340"
-const filename = "feature-searching.db"
+const filename = "games-library.db"
 
 // Defining a map of action types
 export const types = {
@@ -43,6 +44,9 @@ export const types = {
 export const actions = {
   // Fetch Action Methods
   fetchListData: () => {
+    // return dispatch => {
+    //   dispatch(actions.recievedListData(data))
+    // }
     return dispatch => {
       return fetch(`https://api.github.com/gists/${gistId}`)
         .then(response => response.json())
