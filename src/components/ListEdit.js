@@ -18,8 +18,14 @@ class ListEdit extends React.Component {
     cm["pastel-yellow"],cm["pastel-blue"],cm["grey"]]
   }
 
-  componentWillUpdate(props,state) {
-    if (this.onChange) this.onChange(state);
+  componentWillReceiveProps(nextProps) {
+    if (this.onChange) this.onChange(this.state);
+    this.setState({
+      name: nextProps.name || "",
+      fields: nextProps.fields || [],
+      color: nextProps.color || "grey",
+      addToTop: nextProps.addToTop || false
+    })
   }
 
   onTitleChange = (value) => {
