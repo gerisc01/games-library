@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch'
-import data from '../tempData'
 
 const gistId = "6f6097e90c5d7e05a67fbe20068d2340"
 const filename = "games-library.db"
@@ -45,17 +44,14 @@ export const actions = {
   // Fetch Action Methods
   fetchListData: () => {
     return dispatch => {
-      dispatch(actions.recievedListData(data))
+      return fetch(`https://api.github.com/gists/${gistId}`)
+        .then(response => response.json())
+        .then(json => json.files[filename].raw_url)
+        .then(raw_url => fetch(raw_url)
+          .then(response => response.json())
+          .then(json => dispatch(actions.recievedListData(json)))
+        )
     }
-    // return dispatch => {
-    //   return fetch(`https://api.github.com/gists/${gistId}`)
-    //     .then(response => response.json())
-    //     .then(json => json.files[filename].raw_url)
-    //     .then(raw_url => fetch(raw_url)
-    //       .then(response => response.json())
-    //       .then(json => dispatch(actions.recievedListData(json)))
-    //     )
-    // }
   },
   recievedListData: (data) => {
     return {
