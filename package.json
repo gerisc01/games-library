@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "gh-pages": "^1.0.0",
+    "react-render-debugger": "^1.0.2",
     "react-scripts": "1.0.10"
   },
   "scripts": {

@@ -44,18 +44,18 @@ export const types = {
 export const actions = {
   // Fetch Action Methods
   fetchListData: () => {
-    // return dispatch => {
-    //   dispatch(actions.recievedListData(data))
-    // }
     return dispatch => {
-      return fetch(`https://api.github.com/gists/${gistId}`)
-        .then(response => response.json())
-        .then(json => json.files[filename].raw_url)
-        .then(raw_url => fetch(raw_url)
-          .then(response => response.json())
-          .then(json => dispatch(actions.recievedListData(json)))
-        )
+      dispatch(actions.recievedListData(data))
     }
+    // return dispatch => {
+    //   return fetch(`https://api.github.com/gists/${gistId}`)
+    //     .then(response => response.json())
+    //     .then(json => json.files[filename].raw_url)
+    //     .then(raw_url => fetch(raw_url)
+    //       .then(response => response.json())
+    //       .then(json => dispatch(actions.recievedListData(json)))
+    //     )
+    // }
   },
   recievedListData: (data) => {
     return {

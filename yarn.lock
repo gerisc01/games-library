@@ -5162,6 +5162,10 @@ react-redux@^5.0.5:
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
 
+react-render-debugger@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-render-debugger/-/react-render-debugger-1.0.2.tgz#fe71b4080f32e9acc4a9fb69a2b5e8e9099e6c71"
+
 react-scripts@1.0.10:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-1.0.10.tgz#876035594742220f40ffb865a4c7e8dc0fa7ae23"
