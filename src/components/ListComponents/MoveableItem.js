@@ -3,10 +3,13 @@ import { ContextMenu,SubMenu,MenuItem,ContextMenuTrigger } from "react-contextme
 import { DragSource,DropTarget } from 'react-dnd'
 import Item from './Item'
 
+let draggedIndex;
 const cardSource = {
   beginDrag(props) {
+    draggedIndex = props.index;
     return {
-      id: props.id
+      id: props.id,
+      index: props.index
     }
   },
   endDrag(props, monitor) {
@@ -21,11 +24,11 @@ const cardTarget = {
   },
   hover(props, monitor) {
     if (!props.sortable) return
-    const draggedId = monitor.getItem().id
-    const overId = props.id
+    const overIndex = props.index
 
-    if (draggedId !== overId) {
-      props.swapItems(draggedId, overId);
+    if (draggedIndex !== overIndex) {
+      props.swapItems(draggedIndex, overIndex);
+      draggedIndex = overIndex
     }
   }
 };

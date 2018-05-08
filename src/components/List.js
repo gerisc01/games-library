@@ -65,7 +65,8 @@ class List extends React.Component {
               item:                 item,
               hidden:               this.state.deletedIds.indexOf(id) !== -1,
               editing:              this.state.editingId === id,
-              sortable:             Object.keys(this.state.sort).length === 0
+              sortable:             Object.keys(this.state.sort).length === 0,
+              index:                i
             }
             return <MoveableItem {...itemProps} key={id} id={id} />
           })}
@@ -151,12 +152,16 @@ class List extends React.Component {
     return sortOrder;
   }
 
-  swapItems = (originId,destinationId) => {
+  swapItems = (originIndex,destinationIndex) => {
     if (this.state.editingId !== undefined) return;
     if (this.startSwapOrder === null) this.startSwapOrder = this.state.order.slice(0)
-    this.setState({order: this.state.order.map(id => {
-      return id === originId ? destinationId : id === destinationId ? originId : id
-    })})
+
+    let originItem = this.state.order[originIndex]
+    // Create a new order with the previous item sliced out of the list
+    let newOrder = this.state.order.slice(0);
+    newOrder.splice(originIndex,1)
+    newOrder.splice(destinationIndex,0,originItem)
+    this.setState({order: newOrder})
   }
 
   resetOrder = () => {
