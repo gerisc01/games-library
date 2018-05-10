@@ -49,7 +49,8 @@ function targetCollect(connect) {
 class MoveableItem extends React.Component {
   shouldComponentUpdate(nextProps) {
     return (this.props.isDragging !== nextProps.isDragging ||
-      this.props.editing !== nextProps.editing)
+      this.props.editing !== nextProps.editing ||
+      this.props.emphasizedField !== nextProps.emphasizedField)
   }
 
   render() {

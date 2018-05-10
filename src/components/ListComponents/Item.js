@@ -6,6 +6,7 @@ import FontAwesome from 'react-fontawesome'
 class Item extends React.Component {
   shouldComponentUpdate(nextProps) {
     return this.props.editing !== nextProps.editing
+      || this.props.emphasizedField !== nextProps.emphasizedField
   }
 
   render() {

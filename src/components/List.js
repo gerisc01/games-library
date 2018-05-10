@@ -28,10 +28,17 @@ class List extends React.Component {
   render() {
     // Put ordering the list and setting it to the list state into a variable function that will
     // be passed to the header so the lists can be ordered by clicking a button from there
-    let orderAndSetItems = (fieldId,order) => this.setState({
-      sort: {id: fieldId, order: order},
-      sortOrder: this.orderItems(this.items,this.state.order,fieldId,order)
-    })
+    let orderAndSetItems = (fieldId,order) => {
+      if (order === undefined && this.state.sort.order === "desc") {
+        this.setState({sort: {}, sortOrder: undefined})
+      } else {
+        if (order === undefined) order = this.state.sort.order ? "desc" : "asc"
+        this.setState({
+          sort: {id: fieldId, order: order},
+          sortOrder: this.orderItems(this.items,this.state.order,fieldId,order)
+        })
+      }
+    }
     return (
     <Grid style={{float: 'left'}}>
       <StickyContainer>

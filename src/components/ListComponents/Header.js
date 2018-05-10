@@ -76,24 +76,15 @@ const FieldSelector = ({ fieldId,fieldIndex,fields,onChange}) => (
 
 const ColumnSorter = ({ fieldId, orderItems }) => {
   const buttonStyle = {
-    float: 'right', clear: 'right', marginBottom: '-4px', marginTop: '-4px'
-  }
-  const clickStyle = {
-    width: '11px', height: '9px', display: 'block', cursor: 'pointer'
+    float: 'right', clear: 'right', marginBottom: '-5px', marginTop: '-5px'
   }
   // The negative margins that are needed to display the two buttons close to each other (needed
-  // because of excessive padding on top/bottom of font-awesome carets) make the click areas on the
-  // carets very in-accurate. To combat this, spans of the correct size are overlayed over the
-  // icon areas and the click event is put onto those instead of the carets icons.
+  // because of excessive padding on top/bottom of font-awesome carets).
   return (
     <span style={{position: 'relative', width: '11px', height: '36px'}}>
-      <span style={{zIndex: '1', position: 'absolute', top: '25%'}}>
+      <span style={{position: 'absolute', top: '30%', cursor: 'pointer'}} onClick={() => orderItems(fieldId)}>
         <FontAwesome name='caret-up' style={buttonStyle}/>
         <FontAwesome name='caret-down' style={buttonStyle}/>
-      </span>
-      <span style={{zIndex: '2', position: 'absolute', top: '25%'}}>
-        <span style={clickStyle} onClick={() => orderItems(fieldId,"asc")}></span>
-        <span style={{...clickStyle, marginTop: '1px'}} onClick={() => orderItems(fieldId,"desc")}></span>
       </span>
     </span>
   )
