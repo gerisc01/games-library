@@ -11,7 +11,13 @@ const Header = (props) => {
   // Standard inputs
   const { orderItems } = props
   // Editing inputs
-  const { editing, onSave, onAdd, onEdit, onDelete, hasChanged } = props
+  const { editing, onSave, onAdd, onEdit, hasChanged } = props
+
+  const colOptions = {
+    onDelete: props.onDelete,
+    onSort: props.onSort,
+    defaultSort: props.defaultSort || {}
+  }
 
   // If the fields widths sum up to less than 10, add a 'add field' button
   const rowWidth = fields.reduce((sum,field) => { return sum + parseInt(field.width,10)},0);
@@ -30,7 +36,7 @@ const Header = (props) => {
                 <FieldSelector onChange={onEdit} fieldIndex={i} fieldId={header._id} fields={collectionFields} />
                 <ColumnResizer onChange={onEdit} fieldIndex={i} rowWidth={rowWidth} width={width} />
               </div>
-              <ColumnOptions style={{marginTop: '5px'}} onDelete={onDelete} fieldIndex={i} />
+              <ColumnOptions style={{marginTop: '5px'}} fieldIndex={i} id={header._id} {...colOptions} />
             </h4>
             : <h4 style={{fontWeight: 'bold'}}>
                 <div style={{display: 'flex', alignItems: 'center'}}>
@@ -103,8 +109,15 @@ const ColumnResizer = ({ rowWidth, width, fieldIndex, onChange }) => {
   )
 }
 
-const ColumnOptions = ({ style, fieldIndex, onDelete }) => (
+const ColumnOptions = ({ style, id, fieldIndex, onDelete, defaultSort, onSort }) => {
+  
+  return (
   <div style={style}>
     <Button onClick={() => {onDelete(fieldIndex)}}><FontAwesome name='trash' /></Button>
+    <Button onClick={() => {onSort(fieldIndex)}} bsStyle={id === defaultSort.id ? "primary" : "default"}>
+      <FontAwesome name={defaultSort.order === "desc" && defaultSort.id === id
+        ? "sort-alpha-desc" : "sort-alpha-asc"} />
+    </Button>
   </div>
-)
+  )
+}

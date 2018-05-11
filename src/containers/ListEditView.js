@@ -11,7 +11,8 @@ const mapStateToProps = state => {
     collectionFields: state.data.collections.items[collectionId].fields,
     // List data
     ...listItem,
-    addToTop: listItem.addToTop || false
+    addToTop: listItem.addToTop || false,
+    defaultSort: listItem.defaultSort || {}
   }
 }
 

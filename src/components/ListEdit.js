@@ -12,7 +12,8 @@ class ListEdit extends React.Component {
       name: props.name || "",
       fields: props.fields || [],
       color: props.color || "grey",
-      addToTop: props.addToTop || false
+      addToTop: props.addToTop || false,
+      defaultSort: props.defaultSort || {}
     };
     this.tabColors = [cm["pastel-green"],cm["pastel-purple"],cm["pastel-orange"],cm["pastel-red"],
     cm["pastel-yellow"],cm["pastel-blue"],cm["grey"]]
@@ -24,7 +25,8 @@ class ListEdit extends React.Component {
       name: nextProps.name || "",
       fields: nextProps.fields || [],
       color: nextProps.color || "grey",
-      addToTop: nextProps.addToTop || false
+      addToTop: nextProps.addToTop || false,
+      defaultSort: nextProps.defaultSort || {}
     })
   }
 
@@ -70,7 +72,20 @@ class ListEdit extends React.Component {
             : field
         })
       })
-    } else if (name === 'delete') {
+    } else if (name === 'sort') {
+      if (this.state.fields[index]._id !== this.state.defaultSort.id) {
+        this.setState({defaultSort: {
+          id: this.state.fields[index]._id, order: "asc"
+        }})
+      } else if (this.state.defaultSort.order === "desc") {
+        this.setState({defaultSort: {}})
+      } else {
+        this.setState({defaultSort: {
+          id: this.state.fields[index]._id,
+          order: !this.state.defaultSort.order ? "asc" : "desc"
+        }})
+      }
+    }  else if (name === 'delete') {
       this.setState({
         fields: this.state.fields.filter((field,i) => {
           return index !== i;
@@ -84,12 +99,15 @@ class ListEdit extends React.Component {
       editing:          true,
       fields:           this.state.fields,
       collectionFields: this.props.collectionFields,
+      defaultSort:      this.state.defaultSort,
       onEdit:           (index,name,value) => this.onFieldChange(index,name,value),
       onAdd:            () => this.onFieldChange(),
       onSave:           () => this.props.confirmListChanges(this.state),
       onDelete:         (index) => this.onFieldChange(index,'delete'),
+      onSort:           (index) => this.onFieldChange(index,'sort'),
       hasChanged:       JSON.stringify(this.props.fields) !== JSON.stringify(this.state.fields) || 
                         this.props.name !== this.state.name || this.props.color !== this.state.color
+                        || JSON.stringify(this.props.defaultSort) !== JSON.stringify(this.state.defaultSort)
     }
     return (
       <Grid style={{float: 'left'}}>
