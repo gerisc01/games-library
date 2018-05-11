@@ -23,22 +23,11 @@ class List extends React.Component {
     };
     this.items = this.props.items
     this.itemActionsMenus = [];
+
+    if (props.defaultSort && this.props.defaultSort.id) this.orderAndSetItems(props.defaultSort.id,props.defaultSort.order)
   }
 
   render() {
-    // Put ordering the list and setting it to the list state into a variable function that will
-    // be passed to the header so the lists can be ordered by clicking a button from there
-    let orderAndSetItems = (fieldId,order) => {
-      if (order === undefined && this.state.sort.order === "desc") {
-        this.setState({sort: {}, sortOrder: undefined})
-      } else {
-        if (order === undefined) order = this.state.sort.order ? "desc" : "asc"
-        this.setState({
-          sort: {id: fieldId, order: order},
-          sortOrder: this.orderItems(this.items,this.state.order,fieldId,order)
-        })
-      }
-    }
     return (
     <Grid style={{float: 'left'}}>
       <StickyContainer>
@@ -54,7 +43,7 @@ class List extends React.Component {
             )}
         </Sticky>
         <Title {...this.props} />
-        <Header {...this.props} orderItems={orderAndSetItems} />
+        <Header {...this.props} orderItems={this.orderAndSetItems} />
         <div style={{position: 'relative', zIndex: '3'}}>
           {this.renderItemAddRow(true)}
           {(this.state.sortOrder || this.state.order).map((id,i) => {
@@ -90,7 +79,12 @@ class List extends React.Component {
       this.setState({ editingId: undefined })
     } else if (this.props.id !== nextProps.id) {
       // If a new list has been selected, reset the sort to null and use the new items/order
-      this.setState({order: nextProps.order, sort: {}, sortOrder: undefined})
+      let defaultSort = nextProps.defaultSort || {}
+      this.setState({
+        order: nextProps.order,
+        sort: defaultSort,
+        sortOrder: defaultSort.id ? this.orderItems(nextProps.items,nextProps.order,defaultSort.id,defaultSort.order) : undefined
+      })
     } else if (this.state.sort.id) {
       // If the same list is used and has a sort order defined, use the new items/order but re-order
       // the new list while including any new items
@@ -101,6 +95,18 @@ class List extends React.Component {
     } else {
       // If the same list is being used, use the new items but don't reset sort order
       this.setState({ order: nextProps.order })
+    }
+  }
+
+  orderAndSetItems = (fieldId,order) => {
+    if (order === undefined && this.state.sort.order === "desc") {
+      this.setState({sort: {}, sortOrder: undefined})
+    } else {
+      if (order === undefined) order = this.state.sort.order ? "desc" : "asc"
+      this.setState({
+        sort: {id: fieldId, order: order},
+        sortOrder: this.orderItems(this.items,this.state.order,fieldId,order)
+      })
     }
   }
 

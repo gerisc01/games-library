@@ -24,7 +24,7 @@ const mapStateToProps = state => {
     title: listItem.name,
     fields: listItem.fields,
     addToTop: listItem.addToTop || false,
-    defaultSort: listItem.defaultSort,
+    defaultSort: listItem.defaultSort || {},
     // Item data
     // return all items for now - can filter later if needed for perf.
     items: state.data.items.items,
