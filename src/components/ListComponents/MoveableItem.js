@@ -7,6 +7,7 @@ let draggedIndex;
 const cardSource = {
   beginDrag(props) {
     draggedIndex = props.index;
+    props.swapItems(draggedIndex,draggedIndex);
     return {
       id: props.id,
       index: props.index
@@ -51,7 +52,7 @@ class MoveableItem extends React.Component {
     return (this.props.isDragging !== nextProps.isDragging ||
       this.props.editing !== nextProps.editing ||
       this.props.emphasizedField !== nextProps.emphasizedField) ||
-      this.props.toggleDetails !== nextProps.toggleDetails
+      this.props.details !== nextProps.details
   }
 
   render() {

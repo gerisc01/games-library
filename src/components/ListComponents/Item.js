@@ -7,7 +7,7 @@ class Item extends React.Component {
   shouldComponentUpdate(nextProps) {
     return this.props.editing !== nextProps.editing
       || this.props.emphasizedField !== nextProps.emphasizedField
-      || this.props.toggleDetails !== nextProps.toggleDetails
+      || this.props.details !== nextProps.details
   }
 
   render() {

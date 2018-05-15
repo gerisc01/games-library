@@ -179,7 +179,7 @@ class List extends React.Component {
     let newOrder = this.state.order.slice(0);
     newOrder.splice(originIndex,1)
     newOrder.splice(destinationIndex,0,originItem)
-    this.setState({order: newOrder})
+    this.setState({order: newOrder, showDetailId: undefined})
   }
 
   resetOrder = () => {
