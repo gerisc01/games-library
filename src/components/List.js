@@ -15,6 +15,7 @@ class List extends React.Component {
     // Populate items
     this.state = {
       editingId: undefined,
+      showDetailId: undefined,
       addingItem: false,
       sort: {},
       sortOrder: undefined,
@@ -57,6 +58,10 @@ class List extends React.Component {
               startEditItem:        () => this.startEditItem(id),
               cancelEditItem:       () => this.cancelEditItem(),
               acceptEditItem:       (item) => this.acceptEditItem(item),
+              toggleDetails:    () => {
+                this.setState({showDetailId: !this.state.showDetailId || this.state.showDetailId !== id
+                  ? id : undefined})},
+              details:              this.state.showDetailId === id,
               deleteItem:           this.deleteItem,
               item:                 item,
               hidden:               this.state.deletedIds.indexOf(id) !== -1,
@@ -174,7 +179,7 @@ class List extends React.Component {
     let newOrder = this.state.order.slice(0);
     newOrder.splice(originIndex,1)
     newOrder.splice(destinationIndex,0,originItem)
-    this.setState({order: newOrder})
+    this.setState({order: newOrder, showDetailId: undefined})
   }
 
   resetOrder = () => {
