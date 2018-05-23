@@ -37,6 +37,7 @@ const mapDispatchToProps = dispatch => {
   return {
     createItem: (collectionId,listId,item,addToTop) => dispatch(actions.createItem(collectionId,listId,item,addToTop)),
     deleteItem: (listId,id) => dispatch(actions.deleteItem(listId,id)),
+    undeleteItem: (id) => dispatch(actions.undeleteItem(id)),
     updateItem: (item) => dispatch(actions.updateItem(item)),
     updateItemOrder: (listId,itemOrder) => dispatch(actions.updateItemOrder(listId,itemOrder)),
     moveItem: (itemId,listId,newListId) => { dispatch(actions.moveItem(itemId,listId,newListId)) },

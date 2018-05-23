@@ -38,6 +38,7 @@ export const types = {
 
   // DELETE ACTIONS
   DELETE_ITEM: 'DELETE_ITEM',
+  UNDELETE_ITEM: 'UNDELETE_ITEM',
   DELETE_LIST: 'DELETE_LIST',
 }
 
@@ -163,6 +164,12 @@ export const actions = {
       itemId
     }
   },
+  undeleteItem: (itemId) => {
+    return {
+      type: types.UNDELETE_ITEM,
+      itemId
+    }
+  },
   deleteList: (listId) => {
     return {
       type: types.DELETE_LIST,
@@ -176,7 +183,8 @@ export const actions = {
         type: types.SAVE_CHANGES
       })
       // Build the new post object
-      const data = getState().data;
+      const data = { ...getState().data };
+      delete data.items.deleted
 
       fetch(`https://db-updater-api.herokuapp.com/api/v1/gistdb/${gistId}/${filename}`, {
         method: 'PUT',

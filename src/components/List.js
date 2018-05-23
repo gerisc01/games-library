@@ -20,7 +20,7 @@ class List extends React.Component {
       sort: {},
       sortOrder: undefined,
       order: this.props.order,
-      deletedIds: []
+      deletedItems: []
     };
     this.items = this.props.items
     this.itemActionsMenus = [];
@@ -35,10 +35,9 @@ class List extends React.Component {
         <Sticky>
           { ({style}) => (
               <div style={{position: 'absolute', zIndex: '4', top: '20px', width: '50%', left: '25%', ...style}}>
-                {this.state.deletedIds.map(id => {
-                  return this.items[id] ? <DeletedItemAlert id={id} key={id} undo={() => this.deleteConfirm(id,false)}
-                    name={this.items[id][this.props.fields[0]._id]} dismiss={() => this.deleteConfirm(id,true)} />
-                  : undefined
+                {this.state.deletedItems.map((item,i) => {
+                  return <DeletedItemAlert id={item._id} key={item._id} name={item[this.props.fields[0]._id]}
+                    undo={() => this.props.undeleteItem(item._id)} dismiss={() => this.deleteItemDismiss(item._id)} />
                 })}
               </div>
             )}
@@ -64,7 +63,6 @@ class List extends React.Component {
               details:              this.state.showDetailId === id,
               deleteItem:           this.deleteItem,
               item:                 item,
-              hidden:               this.state.deletedIds.indexOf(id) !== -1,
               editing:              this.state.editingId === id,
               sortable:             Object.keys(this.state.sort).length === 0,
               index:                i
@@ -138,15 +136,14 @@ class List extends React.Component {
   }
 
   deleteItem = id => {
-    this.setState({deletedIds: this.state.deletedIds.concat(id)})
-    setTimeout(() => this.deleteConfirm(id,true),5000)
+    this.setState({deletedItems: this.state.deletedItems.concat(this.items[id])})
+    this.props.deleteItem(id)
+    setTimeout(() => this.deleteItemDismiss(id,true),7000)
   }
 
-  deleteConfirm = (id,confirm) => {
-    if (confirm && this.state.deletedIds.includes(id)) this.props.deleteItem(id)
-
-    this.setState({deletedIds: this.state.deletedIds.filter(d_id => {
-      return d_id !== id
+  deleteItemDismiss = id => {
+    this.setState({deletedItems: this.state.deletedItems.filter(item => {
+      return item._id !== id
     })})
   }
 
@@ -206,7 +203,7 @@ const DeletedItemAlert = ({id,name,dismiss,undo}) => {
   return (
   <Alert bsStyle="danger" style={{padding: '8px', margin: '3px'}}>
     {name} has been deleted. <span style={{float: 'right'}}>
-      <a onClick={dismiss} style={alertLink}>Dismiss</a> -- <a onClick={undo} style={alertLink}>Undo</a>
+      <a onClick={dismiss} style={alertLink}>Dismiss</a> -- <a onClick={() => {undo(); dismiss();}} style={alertLink}>Undo</a>
     </span>
   </Alert>
   )

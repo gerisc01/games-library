@@ -1,11 +1,12 @@
 import { types } from '../actions'
 import uuid from 'uuid'
 
-const items = (state = {items: {}, order: {}}, action = {type: "INIT_STATE"}) => {
+const items = (state = {items: {}, order: {}, deleted: {}}, action = {type: "INIT_STATE"}) => {
   let item,previousOrder,newOrder;
   switch (action.type) {
     case types.RECIEVED_DATA:
       return {
+        ...state,
         ...action.items
       }
     case types.CREATE_ITEM:
@@ -72,7 +73,34 @@ const items = (state = {items: {}, order: {}}, action = {type: "INIT_STATE"}) =>
           ...state.order,
           [action.listId]: list.slice(0,itemIndex).concat(list.slice(itemIndex+1,list.length))
         },
-        items: items
+        items: items,
+        deleted: {
+          ...state.deleted,
+          // Add the deleted item to the deleted item object
+          [action.itemId]: {
+            // Save a copy of the item, the listId, and the index of the item in the list
+            item: item,
+            listId: action.listId,
+            itemIndex: itemIndex
+          }
+        }
+      }
+    case types.UNDELETE_ITEM:
+      // Re-add the deleted object to the list order and the item array. Don't bother removing the
+      // item from deleted because it will just be re-written anyway if it is re-deleted
+      const delObj = state.deleted[action.itemId]
+      newOrder = state.order[delObj.listId].slice()
+      newOrder.splice(delObj.itemIndex,0,action.itemId)
+      return {
+        ...state,
+        order: {
+          ...state.order,
+          [delObj.listId]: newOrder
+        },
+        items: {
+          ...state.items,
+          [action.itemId]: delObj.item
+        }
       }
     default:
       return state
