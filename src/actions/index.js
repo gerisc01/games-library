@@ -1,8 +1,7 @@
 import fetch from 'isomorphic-fetch'
 
 const gistId = "6f6097e90c5d7e05a67fbe20068d2340"
-// const filename = "games-library.db"
-const filename = "develop.db"
+const filename = "games-library.db"
 
 // Defining a map of action types
 export const types = {
