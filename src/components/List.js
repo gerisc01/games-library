@@ -154,8 +154,8 @@ class List extends React.Component {
   orderItems = (listItems, listOrder, fieldId, order) => {
     // Order the items passed in and return a sorted list of the items
     let sortOrder = listOrder.slice().sort((a,b) => {
-      let columnA = listItems[a][fieldId].toLowerCase()
-      let columnB = listItems[b][fieldId].toLowerCase()
+      let columnA = (listItems[a][fieldId] || "").toLowerCase()
+      let columnB = (listItems[b][fieldId] || "").toLowerCase()
       if (columnA < columnB) {
         return order === "asc" ? -1 : 1
       }
